@@ -1,0 +1,178 @@
+
+import org.gradle.api.tasks.testing.logging.TestLogEvent
+
+plugins {
+    id 'edu.wpi.first.NativeUtils' version '2.1.2'
+    id "edu.wpi.first.GradleJni" version "0.3.1"
+    id "cpp"
+    id "java"
+    id "eclipse"
+
+    id "checkstyle"
+    id "pmd"
+    id "jacoco"
+}
+
+ext.allwpilibVersion = '2019.1.1'
+ext.rev_library_version = "1.0.28"
+ext.release_version = rev_library_version + "_V0"
+
+repositories {
+    mavenCentral()
+    mavenLocal()
+    maven {
+        url "http://first.wpi.edu/FRC/roborio/maven/release/"
+    }
+    maven {
+        url "http://www.revrobotics.com/content/sw/max/sdk/maven/"
+    }
+}
+
+
+apply from: "config.gradle"
+model {
+    dependencyConfigs {
+        wpiutil(DependencyConfig) {
+            groupId = 'edu.wpi.first.wpiutil'
+            artifactId = 'wpiutil-cpp'
+            headerClassifier = 'headers'
+            ext = 'zip'
+            version = allwpilibVersion
+            sharedConfigs = [ RevSimulation: [] ]
+        }
+        halsim(DependencyConfig) {
+            groupId = 'edu.wpi.first.hal'
+            artifactId = 'hal-cpp'
+            headerClassifier = 'headers'
+            ext = 'zip'
+            version = allwpilibVersion
+            sharedConfigs = [ RevSimulation: [] ]
+        }
+    }
+
+    components {
+        RevSimulation(JniNativeLibrarySpec) {
+
+            enableCheckTask true
+            javaCompileTasks << compileJava
+            jniCrossCompileOptions << JniCrossCompileOptions('athena')
+            sources {
+                cpp {
+                    source {
+                        srcDirs = ["src/main/native/cpp"]
+                        includes = ["**/*.cpp"]
+                    }
+                    exportedHeaders {
+                        srcDirs = ["src/main/native/include"]
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+task packageNativeFilesInJar(type: Jar) {
+    destinationDir = project.buildDir
+    classifier = org.gradle.internal.os.OperatingSystem.current().getFamilyName() + getCurrentArch();
+    if (org.gradle.internal.os.OperatingSystem.current().isMacOsX())
+    {
+        classifier = "osx"
+    }
+
+    project.model {
+        binaries {
+            withType(SharedLibraryBinarySpec) { binary ->
+                if (binary.component.name == "RevSimulation")
+                {
+                    dependsOn binary.buildTask
+                    from(binary.sharedLibraryFile) {
+
+                        into NativeUtils.getPlatformPath(binary)
+                    }
+                }
+            }
+        }
+    }
+}
+
+ext.use_real_library = true
+
+if(!use_real_library)
+{
+    sourceSets {
+        main {
+            java {
+                srcDirs += ["src/rev/java"]
+            }
+        }
+    }
+}
+
+
+configurations.maybeCreate("wpilibNativeDeps")
+dependencies {
+
+    compile 'edu.wpi.first.wpiutil:wpiutil-java:' + allwpilibVersion
+    compile 'edu.wpi.first.wpilibj:wpilibj-java:' + allwpilibVersion
+    compile 'edu.wpi.first.hal:hal-java:' + allwpilibVersion
+
+    if(use_real_library)
+    {
+        compile 'com.revrobotics.frc:SparkMax-java:' + rev_library_version
+    }
+
+    compile 'org.apache.logging.log4j:log4j-api:2.11.0'
+    compile 'org.apache.logging.log4j:log4j-core:2.11.0'
+
+    testCompile 'edu.wpi.first.ntcore:ntcore-java:' + allwpilibVersion
+    testCompile 'edu.wpi.first.cscore:cscore-java:' + allwpilibVersion
+    testCompile 'edu.wpi.first.ntcore:ntcore-jni:' + allwpilibVersion + ':all'
+    testCompile 'edu.wpi.first.cscore:cscore-jni:' + allwpilibVersion + ':all'
+
+    testCompile 'junit:junit:4.12'
+
+    wpilibNativeDeps packageNativeFilesInJar.outputs.files
+
+}
+
+compileJava {
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+}
+
+/////////////////////////////////////////////////////////////////////////////////
+// Style/Formatting stuff
+checkstyle {
+    toolVersion = "8.12"
+    configDir = file("${project.rootDir}/styleguide")
+    config = resources.text.fromFile(new File(configDir, "checkstyle.xml"))
+}
+
+pmd {
+    toolVersion = '6.7.0'
+    consoleOutput  = true
+    reportsDir = file("${project.buildDir}/reports/pmd")
+    ruleSetFiles = files(file("$rootDir/styleguide/pmd-ruleset.xml"))
+    ruleSets = []
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled true
+        html.enabled true
+    }
+}
+check.dependsOn jacocoTestReport
+
+
+/////////////////////////////////////////////////////////////////////////////////
+
+wrapper {
+    gradleVersion = '5.0'
+}
+
+apply from: "publish.gradle"
+
+apply from: "${rootDir}/extract_native_libraries.gradle"
+test.dependsOn extract_wpilib

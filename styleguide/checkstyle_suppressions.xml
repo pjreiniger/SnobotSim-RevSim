@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE suppressions PUBLIC
+        "-//Puppy Crawl//DTD Suppressions 1.1//EN"
+        "http://www.puppycrawl.com/dtds/suppressions_1_1.dtd">
+<suppressions>
+
+    <!-- Only happens if using decompiled rev libraries -->
+    <suppress files="com.revrobotics" checks="[a-zA-Z0-9]*"/>
+
+</suppressions>
