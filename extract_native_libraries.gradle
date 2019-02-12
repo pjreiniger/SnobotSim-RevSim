@@ -38,10 +38,6 @@ task extract_wpilib {
     if (dir.exists()) dir.deleteDir()
     dir.mkdirs()
 
-    println "TASIS"
-    println extractedFiles.each { println it }
-    println dir
-
     if (project.tasks.findByName('packageNativeFilesInJar')) {
         dependsOn packageNativeFilesInJar
     }

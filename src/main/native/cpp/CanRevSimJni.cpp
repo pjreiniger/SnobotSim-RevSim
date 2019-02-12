@@ -3,8 +3,8 @@
 
 #include <iostream>
 
-#include "MockData/CanData.h"
 #include "com_snobot_simulator_rev_RevSimJni.h"
+#include "mockdata/CanData.h"
 
 namespace SnobotSimRev
 {
