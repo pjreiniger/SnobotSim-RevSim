@@ -29,6 +29,12 @@ jobs:
        # checkStyleRunAnalysis: true
        # pmdRunAnalysis: true
 
+    - task: PublishBuildArtifacts@1
+      displayName: 'Publish Artifact: maven repo'
+      inputs:
+        PathtoPublish: 'build/maven_repo'
+        ArtifactName: 'LinuxMaven'
+
  - job: Windows_64_Bit
    pool:
      vmImage: 'vs2017-win2016'
