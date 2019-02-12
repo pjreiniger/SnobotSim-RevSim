@@ -165,7 +165,7 @@ jobs:
       displayName: 'Publish Combined Artifacts'
       inputs:
         PathtoPublish: $(System.DefaultWorkingDirectory)/output
-        ArtifactName: 'Full Maven'
+        ArtifactName: 'REV Full Maven'
 
    dependsOn: [ Windows_64_Bit, Windows_32_Bit, Mac, Linux ]
    condition: succeeded()
