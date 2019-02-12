@@ -6,6 +6,7 @@
 resources:
   containers:
   - container: wpilib2019
+    image: wpilib/roborio-cross-ubuntu:2019-18.04
 
 jobs:
 
