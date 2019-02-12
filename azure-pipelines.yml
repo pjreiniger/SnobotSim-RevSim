@@ -29,11 +29,11 @@ jobs:
        # checkStyleRunAnalysis: true
        # pmdRunAnalysis: true
 
-    - task: PublishBuildArtifacts@1
-      displayName: 'Publish Artifact: maven repo'
-      inputs:
-        PathtoPublish: 'build/maven_repo'
-        ArtifactName: 'LinuxMaven'
+   - task: PublishBuildArtifacts@1
+     displayName: 'Publish Artifact: maven repo'
+     inputs:
+       PathtoPublish: 'build/maven_repo'
+       ArtifactName: 'LinuxMaven'
 
  - job: Windows_64_Bit
    pool:
