@@ -23,9 +23,8 @@ public abstract class BaseRevDeviceManager
             int manufacturer = (aMessageId >> 16) & 0xFF;
             int deviceType = (aMessageId >> 24) & 0x1F;
 
-            sLOGGER.log(Level.TRACE,
-                    "Getting send: Message ID: 0x" + Integer.toHexString(aMessageId) + " -> Device ID: " + deviceId + ", API Id: " + apiId
-                            + ", Manufacturer: " + manufacturer + ", Device Type: " + deviceType);
+            sLOGGER.log(Level.TRACE, "Getting send: Message ID: 0x" + Integer.toHexString(aMessageId) + " -> Device ID: " + deviceId + ", API Id: "
+                    + apiId + ", Manufacturer: " + manufacturer + ", Device Type: " + deviceType);
 
             return handleSend(deviceId, apiId, aData);
         }
@@ -45,7 +44,7 @@ public abstract class BaseRevDeviceManager
         }
     };
 
-    private final Map<Integer, String> mArbIdLookup;
+    protected final Map<Integer, String> mArbIdLookup;
 
     @SuppressWarnings("PMD")
     public BaseRevDeviceManager()
@@ -54,7 +53,7 @@ public abstract class BaseRevDeviceManager
 
         mArbIdLookup = new HashMap<>();
         mArbIdLookup.put(2, "SetpointOut");
-        mArbIdLookup.put(96, "getAppliedOutput");
+        mArbIdLookup.put(96, "getPeriodicStatus0");
         mArbIdLookup.put(97, "getPeriodicStatus1");
         mArbIdLookup.put(98, "getPeriodicStatus2");
         mArbIdLookup.put(110, "clearFaults");
@@ -135,108 +134,20 @@ public abstract class BaseRevDeviceManager
         mArbIdLookup.put(837, "getParamterCore(kEncoderCountsPerRev)");
         mArbIdLookup.put(838, "getParamterCore(kEncoderAverageDepth)");
         mArbIdLookup.put(839, "getParamterCore(kEncoderSampleDelta)");
-
-        // for (ConfigParameter paramter : ConfigParameter.values())
-        // {
-        // int key = 768 + paramter.value;
-        // mArbIdLookup.put(key, "getParamterCore(" + paramter + ")");
-        // System.out.println(" mArbIdLookup.put(" + key + ",
-        // \"getParamterCore(" + paramter + ")\");");
-        // }
     }
 
-    @SuppressWarnings("PMD")
-    protected int handleSend(int aDeviceId, int aApiId, ByteBuffer aData)
+    protected void writeFirmwareVersion(ByteBuffer aBuffer)
     {
-        int output = 0;
-
-        String arbAsString = mArbIdLookup.get(aApiId);
-        if (arbAsString == null)
-        {
-            sLOGGER.log(Level.ERROR, "Unknown API Id " + aApiId);
-            return 1;
-        }
-
-        switch (arbAsString)
-        {
-        case "heartbeat":
-        {
-            sLOGGER.log(Level.TRACE, "Hearbeat not supported");
-            break;
-        }
-
-        case "SetpointOut":
-        {
-            if (aData.capacity() == 0)
-            {
-                return output;
-            }
-
-            aData.order(ByteOrder.LITTLE_ENDIAN);
-            float setpoint = aData.getFloat();
-            short auxSetpoint = aData.getShort();
-            byte pidSlot = aData.get();
-            byte rsvd = aData.get();
-
-            set(aDeviceId, setpoint, auxSetpoint, pidSlot, rsvd);
-            break;
-        }
-        // Firmware Revision
-        case "getFirmwareVersion":
-        {
-            // Assume this only happens when starting a thing.
-            createSim(aDeviceId);
-            break;
-        }
-        default:
-            sLOGGER.log(Level.DEBUG, "Unsupported option " + arbAsString + "(" + aApiId + ")");
-            break;
-        }
-
-        return output;
+        aBuffer.order(ByteOrder.BIG_ENDIAN);
+        aBuffer.rewind();
+        aBuffer.put((byte) 1); // Major
+        aBuffer.put((byte) 0); // Minor
+        aBuffer.putShort((short) 385); // Patch
+        aBuffer.put((byte) 0); // Debug
+        aBuffer.put((byte) 191); // Hardware Revision
     }
 
-    protected int handleRead(int aDeviceId, int aApiId, ByteBuffer aBuffer)
-    {
-        int output = 0;
+    protected abstract int handleRead(int aDeviceId, int aApiId, ByteBuffer aBuffer);
 
-        String arbAsString = mArbIdLookup.get(aApiId);
-        if (arbAsString == null)
-        {
-            sLOGGER.log(Level.ERROR, "Unknown API Id " + aApiId);
-            return 1;
-        }
-
-        switch (arbAsString) // NOPMD
-        {
-        // Firmware Revision
-        case "getFirmwareVersion":
-        {
-            sLOGGER.log(Level.DEBUG, "Getting firmware version");
-            aBuffer.order(ByteOrder.BIG_ENDIAN);
-            aBuffer.rewind();
-            aBuffer.put((byte) 1); // Major
-            aBuffer.put((byte) 0); // Minor
-            aBuffer.putShort((short) 385); // Patch
-            aBuffer.put((byte) 0); // Debug
-            aBuffer.put((byte) 191); // Hardware Revision
-            break;
-        }
-        default:
-            sLOGGER.log(Level.DEBUG, "Unsupported option " + arbAsString + "(" + aApiId + ")");
-            break;
-        }
-
-        return output;
-    }
-
-    protected abstract void createSim(int aDeviceId);
-
-    @SuppressWarnings("PMD.AvoidUsingShortType")
-    protected void set(int aDeviceId, float aSetpoint, short aAuxSetpoint, byte aPidSlot, byte aRsvd)
-    {
-        sLOGGER.log(Level.DEBUG, "Setting " + aAuxSetpoint + ", " + aPidSlot + ", " + aRsvd + ", " + aSetpoint);
-    }
-
-
+    protected abstract int handleSend(int aDeviceId, int aApiId, ByteBuffer aData);
 }
