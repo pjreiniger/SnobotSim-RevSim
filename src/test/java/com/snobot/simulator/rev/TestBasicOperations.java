@@ -1,5 +1,9 @@
 package com.snobot.simulator.rev;
 
+import static org.junit.Assert.fail;
+
+import java.nio.ByteBuffer;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -21,21 +25,43 @@ public class TestBasicOperations
 {
     private class TestableDeviceManager extends BaseRevDeviceManager
     {
+
         @Override
-        protected void createSim(int aDeviceId)
+        protected int handleRead(int aDeviceId, int aApiId, ByteBuffer aBuffer)
         {
+            String arbAsString = mArbIdLookup.get(aApiId);
+            if (arbAsString == null)
+            {
+                fail("Unknown lookup for id " + aApiId);
+                return 1;
+            }
+
+            if ("getFirmwareVersion".equals(arbAsString))
+            {
+                writeFirmwareVersion(aBuffer);
+            }
+
+            return 0;
         }
 
+        @Override
+        protected int handleSend(int aDeviceId, int aApiId, ByteBuffer aData)
+        {
+            String arbAsString = mArbIdLookup.get(aApiId);
+            if (arbAsString == null)
+            {
+                fail("Unknown lookup for id " + aApiId);
+                return 1;
+            }
+
+            return 0;
+        }
     }
 
     @SuppressWarnings({"PMD.NcssCount", "PMD.DataflowAnomalyAnalysis", "PMD.ExcessiveMethodLength"})
     @Test
     public void testUnsupportedOperations()
     {
-        new TestableDeviceManager();
-
-        HAL.initialize(0, 0);
-
         CANSparkMax sc = new CANSparkMax(10, MotorType.kBrushless);
         CANSparkMax follower = new CANSparkMax(11, MotorType.kBrushed);
         ExternalFollower externalFollower = new ExternalFollower(15, 0);
@@ -154,5 +180,9 @@ public class TestBasicOperations
         HAL.initialize(0, 0);
 
         System.loadLibrary("SparkMaxDriver");
+
+        new TestableDeviceManager();
+        HAL.initialize(0, 0);
+
     }
 }
