@@ -62,7 +62,6 @@ public class TestBasicOperations
         sc.getMotorTemperature();
         sc.getOutputCurrent();
         sc.getPIDController();
-        sc.getRampRate();
         for (FaultID faultId : FaultID.values())
         {
             sc.getStickyFault(faultId); // TODO investigate
@@ -96,7 +95,6 @@ public class TestBasicOperations
         }
         sc.setInverted(true);
         sc.setInverted(false);
-        sc.setRampRate(.5);
         sc.setSecondaryCurrentLimit(.6);
         sc.setSecondaryCurrentLimit(.8, 10);
         sc.setSmartCurrentLimit(3);
@@ -104,7 +102,6 @@ public class TestBasicOperations
         sc.setSmartCurrentLimit(6, 7, 12);
         sc.stopMotor();
 
-        sc.getControlFramePeriod();
         sc.getDeviceId();
         sc.getFirmwareString();
         sc.getFirmwareVersion();
@@ -134,7 +131,6 @@ public class TestBasicOperations
             sc.setPeriodicFramePeriod(frame, 50);
         }
         sc.getSerialNumber();
-        sc.setControlFramePeriod(32);
 
         for (MotorType motorType : MotorType.values())
         {
@@ -157,6 +153,6 @@ public class TestBasicOperations
 
         HAL.initialize(0, 0);
 
-        System.loadLibrary("RevSimulation");
+        System.loadLibrary("SparkMaxDriver");
     }
 }

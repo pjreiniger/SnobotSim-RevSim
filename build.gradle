@@ -13,8 +13,8 @@ plugins {
     id "jacoco"
 }
 
-ext.allwpilibVersion = '2019.1.1'
-ext.rev_library_version = "1.0.28"
+ext.allwpilibVersion = '2019.3.1'
+ext.rev_library_version = "1.1.8"
 ext.release_version = rev_library_version + "_V0"
 
 repositories {
@@ -38,7 +38,7 @@ model {
             headerClassifier = 'headers'
             ext = 'zip'
             version = allwpilibVersion
-            sharedConfigs = [ RevSimulation: [] ]
+            sharedConfigs = [ SparkMaxDriver: [] ]
         }
         halsim(DependencyConfig) {
             groupId = 'edu.wpi.first.hal'
@@ -46,12 +46,12 @@ model {
             headerClassifier = 'headers'
             ext = 'zip'
             version = allwpilibVersion
-            sharedConfigs = [ RevSimulation: [] ]
+            sharedConfigs = [ SparkMaxDriver: [] ]
         }
     }
 
     components {
-        RevSimulation(JniNativeLibrarySpec) {
+        SparkMaxDriver(JniNativeLibrarySpec) {
 
             enableCheckTask true
             javaCompileTasks << compileJava
@@ -83,7 +83,7 @@ task packageNativeFilesInJar(type: Jar) {
     project.model {
         binaries {
             withType(SharedLibraryBinarySpec) { binary ->
-                if (binary.component.name == "RevSimulation")
+                if (binary.component.name == "SparkMaxDriver")
                 {
                     dependsOn binary.buildTask
                     from(binary.sharedLibraryFile) {
