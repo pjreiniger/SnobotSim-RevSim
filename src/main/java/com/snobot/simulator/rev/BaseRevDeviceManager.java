@@ -188,11 +188,10 @@ public abstract class BaseRevDeviceManager
 
     protected void writeFirmwareVersion(ByteBuffer aBuffer)
     {
+        sLOGGER.log(Level.DEBUG, "Getting firmware version");
         aBuffer.order(ByteOrder.BIG_ENDIAN);
         aBuffer.rewind();
-        aBuffer.put((byte) 1); // Major
-        aBuffer.put((byte) 0); // Minor
-        aBuffer.putShort((short) 385); // Patch
+        aBuffer.putInt(0x101001C); // Major, Minor, Patch
         aBuffer.put((byte) 0); // Debug
         aBuffer.put((byte) 191); // Hardware Revision
     }
