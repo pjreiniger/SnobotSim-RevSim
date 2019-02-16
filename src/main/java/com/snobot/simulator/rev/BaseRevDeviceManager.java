@@ -118,7 +118,7 @@ public abstract class BaseRevDeviceManager
         mArbIdLookup.put(821, "getParamterCore(kHardLimitRevEn)");
         mArbIdLookup.put(822, "getParamterCore(kSoftLimitFwdEn)");
         mArbIdLookup.put(823, "getParamterCore(kSoftLimitRevEn)");
-        mArbIdLookup.put(824, "getParamterCore(kRampRate)");
+        mArbIdLookup.put(824, "getParamterCore(kOpenLoopRampRate)");
         mArbIdLookup.put(825, "getParamterCore(kFollowerID)");
         mArbIdLookup.put(826, "getParamterCore(kFollowerConfig)");
         mArbIdLookup.put(827, "getParamterCore(kSmartCurrentStallLimit)");
@@ -134,6 +134,56 @@ public abstract class BaseRevDeviceManager
         mArbIdLookup.put(837, "getParamterCore(kEncoderCountsPerRev)");
         mArbIdLookup.put(838, "getParamterCore(kEncoderAverageDepth)");
         mArbIdLookup.put(839, "getParamterCore(kEncoderSampleDelta)");
+        mArbIdLookup.put(840, "getParamterCore(kEncoderRsvd0)");
+        mArbIdLookup.put(841, "getParamterCore(kEncoderRsvd1)");
+        mArbIdLookup.put(842, "getParamterCore(kVoltageCompMode)");
+        mArbIdLookup.put(843, "getParamterCore(kCompensatedNominalVoltage)");
+        mArbIdLookup.put(844, "getParamterCore(kSmartMotionMaxVelocity_0)");
+        mArbIdLookup.put(845, "getParamterCore(kSmartMotionMaxAccel_0)");
+        mArbIdLookup.put(846, "getParamterCore(kSmartMotionMinVelOutput_0)");
+        mArbIdLookup.put(847, "getParamterCore(kSmartMotionAllowedClosedLoopError_0)");
+        mArbIdLookup.put(848, "getParamterCore(kSmartMotionAccelStrategy_0)");
+        mArbIdLookup.put(849, "getParamterCore(kSmartMotionMaxVelocity_1)");
+        mArbIdLookup.put(850, "getParamterCore(kSmartMotionMaxAccel_1)");
+        mArbIdLookup.put(851, "getParamterCore(kSmartMotionMinVelOutput_1)");
+        mArbIdLookup.put(852, "getParamterCore(kSmartMotionAllowedClosedLoopError_1)");
+        mArbIdLookup.put(853, "getParamterCore(kSmartMotionAccelStrategy_1)");
+        mArbIdLookup.put(854, "getParamterCore(kSmartMotionMaxVelocity_2)");
+        mArbIdLookup.put(855, "getParamterCore(kSmartMotionMaxAccel_2)");
+        mArbIdLookup.put(856, "getParamterCore(kSmartMotionMinVelOutput_2)");
+        mArbIdLookup.put(857, "getParamterCore(kSmartMotionAllowedClosedLoopError_2)");
+        mArbIdLookup.put(858, "getParamterCore(kSmartMotionAccelStrategy_2)");
+        mArbIdLookup.put(859, "getParamterCore(kSmartMotionMaxVelocity_3)");
+        mArbIdLookup.put(860, "getParamterCore(kSmartMotionMaxAccel_3)");
+        mArbIdLookup.put(861, "getParamterCore(kSmartMotionMinVelOutput_3)");
+        mArbIdLookup.put(862, "getParamterCore(kSmartMotionAllowedClosedLoopError_3)");
+        mArbIdLookup.put(863, "getParamterCore(kSmartMotionAccelStrategy_3)");
+        mArbIdLookup.put(864, "getParamterCore(kIMaxAccum_0)");
+        mArbIdLookup.put(865, "getParamterCore(kSlot3Placeholder1_0)");
+        mArbIdLookup.put(866, "getParamterCore(kSlot3Placeholder2_0)");
+        mArbIdLookup.put(867, "getParamterCore(kSlot3Placeholder3_0)");
+        mArbIdLookup.put(868, "getParamterCore(kIMaxAccum_1)");
+        mArbIdLookup.put(869, "getParamterCore(kSlot3Placeholder1_1)");
+        mArbIdLookup.put(870, "getParamterCore(kSlot3Placeholder2_1)");
+        mArbIdLookup.put(871, "getParamterCore(kSlot3Placeholder3_1)");
+        mArbIdLookup.put(872, "getParamterCore(kIMaxAccum_2)");
+        mArbIdLookup.put(873, "getParamterCore(kSlot3Placeholder1_2)");
+        mArbIdLookup.put(874, "getParamterCore(kSlot3Placeholder2_2)");
+        mArbIdLookup.put(875, "getParamterCore(kSlot3Placeholder3_2)");
+        mArbIdLookup.put(876, "getParamterCore(kIMaxAccum_3)");
+        mArbIdLookup.put(877, "getParamterCore(kSlot3Placeholder1_3)");
+        mArbIdLookup.put(878, "getParamterCore(kSlot3Placeholder2_3)");
+        mArbIdLookup.put(879, "getParamterCore(kSlot3Placeholder3_3)");
+        mArbIdLookup.put(880, "getParamterCore(kPositionConversionFactor)");
+        mArbIdLookup.put(881, "getParamterCore(kVelocityConversionFactor)");
+        mArbIdLookup.put(882, "getParamterCore(kClosedLoopRampRate)");
+
+//         for (ConfigParameter paramter : ConfigParameter.values())
+//         {
+//            int key = 768 + paramter.value;
+//            mArbIdLookup.put(key, "getParamterCore(" + paramter + ")");
+//            System.out.println(" mArbIdLookup.put(" + key + ",\"getParamterCore(" + paramter + ")\");");
+//         }
     }
 
     protected void writeFirmwareVersion(ByteBuffer aBuffer)
