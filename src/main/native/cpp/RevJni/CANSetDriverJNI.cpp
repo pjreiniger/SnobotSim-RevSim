@@ -77,10 +77,6 @@ Java_com_revrobotics_jni_CANSetDriverJNI_SetDriverSet4
   (JNIEnv* env, jclass, jint deviceID, jfloat value, jint apiId, jbyte pidSlot,
    jshort arbFF)
 {
-    int length = 8;
-    uint8_t buffer[8];
-    void* paramData = NULL;
-
     sRevSimulator.Send("SetDriverSet4", deviceID, value, apiId, pidSlot, arbFF);
 }
 
