@@ -25,7 +25,6 @@ public class TestBasicOperations
 {
     private class TestableDeviceManager extends BaseRevDeviceManager
     {
-
         @Override
         protected int handleRead(int aDeviceId, int aApiId, ByteBuffer aBuffer)
         {
@@ -39,6 +38,13 @@ public class TestBasicOperations
             if ("getFirmwareVersion".equals(arbAsString))
             {
                 writeFirmwareVersion(aBuffer);
+            }
+            else
+            {
+                for (int i = 0; i < aBuffer.capacity(); ++i)
+                {
+                    aBuffer.put(i, (byte) 0);
+                }
             }
 
             return 0;
@@ -58,7 +64,7 @@ public class TestBasicOperations
         }
     }
 
-    @SuppressWarnings({"PMD.NcssCount", "PMD.DataflowAnomalyAnalysis", "PMD.ExcessiveMethodLength"})
+    @SuppressWarnings({ "PMD.NcssCount", "PMD.DataflowAnomalyAnalysis", "PMD.ExcessiveMethodLength", "PMD.CyclomaticComplexity", "PMD.NPathComplexity" })
     @Test
     public void testUnsupportedOperations()
     {
@@ -66,38 +72,128 @@ public class TestBasicOperations
         CANSparkMax follower = new CANSparkMax(11, MotorType.kBrushed);
         ExternalFollower externalFollower = new ExternalFollower(15, 0);
 
-        sc.set(0);
-        sc.set(-.1);
-        sc.set(0);
 
-        sc.burnFlash();
-        sc.clearFaults();
+        sc.set(0);
+        sc.get();
+        sc.setInverted(false);
+        sc.getInverted();
         sc.disable();
+        sc.stopMotor();
+        sc.pidWrite(0);
+        sc.getEncoder();
+        sc.getPIDController();
+        for (LimitSwitchPolarity limitSwitchPolarity : LimitSwitchPolarity.values())
+        {
+            sc.getForwardLimitSwitch(limitSwitchPolarity);
+        }
+        for (LimitSwitchPolarity limitSwitchPolarity : LimitSwitchPolarity.values())
+        {
+            sc.getReverseLimitSwitch(limitSwitchPolarity);
+        }
+        sc.setSmartCurrentLimit(0);
+        sc.setSmartCurrentLimit(0, 0);
+        sc.setSmartCurrentLimit(0, 0, 0);
+        sc.setSecondaryCurrentLimit(0);
+        sc.setSecondaryCurrentLimit(0, 0);
+        for (IdleMode idleMode : IdleMode.values())
+        {
+            sc.setIdleMode(idleMode);
+        }
+        sc.getIdleMode();
+        sc.enableVoltageCompensation(0);
+        sc.disableVoltageCompensation();
+        sc.getVoltageCompensationNominalVoltage();
+        sc.setOpenLoopRampRate(0);
+        sc.setClosedLoopRampRate(0);
+        sc.getOpenLoopRampRate();
+        sc.getClosedLoopRampRate();
         sc.follow(follower);
         sc.follow(follower, true);
         sc.follow(externalFollower, 11);
         sc.follow(externalFollower, 12, true);
-        sc.get(); // TODO investigate
-        sc.getAppliedOutput();
-
-        sc.getBusVoltage();
-
-        sc.getFaults();
-        sc.getIdleMode();
-        sc.getInverted();
-        sc.getMotorTemperature();
-        sc.getOutputCurrent();
-        sc.getPIDController();
-        for (FaultID faultId : FaultID.values())
-        {
-            sc.getStickyFault(faultId); // TODO investigate
-            sc.getFault(faultId);
-        }
-        sc.getStickyFaults();
         sc.isFollower();
-        sc.pidWrite(0);
-        sc.set(.5);
-        sc.setCANTimeout(20);
+        sc.getFaults();
+        sc.getStickyFaults();
+        for (FaultID faultID : FaultID.values())
+        {
+            sc.getFault(faultID);
+        }
+        for (FaultID faultID : FaultID.values())
+        {
+            sc.getStickyFault(faultID);
+        }
+        sc.getBusVoltage();
+        sc.getAppliedOutput();
+        sc.getOutputCurrent();
+        sc.getMotorTemperature();
+        sc.clearFaults();
+        sc.burnFlash();
+        sc.setCANTimeout(0);
+
+        sc.getFirmwareVersion();
+        sc.setControlFramePeriodMs(0);
+        sc.getFirmwareString();
+        sc.getSerialNumber();
+        sc.getDeviceId();
+        for (MotorType motorType : MotorType.values())
+        {
+            sc.setMotorType(motorType);
+        }
+        sc.getMotorType();
+        for (PeriodicFrame periodicFrame : PeriodicFrame.values())
+        {
+            sc.setPeriodicFramePeriod(periodicFrame, 0);
+        }
+        for (ConfigParameter configParameter : ConfigParameter.values())
+        {
+            sc.setParameter(configParameter, 0);
+        }
+        for (ConfigParameter configParameter : ConfigParameter.values())
+        {
+            sc.setParameter(configParameter, 0);
+        }
+        for (ConfigParameter configParameter : ConfigParameter.values())
+        {
+            sc.setParameter(configParameter, false);
+        }
+        for (ConfigParameter configParameter : ConfigParameter.values())
+        {
+            sc.getParameterDouble(configParameter);
+        }
+        for (ConfigParameter configParameter : ConfigParameter.values())
+        {
+            sc.getParameterInt(configParameter);
+        }
+        for (ConfigParameter configParameter : ConfigParameter.values())
+        {
+            sc.getParameterBoolean(configParameter);
+        }
+        sc.getSafeFloat(1.5f);
+        sc.setEncPosition(0);
+        sc.setIAccum(0);
+        sc.restoreFactoryDefaults();
+        sc.restoreFactoryDefaults(false);
+        for (ConfigParameter configParameter : ConfigParameter.values())
+        {
+            for (ParameterType type : ParameterType.values())
+            {
+                sc.getParameterCore(configParameter, type);
+                sc.setParameterCore(configParameter, type, 1);
+            }
+        }
+
+        for (ConfigParameter configParameter : ConfigParameter.values())
+        {
+            sc.getParameterType(configParameter);
+        }
+
+        sc.close();
+    }
+
+    @Test
+    public void testLimitSwitchFunctions()
+    {
+        CANSparkMax sc = new CANSparkMax(11, MotorType.kBrushless);
 
         for (LimitSwitchPolarity polarity : LimitSwitchPolarity.values())
         {
@@ -115,59 +211,21 @@ public class TestBasicOperations
             fowrardSwitch.isLimitSwitchEnabled();
         }
 
-        for (IdleMode mode : IdleMode.values())
-        {
-            sc.setIdleMode(mode);
-        }
-        sc.setInverted(true);
-        sc.setInverted(false);
-        sc.setSecondaryCurrentLimit(.6);
-        sc.setSecondaryCurrentLimit(.8, 10);
-        sc.setSmartCurrentLimit(3);
-        sc.setSmartCurrentLimit(5, 8);
-        sc.setSmartCurrentLimit(6, 7, 12);
-        sc.stopMotor();
+    }
 
-        sc.getDeviceId();
-        sc.getFirmwareString();
-        sc.getFirmwareVersion();
-        // sc.getMotorType();
-
-
-        for (ConfigParameter parameter : ConfigParameter.values())
-        {
-            sc.getParameterBoolean(parameter);
-            sc.getParameterDouble(parameter);
-            sc.getParameterInt(parameter);
-            sc.setParameter(parameter, false);
-            sc.setParameter(parameter, 1.0);
-            sc.setParameter(parameter, 1);
-
-            for (ParameterType type : ParameterType.values())
-            {
-                sc.getParameterCore(parameter, type);
-                sc.setParameterCore(parameter, type, 1);
-            }
-        }
-
-        // sc.getParameterType(ConfigParameter.kI_0);
-
-        for (PeriodicFrame frame : PeriodicFrame.values())
-        {
-            sc.setPeriodicFramePeriod(frame, 50);
-        }
-        sc.getSerialNumber();
-
-        for (MotorType motorType : MotorType.values())
-        {
-            sc.setMotorType(motorType);
-        }
-
+    @Test
+    public void testEncoderFunctions()
+    {
+        CANSparkMax sc = new CANSparkMax(12, MotorType.kBrushless);
         CANEncoder encoder = sc.getEncoder();
+
         encoder.getPosition();
         encoder.getVelocity();
-
-        sc.close();
+        encoder.setPosition(0);
+        encoder.setPositionConversionFactor(0);
+        encoder.setVelocityConversionFactor(0);
+        encoder.getPositionConversionFactor();
+        encoder.getVelocityConversionFactor();
     }
 
     @Before

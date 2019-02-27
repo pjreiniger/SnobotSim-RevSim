@@ -3,6 +3,7 @@
 
 #include <iostream>
 
+#include "RevSimMocks/CanSetDriverSim.h"
 #include "com_snobot_simulator_rev_RevSimJni.h"
 #include "mockdata/CanData.h"
 
@@ -102,6 +103,8 @@ Java_com_snobot_simulator_rev_RevSimJni_registerRevCallback
             std::cout << "No send callback" << std::endl;
         }
     };
+
+    SnobotSim::SetSendCallback(sendCallbackFunc);
 
     auto readCallbackFunc = [](const char* name, void* param,
                                     uint32_t* messageID, uint32_t messageIDMask,

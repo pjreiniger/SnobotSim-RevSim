@@ -13,8 +13,8 @@ plugins {
     id "jacoco"
 }
 
-ext.allwpilibVersion = '2019.3.1'
-ext.rev_library_version = "1.1.8"
+ext.allwpilibVersion = '2019.4.1'
+ext.rev_library_version = "1.1.9"
 ext.release_version = rev_library_version + "_V0"
 
 repositories {

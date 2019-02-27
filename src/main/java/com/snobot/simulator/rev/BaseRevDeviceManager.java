@@ -59,8 +59,11 @@ public abstract class BaseRevDeviceManager
         mArbIdLookup.put(110, "clearFaults");
         mArbIdLookup.put(114, "burnFlash");
         mArbIdLookup.put(115, "follow");
+        mArbIdLookup.put(116, "restoreFactoryDefaults");
         mArbIdLookup.put(146, "heartbeat");
         mArbIdLookup.put(152, "getFirmwareVersion");
+        mArbIdLookup.put(160, "setEncPosition");
+        mArbIdLookup.put(162, "setIAccum");
 
         mArbIdLookup.put(768, "getParamterCore(kCanID)");
         mArbIdLookup.put(769, "getParamterCore(kInputMode)");
@@ -177,6 +180,9 @@ public abstract class BaseRevDeviceManager
         mArbIdLookup.put(880, "getParamterCore(kPositionConversionFactor)");
         mArbIdLookup.put(881, "getParamterCore(kVelocityConversionFactor)");
         mArbIdLookup.put(882, "getParamterCore(kClosedLoopRampRate)");
+
+        // SnobotSim...
+        mArbIdLookup.put(1020, "SetDriverSet4");
 
 //         for (ConfigParameter paramter : ConfigParameter.values())
 //         {
