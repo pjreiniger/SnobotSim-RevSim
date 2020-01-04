@@ -3,9 +3,9 @@ import os
 import re
 import collections
 
-JAVA_PATH = r'C:\Program Files\Java\jdk1.8.0_191'
-LIB_VERSION = "1.1.9"
-LIB_HASH = "e7b118e6fd873ea74e7ccbce278e0979a323c30e"
+JAVA_PATH = r'C:\Users\Public\wpilib\2020\jdk'
+LIB_VERSION = "1.5.0"
+LIB_HASH = "ba053d9ffd562952235ddee363545b2c702c6bb8"
 ARTIFACT_PACKAGE = "com.revrobotics.frc"
 ARTIFACT_NAME = "SparkMax-java"
 M2_DIRECTORY = r'C:\Users\PJ\.gradle\caches\modules-2\files-2.1'

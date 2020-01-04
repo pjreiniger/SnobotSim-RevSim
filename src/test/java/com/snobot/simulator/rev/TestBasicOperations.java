@@ -7,6 +7,8 @@ import java.nio.ByteBuffer;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.revrobotics.AlternateEncoderType;
+import com.revrobotics.CANAnalog.AnalogMode;
 import com.revrobotics.CANDigitalInput;
 import com.revrobotics.CANDigitalInput.LimitSwitchPolarity;
 import com.revrobotics.CANEncoder;
@@ -14,10 +16,9 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.ExternalFollower;
 import com.revrobotics.CANSparkMax.FaultID;
 import com.revrobotics.CANSparkMax.IdleMode;
-import com.revrobotics.CANSparkMaxLowLevel.ConfigParameter;
+import com.revrobotics.CANSparkMax.SoftLimitDirection;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-import com.revrobotics.CANSparkMaxLowLevel.ParameterType;
-import com.revrobotics.CANSparkMaxLowLevel.PeriodicFrame;
+import com.revrobotics.EncoderType;
 
 import edu.wpi.first.hal.HAL;
 
@@ -68,126 +69,101 @@ public class TestBasicOperations
     @Test
     public void testUnsupportedOperations()
     {
-        CANSparkMax sc = new CANSparkMax(10, MotorType.kBrushless);
+        CANSparkMax spark = new CANSparkMax(10, MotorType.kBrushless);
         CANSparkMax follower = new CANSparkMax(11, MotorType.kBrushed);
         ExternalFollower externalFollower = new ExternalFollower(15, 0);
 
 
-        sc.set(0);
-        sc.get();
-        sc.setInverted(false);
-        sc.getInverted();
-        sc.disable();
-        sc.stopMotor();
-        sc.pidWrite(0);
-        sc.getEncoder();
-        sc.getPIDController();
+       
+        spark.set(0);
+        spark.get();
+        spark.setInverted(false);
+        spark.getInverted();
+        spark.disable();
+        spark.stopMotor();
+        spark.pidWrite(0);
+        spark.getEncoder();
+        for (EncoderType encoderType : EncoderType.values())
+        {
+            spark.getEncoder(encoderType, 0);
+        }
+        spark.getAlternateEncoder();
+        for (AlternateEncoderType alternateEncoderType : AlternateEncoderType.values())
+        {
+            spark.getAlternateEncoder(alternateEncoderType, 0);
+        }
+        for (AnalogMode analogMode : AnalogMode.values())
+        {
+            spark.getAnalog(analogMode);
+        }
+        spark.getPIDController();
         for (LimitSwitchPolarity limitSwitchPolarity : LimitSwitchPolarity.values())
         {
-            sc.getForwardLimitSwitch(limitSwitchPolarity);
+            spark.getForwardLimitSwitch(limitSwitchPolarity);
         }
         for (LimitSwitchPolarity limitSwitchPolarity : LimitSwitchPolarity.values())
         {
-            sc.getReverseLimitSwitch(limitSwitchPolarity);
+            spark.getReverseLimitSwitch(limitSwitchPolarity);
         }
-        sc.setSmartCurrentLimit(0);
-        sc.setSmartCurrentLimit(0, 0);
-        sc.setSmartCurrentLimit(0, 0, 0);
-        sc.setSecondaryCurrentLimit(0);
-        sc.setSecondaryCurrentLimit(0, 0);
+        spark.setSmartCurrentLimit(0);
+        spark.setSmartCurrentLimit(0, 0);
+        spark.setSmartCurrentLimit(0, 0, 0);
+        spark.setSecondaryCurrentLimit(0);
+        spark.setSecondaryCurrentLimit(0, 0);
         for (IdleMode idleMode : IdleMode.values())
         {
-            sc.setIdleMode(idleMode);
+            spark.setIdleMode(idleMode);
         }
-        sc.getIdleMode();
-        sc.enableVoltageCompensation(0);
-        sc.disableVoltageCompensation();
-        sc.getVoltageCompensationNominalVoltage();
-        sc.setOpenLoopRampRate(0);
-        sc.setClosedLoopRampRate(0);
-        sc.getOpenLoopRampRate();
-        sc.getClosedLoopRampRate();
-        sc.follow(follower);
-        sc.follow(follower, true);
-        sc.follow(externalFollower, 11);
-        sc.follow(externalFollower, 12, true);
-        sc.isFollower();
-        sc.getFaults();
-        sc.getStickyFaults();
+        spark.getIdleMode();
+        spark.enableVoltageCompensation(0);
+        spark.disableVoltageCompensation();
+        spark.getVoltageCompensationNominalVoltage();
+        spark.setOpenLoopRampRate(0);
+        spark.setClosedLoopRampRate(0);
+        spark.getOpenLoopRampRate();
+        spark.getClosedLoopRampRate();
+
+        spark.follow(follower);
+        spark.follow(follower, false);
+        spark.follow(externalFollower, 0);
+        spark.follow(externalFollower, 0, false);
+        spark.isFollower();
+        spark.getFaults();
+        spark.getStickyFaults();
         for (FaultID faultID : FaultID.values())
         {
-            sc.getFault(faultID);
+            spark.getFault(faultID);
         }
         for (FaultID faultID : FaultID.values())
         {
-            sc.getStickyFault(faultID);
+            spark.getStickyFault(faultID);
         }
-        sc.getBusVoltage();
-        sc.getAppliedOutput();
-        sc.getOutputCurrent();
-        sc.getMotorTemperature();
-        sc.clearFaults();
-        sc.burnFlash();
-        sc.setCANTimeout(0);
-
-        sc.getFirmwareVersion();
-        sc.setControlFramePeriodMs(0);
-        sc.getFirmwareString();
-        sc.getSerialNumber();
-        sc.getDeviceId();
-        for (MotorType motorType : MotorType.values())
+        spark.getBusVoltage();
+        spark.getAppliedOutput();
+        spark.getOutputCurrent();
+        spark.getMotorTemperature();
+        spark.clearFaults();
+        spark.burnFlash();
+        spark.setCANTimeout(0);
+        for (SoftLimitDirection softLimitDirection : SoftLimitDirection.values())
         {
-            sc.setMotorType(motorType);
+            spark.enableSoftLimit(softLimitDirection, false);
         }
-        sc.getMotorType();
-        for (PeriodicFrame periodicFrame : PeriodicFrame.values())
+        for (SoftLimitDirection softLimitDirection : SoftLimitDirection.values())
         {
-            sc.setPeriodicFramePeriod(periodicFrame, 0);
+            spark.setSoftLimit(softLimitDirection, 0);
         }
-        for (ConfigParameter configParameter : ConfigParameter.values())
+        for (SoftLimitDirection softLimitDirection : SoftLimitDirection.values())
         {
-            sc.setParameter(configParameter, 0);
+            spark.getSoftLimit(softLimitDirection);
         }
-        for (ConfigParameter configParameter : ConfigParameter.values())
+        for (SoftLimitDirection softLimitDirection : SoftLimitDirection.values())
         {
-            sc.setParameter(configParameter, 0);
+            spark.isSoftLimitEnabled(softLimitDirection);
         }
-        for (ConfigParameter configParameter : ConfigParameter.values())
-        {
-            sc.setParameter(configParameter, false);
-        }
-        for (ConfigParameter configParameter : ConfigParameter.values())
-        {
-            sc.getParameterDouble(configParameter);
-        }
-        for (ConfigParameter configParameter : ConfigParameter.values())
-        {
-            sc.getParameterInt(configParameter);
-        }
-        for (ConfigParameter configParameter : ConfigParameter.values())
-        {
-            sc.getParameterBoolean(configParameter);
-        }
-        sc.getSafeFloat(1.5f);
-        sc.setEncPosition(0);
-        sc.setIAccum(0);
-        sc.restoreFactoryDefaults();
-        sc.restoreFactoryDefaults(false);
-        for (ConfigParameter configParameter : ConfigParameter.values())
-        {
-            for (ParameterType type : ParameterType.values())
-            {
-                sc.getParameterCore(configParameter, type);
-                sc.setParameterCore(configParameter, type, 1);
-            }
-        }
-
-        for (ConfigParameter configParameter : ConfigParameter.values())
-        {
-            sc.getParameterType(configParameter);
-        }
-
-        sc.close();
+        spark.getLastError();
+        
+        spark.close();
     }
 
     @Test
@@ -226,6 +202,14 @@ public class TestBasicOperations
         encoder.setVelocityConversionFactor(0);
         encoder.getPositionConversionFactor();
         encoder.getVelocityConversionFactor();
+        encoder.setAverageDepth(0);
+        encoder.getAverageDepth();
+        encoder.setMeasurementPeriod(0);
+        encoder.getMeasurementPeriod();
+        encoder.getCPR();
+        encoder.getCountsPerRevolution();
+        encoder.setInverted(false);
+        encoder.getInverted();
     }
 
     @Before
