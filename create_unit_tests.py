@@ -18,10 +18,12 @@ def create_tests(jar_path):
     os.chdir(output_dir)
 
     classes = collections.defaultdict(list)
+    classes["analog"].append("com/revrobotics/CANAnalog.class")
     classes["digitalInput"].append("com/revrobotics/CANDigitalInput.class")
     classes["encoder"].append("com/revrobotics/CANEncoder.class")
     classes["spark"].append("com/revrobotics/CANSparkMax.class")
     classes["spark"].append("com/revrobotics/CANSparkMaxLowLevel.class")
+    classes["pid"].append("com/revrobotics/CANPIDController.class")
 
     unzip_args = []
     unzip_args.append(JAVA_PATH + r'\bin\jar')
