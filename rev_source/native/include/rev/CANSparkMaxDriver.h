@@ -35,8 +35,9 @@
 #include "rev/CANSparkMaxErrors.h"
 
 #if defined(__cplusplus) && __has_include(<array>)
+
 #else
-#error This project requires C++11 or greater
+//#error This project requires C++11 or greater
 #endif
 
 extern "C" {

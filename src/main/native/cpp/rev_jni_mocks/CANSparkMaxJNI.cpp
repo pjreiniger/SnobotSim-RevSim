@@ -6,8 +6,16 @@
 #include "com_revrobotics_jni_CANSparkMaxJNI.h"
 #include "RevSimMocks/RevMockUtilities.h"
 #include "rev/CANSParkMaxDriver.h"
+#include "RevSimMocks/RevDeviceWrapper.h"
 
 extern "C" {
+
+
+c_SparkMax_handle ConvertToMotorControllerWrapper(jlong aHandle)
+{
+    return (c_SparkMax_handle) reinterpret_cast<SnobotSim::RevSimulator*>(aHandle);
+}
+
 
 
 /*
@@ -29,7 +37,7 @@ JNIEXPORT jlong JNICALL Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1Cre
 JNIEXPORT void JNICALL Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1Destroy
   (JNIEnv *, jclass, jlong handle)
 {
-	c_SparkMax_Destroy((c_SparkMax_handle) handle);
+	c_SparkMax_Destroy(ConvertToMotorControllerWrapper(handle));
 }
 
 /*
@@ -53,7 +61,7 @@ JNIEXPORT jint JNICALL Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1GetD
   (JNIEnv *, jclass, jlong handle)
 {
 	int deviceId = 0;
-	c_SparkMax_GetDeviceId((c_SparkMax_handle) &handle, &deviceId);
+	c_SparkMax_GetDeviceId(ConvertToMotorControllerWrapper(handle), &deviceId);
 	return deviceId;
 }
 
@@ -65,7 +73,7 @@ JNIEXPORT jint JNICALL Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1GetD
 JNIEXPORT jint JNICALL Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1SetMotorType
   (JNIEnv *, jclass, jlong handle, jint type)
 {
-	return c_SparkMax_SetMotorType((c_SparkMax_handle) &handle, (c_SparkMax_MotorType) type);
+	return c_SparkMax_SetMotorType(ConvertToMotorControllerWrapper(handle), (c_SparkMax_MotorType) type);
 }
 
 /*
@@ -196,7 +204,7 @@ JNIEXPORT void JNICALL Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1SetE
 JNIEXPORT jint JNICALL Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1SetpointCommand
   (JNIEnv *, jclass, jlong handle, jfloat value, jint ctrl, jint pidSlot, jfloat arbFeedforward, jint arbFFUnits)
 {
-	return (jint) c_SparkMax_SetpointCommand((c_SparkMax_handle) &handle, value, (c_SparkMax_ControlType) ctrl, pidSlot, arbFeedforward, arbFFUnits);
+	return (jint) c_SparkMax_SetpointCommand(ConvertToMotorControllerWrapper(handle), value, (c_SparkMax_ControlType) ctrl, pidSlot, arbFeedforward, arbFFUnits);
 }
 
 /*

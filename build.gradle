@@ -38,25 +38,6 @@ sourceSets {
 
 apply from: "config.gradle"
 model {
-    dependencyConfigs {
-        wpiutil(DependencyConfig) {
-            groupId = 'edu.wpi.first.wpiutil'
-            artifactId = 'wpiutil-cpp'
-            headerClassifier = 'headers'
-            ext = 'zip'
-            version = allwpilibVersion
-            sharedConfigs = [ SparkMaxDriver: [] ]
-        }
-        halsim(DependencyConfig) {
-            groupId = 'edu.wpi.first.hal'
-            artifactId = 'hal-cpp'
-            headerClassifier = 'headers'
-            ext = 'zip'
-            version = allwpilibVersion
-            sharedConfigs = [ SparkMaxDriver: [] ]
-        }
-    }
-
     components {
         SparkMaxDriver(JniNativeLibrarySpec) {
 
@@ -70,7 +51,8 @@ model {
                         includes = ["**/*.cpp"]
                     }
                     exportedHeaders {
-                        srcDirs = ["src/main/native/include"]
+                        srcDirs = ["src/main/native/include", 
+                                   "rev_source/native/include"]
                     }
                 }
             }

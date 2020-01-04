@@ -4,7 +4,5 @@ import java.nio.ByteBuffer;
 
 public interface RevCallback
 {
-    int sendCallback(String aName, int aMessageId, ByteBuffer aData, int aDataSize, int aPeriodMs);
-
-    int readCallback(String aName, int aMessageId, ByteBuffer aBuffer);
+    void callback(String aName, int aDeviceId, ByteBuffer aBuffer, int aCount);
 }

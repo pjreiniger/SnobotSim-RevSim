@@ -91,7 +91,7 @@ float c_SparkMax_SafeFloat(float f);
 c_SparkMax_ErrorCode c_SparkMax_SetpointCommand(c_SparkMax_handle handle, float value, c_SparkMax_ControlType ctrl,
                                     int pidSlot, float arbFeedforward, int arbFFUnits)
 {
-	LOG_UNSUPPORTED_CAN_FUNC("");
+    ((SnobotSim::RevSimulator*)handle)->Send("SetpointCommand", value, ctrl, pidSlot, arbFeedforward, arbFFUnits);
 	return (c_SparkMax_ErrorCode) 0;
 }
 
