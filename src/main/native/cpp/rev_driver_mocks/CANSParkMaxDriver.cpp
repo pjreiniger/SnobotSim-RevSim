@@ -7,6 +7,15 @@
 #include "RevSimMocks/RevDeviceWrapper.h"
 
 
+#define RECEIVE_HELPER(paramName, size)                                        \
+    SnobotSim::RevSimulator* wrapper = (SnobotSim::RevSimulator*) handle;      \
+    uint8_t buffer[size]; /* NOLINT */                                         \
+    std::memset(&buffer[0], 0, size);                                          \
+    wrapper->Receive(paramName, buffer, size);                                 \
+    uint32_t buffer_pos = 0;
+
+
+
 c_SparkMax_handle c_SparkMax_Create(int deviceId, c_SparkMax_MotorType type)
 {
 	SnobotSim::RevSimulator* output = new SnobotSim::RevSimulator(deviceId, "Create");
@@ -84,7 +93,11 @@ c_SparkMax_ErrorCode c_SparkMax_SetIAccum(c_SparkMax_handle handle, float Iaccum
 c_SparkMax_ErrorCode c_SparkMax_RestoreFactoryDefaults(c_SparkMax_handle handle, uint8_t persist);
 c_SparkMax_ErrorCode c_SparkMax_FactoryWipe(c_SparkMax_handle handle, uint8_t persist);
 
-c_SparkMax_ErrorCode c_SparkMax_SetFollow(c_SparkMax_handle handle, uint32_t followerArbId, uint32_t followerCfg);
+c_SparkMax_ErrorCode c_SparkMax_SetFollow(c_SparkMax_handle handle, uint32_t followerArbId, uint32_t followerCfg)
+{
+    ((SnobotSim::RevSimulator*)handle)->Send("SetFollow", followerArbId, followerCfg);
+	return (c_SparkMax_ErrorCode) 0;
+}
 //c_SparkMax_ErrorCode c_SparkMax_FollowerInvert(c_SparkMax_handle handle, uint8_t invert);
 float c_SparkMax_SafeFloat(float f);
 
@@ -119,7 +132,14 @@ c_SparkMax_ErrorCode c_SparkMax_GetStickyFaults(c_SparkMax_handle handle, uint16
 c_SparkMax_ErrorCode c_SparkMax_GetFault(c_SparkMax_handle handle, c_SparkMax_FaultID faultId, uint8_t* fault);
 c_SparkMax_ErrorCode c_SparkMax_GetStickyFault(c_SparkMax_handle handle, c_SparkMax_FaultID faultId, uint8_t* stickyfault);
 c_SparkMax_ErrorCode c_SparkMax_GetBusVoltage(c_SparkMax_handle handle, float* busVoltage);
-c_SparkMax_ErrorCode c_SparkMax_GetAppliedOutput(c_SparkMax_handle handle, float* appliedOutput);
+c_SparkMax_ErrorCode c_SparkMax_GetAppliedOutput(c_SparkMax_handle handle, float* appliedOutput)
+{
+    RECEIVE_HELPER("GetAppliedOutput", sizeof(*appliedOutput));
+    PoplateReceiveResults(buffer, appliedOutput, buffer_pos);
+    std::cout << "Getting voltage... " << *appliedOutput << std::endl;
+    return (c_SparkMax_ErrorCode) 0;
+}
+
 c_SparkMax_ErrorCode c_SparkMax_GetOutputCurrent(c_SparkMax_handle handle, float* outputCurrent);
 c_SparkMax_ErrorCode c_SparkMax_GetMotorTemperature(c_SparkMax_handle handle, float* motorTemperature);
 c_SparkMax_ErrorCode c_SparkMax_ClearFaults(c_SparkMax_handle handle);

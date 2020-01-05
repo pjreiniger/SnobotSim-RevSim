@@ -154,10 +154,9 @@ JNIEXPORT jint JNICALL Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1Rest
  * Signature: (JII)I
  */
 JNIEXPORT jint JNICALL Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1SetFollow
-  (JNIEnv *, jclass, jlong, jint, jint)
+  (JNIEnv *, jclass, jlong handle, jint followerArbId, jint followerCfg)
 {
-	LOG_UNSUPPORTED_CAN_FUNC("");
-	return 0;
+	return c_SparkMax_SetFollow(ConvertToMotorControllerWrapper(handle), followerArbId, followerCfg);
 }
 
 /*
@@ -501,10 +500,11 @@ JNIEXPORT jfloat JNICALL Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1Ge
  * Signature: (J)F
  */
 JNIEXPORT jfloat JNICALL Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1GetAppliedOutput
-  (JNIEnv *, jclass, jlong)
+  (JNIEnv *, jclass, jlong handle)
 {
-	LOG_UNSUPPORTED_CAN_FUNC("");
-	return 0;
+	float appliedVoltage = 0;
+	c_SparkMax_GetAppliedOutput(ConvertToMotorControllerWrapper(handle), &appliedVoltage);
+	return appliedVoltage;
 }
 
 /*

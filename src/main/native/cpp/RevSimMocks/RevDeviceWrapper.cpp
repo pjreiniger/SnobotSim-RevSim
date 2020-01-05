@@ -26,6 +26,14 @@ SnobotSim::RevSimulator::RevSimulator(int aDeviceId, const std::string& aName) :
 }
 void SnobotSim::RevSimulator::Receive(const std::string& aName, uint8_t* aBuffer, int aSize)
 {
+    if (!gRevCallbacks.empty())
+    {
+    	gRevCallbacks[0](aName.c_str(), mDeviceId, aBuffer, aSize);
+    }
+    else
+    {
+        LOG_UNSUPPORTED_CAN_FUNC("Callback " << aName << " not registered");
+    }
 }
 
 void SnobotSim::RevSimulator::Send(const std::string& aName, uint8_t* aBuffer, int aSize)

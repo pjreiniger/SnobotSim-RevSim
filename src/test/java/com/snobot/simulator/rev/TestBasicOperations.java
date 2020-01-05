@@ -1,7 +1,5 @@
 package com.snobot.simulator.rev;
 
-import static org.junit.Assert.fail;
-
 import java.nio.ByteBuffer;
 
 import org.junit.Before;
@@ -27,46 +25,14 @@ import com.revrobotics.EncoderType;
 
 public class TestBasicOperations
 {
-    private class TestableDeviceManager extends BaseRevDeviceManager
+    private final RevCallback mRevCallback = new RevCallback()
     {
         @Override
-        protected int handleRead(int aDeviceId, int aApiId, ByteBuffer aBuffer)
+        public void callback(String aName, int aDeviceId, ByteBuffer aBuffer, int aCount)
         {
-            String arbAsString = mArbIdLookup.get(aApiId);
-            if (arbAsString == null)
-            {
-                fail("Unknown lookup for id " + aApiId);
-                return 1;
-            }
-
-            if ("getFirmwareVersion".equals(arbAsString))
-            {
-                writeFirmwareVersion(aBuffer);
-            }
-            else
-            {
-                for (int i = 0; i < aBuffer.capacity(); ++i)
-                {
-                    aBuffer.put(i, (byte) 0);
-                }
-            }
-
-            return 0;
+            // Nothing to do
         }
-
-        @Override
-        protected int handleSend(int aDeviceId, int aApiId, ByteBuffer aData)
-        {
-            String arbAsString = mArbIdLookup.get(aApiId);
-            if (arbAsString == null)
-            {
-                fail("Unknown lookup for id " + aApiId);
-                return 1;
-            }
-
-            return 0;
-        }
-    }
+    };
 
     @SuppressWarnings({ "PMD.NcssCount", "PMD.DataflowAnomalyAnalysis", "PMD.ExcessiveMethodLength", "PMD.CyclomaticComplexity", "PMD.NPathComplexity" })
     @Test
@@ -86,7 +52,6 @@ public class TestBasicOperations
         spark.stopMotor();
         spark.pidWrite(0);
         spark.getEncoder();
-        assert (false);
         for (EncoderType encoderType : EncoderType.values())
         {
             spark.getEncoder(encoderType, 0);
@@ -237,6 +202,7 @@ public class TestBasicOperations
         encoder.getInverted();
     }
 
+    @SuppressWarnings("PMD.NcssCount")
     @Test
     public void testPidFunctions()
     {
@@ -322,7 +288,7 @@ public class TestBasicOperations
 
         System.loadLibrary("SparkMaxDriver");
 
-        new TestableDeviceManager();
+        RevSimJni.registerRevCallback(mRevCallback);
 
     }
 }
