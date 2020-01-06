@@ -5,7 +5,7 @@
 
 #include "com_revrobotics_jni_CANSparkMaxJNI.h"
 #include "RevSimMocks/RevMockUtilities.h"
-#include "rev/CANSParkMaxDriver.h"
+#include "rev/CANSparkMaxDriver.h"
 #include "RevSimMocks/RevDeviceWrapper.h"
 
 extern "C" {
