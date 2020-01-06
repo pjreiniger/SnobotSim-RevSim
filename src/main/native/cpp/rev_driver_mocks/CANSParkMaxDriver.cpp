@@ -2,7 +2,7 @@
 #include <iostream>
 #include <vector>
 
-#include "rev/CANSParkMaxDriver.h"
+#include "rev/CANSparkMaxDriver.h"
 #include "RevSimMocks/RevMockUtilities.h"
 #include "RevSimMocks/RevDeviceWrapper.h"
 
