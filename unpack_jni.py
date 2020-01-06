@@ -1,6 +1,7 @@
 from __future__ import print_function
 import os
 import re
+import collections
 
 
 class CciFunctionDef:
@@ -48,7 +49,7 @@ def parse_jni_args(function_text, comments):
 
 
 def parse_cci_file(cci_file):
-    output = {}
+    output = collections.OrderedDict()
     with open(cci_file, 'r') as f:
         lines_iter = iter(f.readlines())
         try:
@@ -194,7 +195,70 @@ c_SparkMax_handle ConvertToMotorControllerWrapper(jlong aHandle)
             f.write(jni_def.comment)
             f.write("JNIEXPORT %s JNICALL %s\n" % (jni_def.rettype, jni_def.func_name))
             f.write(guess_jni_function(package_name, jni_def, cci_functions))
+
+def dump_updated_cci(cci_output_file, cci_functions):
+    with open(cci_output_file, 'w') as f:
+        f.write("""
+#include <iostream>
+#include <vector>
+
+#include "rev/CANSParkMaxDriver.h"
+#include "RevSimMocks/RevMockUtilities.h"
+#include "RevSimMocks/RevDeviceWrapper.h"
+
+
+#define RECEIVE_HELPER(paramName, size)                                        \\
+    SnobotSim::RevSimulator* wrapper = (SnobotSim::RevSimulator*) handle;      \\
+    uint8_t buffer[size]; /* NOLINT */                                         \\
+    std::memset(&buffer[0], 0, size);                                          \\
+    wrapper->Receive(paramName, buffer, size);                                 \\
+    uint32_t buffer_pos = 0;
+
+""")
+#         tmemp_funcs = []
+#         tmemp_funcs.append("c_SparkMax_SetFollow")
+#         tmemp_funcs.append("c_SparkMax_SetpointCommand")
+#         tmemp_funcs.append("c_SparkMax_SetFollow")
+#         
+#         other_temp = []
+#         other_temp.append("c_SparkMax_GetAppliedOutput")
         
+        for cci_def in cci_functions.values():
+            f.write("%s %s(" % (cci_def.rettype, cci_def.func_name))
+            f.write(", ".join("%s %s" % x for x in cci_def.args))
+            f.write(")")
+            call_name = cci_def.func_name[len("c_SparkMax_"):]
+            
+            is_setter = True
+            for arg_type, _ in cci_def.args:
+                if "*" in arg_type:
+                    is_setter = False
+                    break
+            
+            if is_setter:
+                
+                f.write("\n{\n")
+                f.write('    ((SnobotSim::RevSimulator*)handle)->Send("%s"' % call_name);
+                for _, arg_name in cci_def.args:
+                    if arg_name != "handle":
+                        f.write(", %s" % arg_name)
+                f.write(");\n    return (c_SparkMax_ErrorCode) 0;\n")
+                f.write("}\n")
+            elif False: # cci_def.func_name in other_temp:
+                f.write("\n{\n")
+                rcv_helper = ""
+                pop_stuff = ""
+                for _, arg_name in cci_def.args:
+                    if arg_name != "handle":
+                        rcv_helper += (", sizeof(*%s)" % arg_name)
+                        pop_stuff += ", %s" % arg_name
+                f.write('    RECEIVE_HELPER("%s"%s);\n' % (call_name, rcv_helper))
+                f.write('    PoplateReceiveResults(buffer%s, buffer_pos);\n' % (pop_stuff))
+#                 f.write(rcv_helper + ");\n")
+                f.write("    return (c_SparkMax_ErrorCode) 0;\n")
+                f.write("}\n")
+            else:
+                f.write(";\n")
 
 def main():
     print("Hello")
@@ -202,7 +266,8 @@ def main():
     cci_functions = parse_cci_file(os.path.join(base_dir, 'rev_source/native/include/rev/CANSparkMaxDriver.h'))
     jni_functions = parse_jni_file(os.path.join(base_dir, 'rev_source/native/jni/com_revrobotics_jni_CANSparkMaxJNI.h'))
     
-    dump_updated_jni(os.path.join(base_dir, 'com_revrobotics_jni_CANSparkMaxJNI.h'), "com_revrobotics_jni_CANSparkMaxJNI", cci_functions, jni_functions)
+#     dump_updated_jni(os.path.join(base_dir, 'com_revrobotics_jni_CANSparkMaxJNI.h'), "com_revrobotics_jni_CANSparkMaxJNI", cci_functions, jni_functions)
+    dump_updated_cci(os.path.join(base_dir, 'com_revrobotics_jni_CANSparkMaxJNI.h'), cci_functions)
 
 
 if __name__ == "__main__":
