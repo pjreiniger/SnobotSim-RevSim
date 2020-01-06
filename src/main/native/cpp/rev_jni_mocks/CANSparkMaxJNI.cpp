@@ -461,8 +461,9 @@ JNIEXPORT jfloat JNICALL Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1Ge
 JNIEXPORT jfloat JNICALL Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1GetAppliedOutput
   (JNIEnv *, jclass, jlong)
 {
-   LOG_UNSUPPORTED_CAN_FUNC("");
-   return 0;
+   float appliedVoltage = 0;
+   c_SparkMax_GetAppliedOutput(ConvertToMotorControllerWrapper(handle), &appliedVoltage);
+   return appliedVoltage;
 }
 /*
  * Class:     com_revrobotics_jni_CANSparkMaxJNI
