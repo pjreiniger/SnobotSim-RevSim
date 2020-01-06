@@ -364,25 +364,22 @@ c_SparkMax_ErrorCode c_SparkMax_SetSensorType(c_SparkMax_handle handle, c_SparkM
 }
 c_SparkMax_ErrorCode c_SparkMax_IDQuery(uint32_t* uniqueIdArray, size_t uniqueIdArraySize, size_t* numberOfDevices)
 {
-    //RECEIVE_HELPER("IDQuery", sizeof(*uniqueIdArray) + sizeof(uniqueIdArraySize) + sizeof(*numberOfDevices));
-    //PoplateReceiveResults(buffer, uniqueIdArray, buffer_pos);
-    //PoplateReceiveResults(buffer, &uniqueIdArraySize, buffer_pos);
-    //PoplateReceiveResults(buffer, numberOfDevices, buffer_pos);
+    LOG_UNSUPPORTED_CAN_FUNC("");
     return (c_SparkMax_ErrorCode) 0;
 }
 c_SparkMax_ErrorCode c_SparkMax_IDAssign(uint32_t uniqueId, uint8_t deviceId)
 {
-//    ((SnobotSim::RevSimulator*)handle)->Send("IDAssign", uniqueId, deviceId);
+    LOG_UNSUPPORTED_CAN_FUNC("");
     return (c_SparkMax_ErrorCode) 0;
 }
 c_SparkMax_ErrorCode c_SparkMax_Identify(c_SparkMax_handle handle)
 {
-//    ((SnobotSim::RevSimulator*)handle)->Send("Identify");
+    ((SnobotSim::RevSimulator*)handle)->Send("Identify");
     return (c_SparkMax_ErrorCode) 0;
 }
 c_SparkMax_ErrorCode c_SparkMax_IdentifyUniqueId(uint32_t uniqueId)
 {
-//    ((SnobotSim::RevSimulator*)handle)->Send("IdentifyUniqueId", uniqueId);
+    LOG_UNSUPPORTED_CAN_FUNC("");
     return (c_SparkMax_ErrorCode) 0;
 }
 c_SparkMax_ErrorCode c_SparkMax_SetLimitPolarity(c_SparkMax_handle handle, c_SparkMax_LimitDirection sw, c_SparkMax_LimitPolarity polarity)
@@ -859,7 +856,7 @@ c_SparkMax_ErrorCode c_SparkMax_GetLastError(c_SparkMax_handle handle)
 }
 c_SparkMax_ErrorCode c_SparkMax_GenerateError(int deviceID, c_SparkMax_ErrorCode error)
 {
-//    ((SnobotSim::RevSimulator*)handle)->Send("GenerateError", deviceID, error);
+    LOG_UNSUPPORTED_CAN_FUNC("");
     return (c_SparkMax_ErrorCode) 0;
 }
 c_SparkMax_ErrorCode c_SparkMax_ReadTelemetryStream(c_SparkMax_handle handle, uint32_t telemetryHandle, c_SparkMax_TelemetryMessage* messages, c_SparkMax_TelemetryID* ids, uint32_t numOfStreams)

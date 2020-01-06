@@ -98,11 +98,82 @@ def parse_jni_file(jni_file):
     return output
 
 
+def dump_jni_set_function(jni_def, cci_function):
+    
+    if len(jni_def.args) - 1 != len(cci_function.args):
+        print("UH OH", jni_def.func_name, len(jni_def.args), len(cci_function.args))
+        return dump_unknown_function(jni_def)
+#     if jni_def.func_name != "Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1GetAppliedOutput":
+#         return dump_unknown_function(jni_def)
+        
+    
+#     print("Good")
+
+    output_type = None
+    for arg_type, arg_name in cci_function.args:
+        if "*" in arg_type:
+            output_type = arg_type, arg_name
+    
+    arg_text = ""
+    arg_text += "  ("
+    arg_text += ", ".join(str(argg) for argg in jni_def.args[:2])
+    
+    ret_def = cci_function.rettype
+    func_args = ""
+    
+    for i in range(len(cci_function.args)):
+        if cci_function.args[i][0] == "c_SparkMax_handle":
+            func_args += "ConvertToMotorControllerWrapper(handle), "
+        else:
+            cci_type = ""
+            
+            if cci_function.args[i] == output_type:
+                cci_type = "&"
+            elif cci_function.args[i][0] not in ["int", "float", "uint8_t", "uint16_t", "uint32_t"]:
+                print("Not listed '%s'" % cci_function.args[i][0])
+                cci_type = "(%s) " % cci_function.args[i][0]
+            func_args += "%s%s, " % (cci_type, cci_function.args[i][1])
+            
+        if cci_function.args[i] == output_type:
+            print("GOT IT", cci_function.args[i])
+        else:
+            print("NOPE IT", cci_function.args[i])
+        
+            arg_text += ", " + jni_def.args[i + 2] + " " + cci_function.args[i][1]
+        
+    func_args = func_args[:-2]
+#         print(arg)
+    
+    
+    arg_text += ")"
+    
+    output = arg_text
+    output += "\n{\n"
+    output += '   %s %s;\n' % (output_type[0].replace("*", ""), output_type[1])
+    output += '   %s(%s);\n' % (cci_function.func_name, func_args)
+    if jni_def.rettype.strip() != "void":
+        output += '   return (%s) %s;\n' % (jni_def.rettype, output_type[1])
+    output += "}\n"
+    
+    return output
+
+
 def dump_known_function(jni_def, cci_function):
     
     if len(jni_def.args) - 2 != len(cci_function.args):
-#         print("UH OH", len(jni_def.args), len(cci_function.args))
-        return dump_unknown_function(jni_def)
+        is_setter = False
+        for arg_type, _ in cci_function.args:
+#             print(arg_type)
+            if "*" in arg_type:
+                is_setter = True
+                break
+            
+        if is_setter:
+#             print("IS SETTER")
+            return dump_jni_set_function(jni_def, cci_function)
+        else:
+#             print("UH OH", jni_def.func_name, len(jni_def.args), len(cci_function.args))
+            return dump_unknown_function(jni_def)
     
 #     print("Good")
     
@@ -119,7 +190,7 @@ def dump_known_function(jni_def, cci_function):
         else:
             cci_type = ""
             if cci_function.args[i][0] not in ["int", "float", "uint8_t", "uint16_t", "uint32_t"]:
-                print("Not listed '%s'" % cci_function.args[i][0])
+#                 print("Not listed '%s'" % cci_function.args[i][0])
                 cci_type = "(%s) " % cci_function.args[i][0]
             func_args += "%s%s, " % (cci_type, cci_function.args[i][1])
         
@@ -195,6 +266,8 @@ c_SparkMax_handle ConvertToMotorControllerWrapper(jlong aHandle)
             f.write(jni_def.comment)
             f.write("JNIEXPORT %s JNICALL %s\n" % (jni_def.rettype, jni_def.func_name))
             f.write(guess_jni_function(package_name, jni_def, cci_functions))
+            
+        f.write("\n}\n")
 
 def dump_updated_cci(cci_output_file, cci_functions):
     with open(cci_output_file, 'w') as f:
@@ -244,16 +317,23 @@ def dump_updated_cci(cci_output_file, cci_functions):
                         f.write(", %s" % arg_name)
                 f.write(");\n    return (c_SparkMax_ErrorCode) 0;\n")
                 f.write("}\n")
-            elif False: # cci_def.func_name in other_temp:
+            elif True: # cci_def.func_name in other_temp:
                 f.write("\n{\n")
                 rcv_helper = ""
-                pop_stuff = ""
-                for _, arg_name in cci_def.args:
+                for arg_type, arg_name in cci_def.args:
                     if arg_name != "handle":
-                        rcv_helper += (", sizeof(*%s)" % arg_name)
-                        pop_stuff += ", %s" % arg_name
-                f.write('    RECEIVE_HELPER("%s"%s);\n' % (call_name, rcv_helper))
-                f.write('    PoplateReceiveResults(buffer%s, buffer_pos);\n' % (pop_stuff))
+                        if "*" in arg_type:
+                            rcv_helper += ("sizeof(*%s) + " % arg_name)
+                        else:
+                            rcv_helper += ("sizeof(%s) + " % arg_name)
+                f.write('    RECEIVE_HELPER("%s", %s);\n' % (call_name, rcv_helper[:-3]))
+                
+                for arg_type, arg_name in cci_def.args:
+                    if arg_name != "handle":
+                        if "*" in arg_type:
+                            f.write('    PoplateReceiveResults(buffer, %s, buffer_pos);\n' % (arg_name))
+                        else:
+                            f.write('    PoplateReceiveResults(buffer, &%s, buffer_pos);\n' % (arg_name))
 #                 f.write(rcv_helper + ");\n")
                 f.write("    return (c_SparkMax_ErrorCode) 0;\n")
                 f.write("}\n")
