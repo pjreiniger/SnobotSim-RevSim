@@ -80,26 +80,30 @@ c_SparkMax_ErrorCode c_SparkMax_SetParameterBool(c_SparkMax_handle handle, c_Spa
 }
 c_SparkMax_ErrorCode c_SparkMax_GetParameterFloat32(c_SparkMax_handle handle, c_SparkMax_ConfigParameter paramId, float* value)
 {
-//    RECEIVE_HELPER("GetParameterFloat32", sizeof(*paramId) + sizeof(*value));
-//    PoplateReceiveResults(buffer, paramId, value, buffer_pos);
+    RECEIVE_HELPER("GetParameterFloat32", sizeof(paramId) + sizeof(*value));
+    PoplateReceiveResults(buffer, &paramId, buffer_pos);
+    PoplateReceiveResults(buffer, value, buffer_pos);
     return (c_SparkMax_ErrorCode) 0;
 }
 c_SparkMax_ErrorCode c_SparkMax_GetParameterInt32(c_SparkMax_handle handle, c_SparkMax_ConfigParameter paramId, int32_t* value)
 {
-//    RECEIVE_HELPER("GetParameterInt32", sizeof(*paramId) + sizeof(*value));
-//    PoplateReceiveResults(buffer, paramId, value, buffer_pos);
+    RECEIVE_HELPER("GetParameterInt32", sizeof(paramId) + sizeof(*value));
+    PoplateReceiveResults(buffer, &paramId, buffer_pos);
+    PoplateReceiveResults(buffer, value, buffer_pos);
     return (c_SparkMax_ErrorCode) 0;
 }
 c_SparkMax_ErrorCode c_SparkMax_GetParameterUint32(c_SparkMax_handle handle, c_SparkMax_ConfigParameter paramId, uint32_t* value)
 {
-//    RECEIVE_HELPER("GetParameterUint32", sizeof(*paramId) + sizeof(*value));
-//    PoplateReceiveResults(buffer, paramId, value, buffer_pos);
+    RECEIVE_HELPER("GetParameterUint32", sizeof(paramId) + sizeof(*value));
+    PoplateReceiveResults(buffer, &paramId, buffer_pos);
+    PoplateReceiveResults(buffer, value, buffer_pos);
     return (c_SparkMax_ErrorCode) 0;
 }
 c_SparkMax_ErrorCode c_SparkMax_GetParameterBool(c_SparkMax_handle handle, c_SparkMax_ConfigParameter paramId, uint8_t* value)
 {
-//    RECEIVE_HELPER("GetParameterBool", sizeof(*paramId) + sizeof(*value));
-//    PoplateReceiveResults(buffer, paramId, value, buffer_pos);
+    RECEIVE_HELPER("GetParameterBool", sizeof(paramId) + sizeof(*value));
+    PoplateReceiveResults(buffer, &paramId, buffer_pos);
+    PoplateReceiveResults(buffer, value, buffer_pos);
     return (c_SparkMax_ErrorCode) 0;
 }
 c_SparkMax_ErrorCode c_SparkMax_GetPeriodicStatus0(c_SparkMax_handle handle, c_SparkMax_PeriodicStatus0* rawframe)
@@ -191,8 +195,10 @@ c_SparkMax_ErrorCode c_SparkMax_SetSmartCurrentLimit(c_SparkMax_handle handle, u
 }
 c_SparkMax_ErrorCode c_SparkMax_GetSmartCurrentLimit(c_SparkMax_handle handle, uint8_t* stallLimit, uint8_t* freeLimit, uint32_t* limitRPM)
 {
-//    RECEIVE_HELPER("GetSmartCurrentLimit", sizeof(*stallLimit) + sizeof(*freeLimit) + sizeof(*limitRPM));
-//    PoplateReceiveResults(buffer, stallLimit, freeLimit, limitRPM, buffer_pos);
+    RECEIVE_HELPER("GetSmartCurrentLimit", sizeof(*stallLimit) + sizeof(*freeLimit) + sizeof(*limitRPM));
+    PoplateReceiveResults(buffer, stallLimit, buffer_pos);
+    PoplateReceiveResults(buffer, freeLimit, buffer_pos);
+    PoplateReceiveResults(buffer, limitRPM, buffer_pos);
     return (c_SparkMax_ErrorCode) 0;
 }
 c_SparkMax_ErrorCode c_SparkMax_SetSecondaryCurrentLimit(c_SparkMax_handle handle, float limit, int chopCycles)
@@ -202,8 +208,9 @@ c_SparkMax_ErrorCode c_SparkMax_SetSecondaryCurrentLimit(c_SparkMax_handle handl
 }
 c_SparkMax_ErrorCode c_SparkMax_GetSecondaryCurrentLimit(c_SparkMax_handle handle, float* limit, int* chopCycles)
 {
-//    RECEIVE_HELPER("GetSecondaryCurrentLimit", sizeof(*limit) + sizeof(*chopCycles));
-//    PoplateReceiveResults(buffer, limit, chopCycles, buffer_pos);
+    RECEIVE_HELPER("GetSecondaryCurrentLimit", sizeof(*limit) + sizeof(*chopCycles));
+    PoplateReceiveResults(buffer, limit, buffer_pos);
+    PoplateReceiveResults(buffer, chopCycles, buffer_pos);
     return (c_SparkMax_ErrorCode) 0;
 }
 c_SparkMax_ErrorCode c_SparkMax_SetIdleMode(c_SparkMax_handle handle, c_SparkMax_IdleMode idlemode)
@@ -275,14 +282,16 @@ c_SparkMax_ErrorCode c_SparkMax_GetStickyFaults(c_SparkMax_handle handle, uint16
 }
 c_SparkMax_ErrorCode c_SparkMax_GetFault(c_SparkMax_handle handle, c_SparkMax_FaultID faultId, uint8_t* fault)
 {
-//    RECEIVE_HELPER("GetFault", sizeof(*faultId) + sizeof(*fault));
-//    PoplateReceiveResults(buffer, faultId, fault, buffer_pos);
+    RECEIVE_HELPER("GetFault", sizeof(faultId) + sizeof(*fault));
+    PoplateReceiveResults(buffer, &faultId, buffer_pos);
+    PoplateReceiveResults(buffer, fault, buffer_pos);
     return (c_SparkMax_ErrorCode) 0;
 }
 c_SparkMax_ErrorCode c_SparkMax_GetStickyFault(c_SparkMax_handle handle, c_SparkMax_FaultID faultId, uint8_t* stickyfault)
 {
-//    RECEIVE_HELPER("GetStickyFault", sizeof(*faultId) + sizeof(*stickyfault));
-//    PoplateReceiveResults(buffer, faultId, stickyfault, buffer_pos);
+    RECEIVE_HELPER("GetStickyFault", sizeof(faultId) + sizeof(*stickyfault));
+    PoplateReceiveResults(buffer, &faultId, buffer_pos);
+    PoplateReceiveResults(buffer, stickyfault, buffer_pos);
     return (c_SparkMax_ErrorCode) 0;
 }
 c_SparkMax_ErrorCode c_SparkMax_GetBusVoltage(c_SparkMax_handle handle, float* busVoltage)
@@ -331,8 +340,9 @@ c_SparkMax_ErrorCode c_SparkMax_EnableSoftLimit(c_SparkMax_handle handle, c_Spar
 }
 c_SparkMax_ErrorCode c_SparkMax_IsSoftLimitEnabled(c_SparkMax_handle handle, c_SparkMax_LimitDirection dir, uint8_t* enabled)
 {
-//    RECEIVE_HELPER("IsSoftLimitEnabled", sizeof(*dir) + sizeof(*enabled));
-//    PoplateReceiveResults(buffer, dir, enabled, buffer_pos);
+    RECEIVE_HELPER("IsSoftLimitEnabled", sizeof(dir) + sizeof(*enabled));
+    PoplateReceiveResults(buffer, &dir, buffer_pos);
+    PoplateReceiveResults(buffer, enabled, buffer_pos);
     return (c_SparkMax_ErrorCode) 0;
 }
 c_SparkMax_ErrorCode c_SparkMax_SetSoftLimit(c_SparkMax_handle handle, c_SparkMax_LimitDirection dir, float limit)
@@ -342,8 +352,9 @@ c_SparkMax_ErrorCode c_SparkMax_SetSoftLimit(c_SparkMax_handle handle, c_SparkMa
 }
 c_SparkMax_ErrorCode c_SparkMax_GetSoftLimit(c_SparkMax_handle handle, c_SparkMax_LimitDirection dir, float* limit)
 {
-//    RECEIVE_HELPER("GetSoftLimit", sizeof(*dir) + sizeof(*limit));
-//    PoplateReceiveResults(buffer, dir, limit, buffer_pos);
+    RECEIVE_HELPER("GetSoftLimit", sizeof(dir) + sizeof(*limit));
+    PoplateReceiveResults(buffer, &dir, buffer_pos);
+    PoplateReceiveResults(buffer, limit, buffer_pos);
     return (c_SparkMax_ErrorCode) 0;
 }
 c_SparkMax_ErrorCode c_SparkMax_SetSensorType(c_SparkMax_handle handle, c_SparkMax_EncoderType sensorType)
@@ -353,8 +364,10 @@ c_SparkMax_ErrorCode c_SparkMax_SetSensorType(c_SparkMax_handle handle, c_SparkM
 }
 c_SparkMax_ErrorCode c_SparkMax_IDQuery(uint32_t* uniqueIdArray, size_t uniqueIdArraySize, size_t* numberOfDevices)
 {
-//    RECEIVE_HELPER("IDQuery", sizeof(*uniqueIdArray) + sizeof(*uniqueIdArraySize) + sizeof(*numberOfDevices));
-//    PoplateReceiveResults(buffer, uniqueIdArray, uniqueIdArraySize, numberOfDevices, buffer_pos);
+    //RECEIVE_HELPER("IDQuery", sizeof(*uniqueIdArray) + sizeof(uniqueIdArraySize) + sizeof(*numberOfDevices));
+    //PoplateReceiveResults(buffer, uniqueIdArray, buffer_pos);
+    //PoplateReceiveResults(buffer, &uniqueIdArraySize, buffer_pos);
+    //PoplateReceiveResults(buffer, numberOfDevices, buffer_pos);
     return (c_SparkMax_ErrorCode) 0;
 }
 c_SparkMax_ErrorCode c_SparkMax_IDAssign(uint32_t uniqueId, uint8_t deviceId)
@@ -379,14 +392,16 @@ c_SparkMax_ErrorCode c_SparkMax_SetLimitPolarity(c_SparkMax_handle handle, c_Spa
 }
 c_SparkMax_ErrorCode c_SparkMax_GetLimitPolarity(c_SparkMax_handle handle, c_SparkMax_LimitDirection sw, c_SparkMax_LimitPolarity* polarity)
 {
-//    RECEIVE_HELPER("GetLimitPolarity", sizeof(*sw) + sizeof(*polarity));
-//    PoplateReceiveResults(buffer, sw, polarity, buffer_pos);
+    RECEIVE_HELPER("GetLimitPolarity", sizeof(sw) + sizeof(*polarity));
+    PoplateReceiveResults(buffer, &sw, buffer_pos);
+    PoplateReceiveResults(buffer, polarity, buffer_pos);
     return (c_SparkMax_ErrorCode) 0;
 }
 c_SparkMax_ErrorCode c_SparkMax_GetLimitSwitch(c_SparkMax_handle handle, c_SparkMax_LimitDirection sw, uint8_t* limit)
 {
-//    RECEIVE_HELPER("GetLimitSwitch", sizeof(*sw) + sizeof(*limit));
-//    PoplateReceiveResults(buffer, sw, limit, buffer_pos);
+    RECEIVE_HELPER("GetLimitSwitch", sizeof(sw) + sizeof(*limit));
+    PoplateReceiveResults(buffer, &sw, buffer_pos);
+    PoplateReceiveResults(buffer, limit, buffer_pos);
     return (c_SparkMax_ErrorCode) 0;
 }
 c_SparkMax_ErrorCode c_SparkMax_EnableLimitSwitch(c_SparkMax_handle handle, c_SparkMax_LimitDirection sw, uint8_t enable)
@@ -396,8 +411,9 @@ c_SparkMax_ErrorCode c_SparkMax_EnableLimitSwitch(c_SparkMax_handle handle, c_Sp
 }
 c_SparkMax_ErrorCode c_SparkMax_IsLimitEnabled(c_SparkMax_handle handle, c_SparkMax_LimitDirection sw, uint8_t* enabled)
 {
-//    RECEIVE_HELPER("IsLimitEnabled", sizeof(*sw) + sizeof(*enabled));
-//    PoplateReceiveResults(buffer, sw, enabled, buffer_pos);
+    RECEIVE_HELPER("IsLimitEnabled", sizeof(sw) + sizeof(*enabled));
+    PoplateReceiveResults(buffer, &sw, buffer_pos);
+    PoplateReceiveResults(buffer, enabled, buffer_pos);
     return (c_SparkMax_ErrorCode) 0;
 }
 c_SparkMax_ErrorCode c_SparkMax_GetAnalogPosition(c_SparkMax_handle handle, float* position)
@@ -688,50 +704,58 @@ c_SparkMax_ErrorCode c_SparkMax_SetOutputRange(c_SparkMax_handle handle, int slo
 }
 c_SparkMax_ErrorCode c_SparkMax_GetP(c_SparkMax_handle handle, int slotID, float* gain)
 {
-//    RECEIVE_HELPER("GetP", sizeof(*slotID) + sizeof(*gain));
-//    PoplateReceiveResults(buffer, slotID, gain, buffer_pos);
+    RECEIVE_HELPER("GetP", sizeof(slotID) + sizeof(*gain));
+    PoplateReceiveResults(buffer, &slotID, buffer_pos);
+    PoplateReceiveResults(buffer, gain, buffer_pos);
     return (c_SparkMax_ErrorCode) 0;
 }
 c_SparkMax_ErrorCode c_SparkMax_GetI(c_SparkMax_handle handle, int slotID, float* gain)
 {
-//    RECEIVE_HELPER("GetI", sizeof(*slotID) + sizeof(*gain));
-//    PoplateReceiveResults(buffer, slotID, gain, buffer_pos);
+    RECEIVE_HELPER("GetI", sizeof(slotID) + sizeof(*gain));
+    PoplateReceiveResults(buffer, &slotID, buffer_pos);
+    PoplateReceiveResults(buffer, gain, buffer_pos);
     return (c_SparkMax_ErrorCode) 0;
 }
 c_SparkMax_ErrorCode c_SparkMax_GetD(c_SparkMax_handle handle, int slotID, float* gain)
 {
-//    RECEIVE_HELPER("GetD", sizeof(*slotID) + sizeof(*gain));
-//    PoplateReceiveResults(buffer, slotID, gain, buffer_pos);
+    RECEIVE_HELPER("GetD", sizeof(slotID) + sizeof(*gain));
+    PoplateReceiveResults(buffer, &slotID, buffer_pos);
+    PoplateReceiveResults(buffer, gain, buffer_pos);
     return (c_SparkMax_ErrorCode) 0;
 }
 c_SparkMax_ErrorCode c_SparkMax_GetDFilter(c_SparkMax_handle handle, int slotID, float* gain)
 {
-//    RECEIVE_HELPER("GetDFilter", sizeof(*slotID) + sizeof(*gain));
-//    PoplateReceiveResults(buffer, slotID, gain, buffer_pos);
+    RECEIVE_HELPER("GetDFilter", sizeof(slotID) + sizeof(*gain));
+    PoplateReceiveResults(buffer, &slotID, buffer_pos);
+    PoplateReceiveResults(buffer, gain, buffer_pos);
     return (c_SparkMax_ErrorCode) 0;
 }
 c_SparkMax_ErrorCode c_SparkMax_GetFF(c_SparkMax_handle handle, int slotID, float* gain)
 {
-//    RECEIVE_HELPER("GetFF", sizeof(*slotID) + sizeof(*gain));
-//    PoplateReceiveResults(buffer, slotID, gain, buffer_pos);
+    RECEIVE_HELPER("GetFF", sizeof(slotID) + sizeof(*gain));
+    PoplateReceiveResults(buffer, &slotID, buffer_pos);
+    PoplateReceiveResults(buffer, gain, buffer_pos);
     return (c_SparkMax_ErrorCode) 0;
 }
 c_SparkMax_ErrorCode c_SparkMax_GetIZone(c_SparkMax_handle handle, int slotID, float* IZone)
 {
-//    RECEIVE_HELPER("GetIZone", sizeof(*slotID) + sizeof(*IZone));
-//    PoplateReceiveResults(buffer, slotID, IZone, buffer_pos);
+    RECEIVE_HELPER("GetIZone", sizeof(slotID) + sizeof(*IZone));
+    PoplateReceiveResults(buffer, &slotID, buffer_pos);
+    PoplateReceiveResults(buffer, IZone, buffer_pos);
     return (c_SparkMax_ErrorCode) 0;
 }
 c_SparkMax_ErrorCode c_SparkMax_GetOutputMin(c_SparkMax_handle handle, int slotID, float* min)
 {
-//    RECEIVE_HELPER("GetOutputMin", sizeof(*slotID) + sizeof(*min));
-//    PoplateReceiveResults(buffer, slotID, min, buffer_pos);
+    RECEIVE_HELPER("GetOutputMin", sizeof(slotID) + sizeof(*min));
+    PoplateReceiveResults(buffer, &slotID, buffer_pos);
+    PoplateReceiveResults(buffer, min, buffer_pos);
     return (c_SparkMax_ErrorCode) 0;
 }
 c_SparkMax_ErrorCode c_SparkMax_GetOutputMax(c_SparkMax_handle handle, int slotID, float* max)
 {
-//    RECEIVE_HELPER("GetOutputMax", sizeof(*slotID) + sizeof(*max));
-//    PoplateReceiveResults(buffer, slotID, max, buffer_pos);
+    RECEIVE_HELPER("GetOutputMax", sizeof(slotID) + sizeof(*max));
+    PoplateReceiveResults(buffer, &slotID, buffer_pos);
+    PoplateReceiveResults(buffer, max, buffer_pos);
     return (c_SparkMax_ErrorCode) 0;
 }
 c_SparkMax_ErrorCode c_SparkMax_SetSmartMotionMaxVelocity(c_SparkMax_handle handle, int slotID, float maxVel)
@@ -761,32 +785,37 @@ c_SparkMax_ErrorCode c_SparkMax_SetSmartMotionAllowedClosedLoopError(c_SparkMax_
 }
 c_SparkMax_ErrorCode c_SparkMax_GetSmartMotionMaxVelocity(c_SparkMax_handle handle, int slotID, float* maxVel)
 {
-//    RECEIVE_HELPER("GetSmartMotionMaxVelocity", sizeof(*slotID) + sizeof(*maxVel));
-//    PoplateReceiveResults(buffer, slotID, maxVel, buffer_pos);
+    RECEIVE_HELPER("GetSmartMotionMaxVelocity", sizeof(slotID) + sizeof(*maxVel));
+    PoplateReceiveResults(buffer, &slotID, buffer_pos);
+    PoplateReceiveResults(buffer, maxVel, buffer_pos);
     return (c_SparkMax_ErrorCode) 0;
 }
 c_SparkMax_ErrorCode c_SparkMax_GetSmartMotionMaxAccel(c_SparkMax_handle handle, int slotID, float* maxAccel)
 {
-//    RECEIVE_HELPER("GetSmartMotionMaxAccel", sizeof(*slotID) + sizeof(*maxAccel));
-//    PoplateReceiveResults(buffer, slotID, maxAccel, buffer_pos);
+    RECEIVE_HELPER("GetSmartMotionMaxAccel", sizeof(slotID) + sizeof(*maxAccel));
+    PoplateReceiveResults(buffer, &slotID, buffer_pos);
+    PoplateReceiveResults(buffer, maxAccel, buffer_pos);
     return (c_SparkMax_ErrorCode) 0;
 }
 c_SparkMax_ErrorCode c_SparkMax_GetSmartMotionMinOutputVelocity(c_SparkMax_handle handle, int slotID, float* minVel)
 {
-//    RECEIVE_HELPER("GetSmartMotionMinOutputVelocity", sizeof(*slotID) + sizeof(*minVel));
-//    PoplateReceiveResults(buffer, slotID, minVel, buffer_pos);
+    RECEIVE_HELPER("GetSmartMotionMinOutputVelocity", sizeof(slotID) + sizeof(*minVel));
+    PoplateReceiveResults(buffer, &slotID, buffer_pos);
+    PoplateReceiveResults(buffer, minVel, buffer_pos);
     return (c_SparkMax_ErrorCode) 0;
 }
 c_SparkMax_ErrorCode c_SparkMax_GetSmartMotionAccelStrategy(c_SparkMax_handle handle, int slotID, c_SparkMax_AccelStrategy* accelStrategy)
 {
-//    RECEIVE_HELPER("GetSmartMotionAccelStrategy", sizeof(*slotID) + sizeof(*accelStrategy));
-//    PoplateReceiveResults(buffer, slotID, accelStrategy, buffer_pos);
+    RECEIVE_HELPER("GetSmartMotionAccelStrategy", sizeof(slotID) + sizeof(*accelStrategy));
+    PoplateReceiveResults(buffer, &slotID, buffer_pos);
+    PoplateReceiveResults(buffer, accelStrategy, buffer_pos);
     return (c_SparkMax_ErrorCode) 0;
 }
 c_SparkMax_ErrorCode c_SparkMax_GetSmartMotionAllowedClosedLoopError(c_SparkMax_handle handle, int slotID, float* allowedError)
 {
-//    RECEIVE_HELPER("GetSmartMotionAllowedClosedLoopError", sizeof(*slotID) + sizeof(*allowedError));
-//    PoplateReceiveResults(buffer, slotID, allowedError, buffer_pos);
+    RECEIVE_HELPER("GetSmartMotionAllowedClosedLoopError", sizeof(slotID) + sizeof(*allowedError));
+    PoplateReceiveResults(buffer, &slotID, buffer_pos);
+    PoplateReceiveResults(buffer, allowedError, buffer_pos);
     return (c_SparkMax_ErrorCode) 0;
 }
 c_SparkMax_ErrorCode c_SparkMax_SetIMaxAccum(c_SparkMax_handle handle, int slotID, float iMaxAccum)
@@ -796,8 +825,9 @@ c_SparkMax_ErrorCode c_SparkMax_SetIMaxAccum(c_SparkMax_handle handle, int slotI
 }
 c_SparkMax_ErrorCode c_SparkMax_GetIMaxAccum(c_SparkMax_handle handle, int slotID, float* iMaxAccum)
 {
-//    RECEIVE_HELPER("GetIMaxAccum", sizeof(*slotID) + sizeof(*iMaxAccum));
-//    PoplateReceiveResults(buffer, slotID, iMaxAccum, buffer_pos);
+    RECEIVE_HELPER("GetIMaxAccum", sizeof(slotID) + sizeof(*iMaxAccum));
+    PoplateReceiveResults(buffer, &slotID, buffer_pos);
+    PoplateReceiveResults(buffer, iMaxAccum, buffer_pos);
     return (c_SparkMax_ErrorCode) 0;
 }
 c_SparkMax_ErrorCode c_SparkMax_GetIAccum(c_SparkMax_handle handle, float* iAccum)
@@ -834,8 +864,11 @@ c_SparkMax_ErrorCode c_SparkMax_GenerateError(int deviceID, c_SparkMax_ErrorCode
 }
 c_SparkMax_ErrorCode c_SparkMax_ReadTelemetryStream(c_SparkMax_handle handle, uint32_t telemetryHandle, c_SparkMax_TelemetryMessage* messages, c_SparkMax_TelemetryID* ids, uint32_t numOfStreams)
 {
-//    RECEIVE_HELPER("ReadTelemetryStream", sizeof(*telemetryHandle) + sizeof(*messages) + sizeof(*ids) + sizeof(*numOfStreams));
-//    PoplateReceiveResults(buffer, telemetryHandle, messages, ids, numOfStreams, buffer_pos);
+    RECEIVE_HELPER("ReadTelemetryStream", sizeof(telemetryHandle) + sizeof(*messages) + sizeof(*ids) + sizeof(numOfStreams));
+    PoplateReceiveResults(buffer, &telemetryHandle, buffer_pos);
+    PoplateReceiveResults(buffer, messages, buffer_pos);
+    PoplateReceiveResults(buffer, ids, buffer_pos);
+    PoplateReceiveResults(buffer, &numOfStreams, buffer_pos);
     return (c_SparkMax_ErrorCode) 0;
 }
 c_SparkMax_ErrorCode c_SparkMax_OpenTelemetryStream(c_SparkMax_handle handle, uint32_t* telemetryHandle)
