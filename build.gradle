@@ -13,43 +13,31 @@ plugins {
     id "jacoco"
 }
 
-ext.allwpilibVersion = '2019.3.1'
-ext.rev_library_version = "1.1.8"
+ext.allwpilibVersion = '2020.1.2'
+ext.rev_library_version = "1.5.0"
 ext.release_version = rev_library_version + "_V0"
 
 repositories {
     mavenCentral()
     mavenLocal()
     maven {
-        url "http://first.wpi.edu/FRC/roborio/maven/release/"
+        url "https://frcmaven.wpi.edu/artifactory/development/"
     }
     maven {
         url "http://www.revrobotics.com/content/sw/max/sdk/maven/"
     }
 }
 
+sourceSets {
+    main {
+        java {
+            srcDirs += "rev_source/java"
+        }
+    }
+}
 
 apply from: "config.gradle"
 model {
-    dependencyConfigs {
-        wpiutil(DependencyConfig) {
-            groupId = 'edu.wpi.first.wpiutil'
-            artifactId = 'wpiutil-cpp'
-            headerClassifier = 'headers'
-            ext = 'zip'
-            version = allwpilibVersion
-            sharedConfigs = [ SparkMaxDriver: [] ]
-        }
-        halsim(DependencyConfig) {
-            groupId = 'edu.wpi.first.hal'
-            artifactId = 'hal-cpp'
-            headerClassifier = 'headers'
-            ext = 'zip'
-            version = allwpilibVersion
-            sharedConfigs = [ SparkMaxDriver: [] ]
-        }
-    }
-
     components {
         SparkMaxDriver(JniNativeLibrarySpec) {
 
@@ -63,7 +51,8 @@ model {
                         includes = ["**/*.cpp"]
                     }
                     exportedHeaders {
-                        srcDirs = ["src/main/native/include"]
+                        srcDirs = ["src/main/native/include", 
+                                   "rev_source/native/include"]
                     }
                 }
             }
@@ -125,12 +114,14 @@ dependencies {
     compile 'org.apache.logging.log4j:log4j-api:2.11.0'
     compile 'org.apache.logging.log4j:log4j-core:2.11.0'
 
-    testCompile 'edu.wpi.first.ntcore:ntcore-java:' + allwpilibVersion
-    testCompile 'edu.wpi.first.cscore:cscore-java:' + allwpilibVersion
-    testCompile 'edu.wpi.first.ntcore:ntcore-jni:' + allwpilibVersion + ':all'
-    testCompile 'edu.wpi.first.cscore:cscore-jni:' + allwpilibVersion + ':all'
+    // testCompile 'edu.wpi.first.ntcore:ntcore-java:' + allwpilibVersion
+    // testCompile 'edu.wpi.first.cscore:cscore-java:' + allwpilibVersion
+    // testCompile 'edu.wpi.first.ntcore:ntcore-jni:' + allwpilibVersion + ':' + getCurrentArch()
+    // testCompile 'edu.wpi.first.cscore:cscore-jni:' + allwpilibVersion + ':' + getCurrentArch()
 
     testCompile 'junit:junit:4.12'
+    
+    testCompile 'com.revrobotics.frc:SparkMax-driver:' + rev_library_version + ":headers@zip"
 
     wpilibNativeDeps packageNativeFilesInJar.outputs.files
 
