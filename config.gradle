@@ -246,6 +246,7 @@ ext.createComponentZipTasks = { components, names, base, type, project, func ->
     def stringNames = names.collect {it.toString()}
     def configMap = [:]
     components.each {
+	    println("Creating component zip.... " + it.name + " " + stringNames);
         if (it in NativeLibrarySpec && stringNames.contains(it.name)) {
             it.binaries.each {
                 if (!it.buildable) return
