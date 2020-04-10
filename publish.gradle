@@ -2,7 +2,7 @@ apply plugin: 'maven-publish'
 
 def outputsFolder = file("$project.buildDir/outputs")
 
-def libraryName = "RevSimulation"
+def libraryName = "SparkMaxDriver"
 
 def artifactGroupId = "edu.wpi.first.${libraryName}"
 def zipBaseName = "_GROUP_edu_wpi_first_${libraryName}_ID_${libraryName}-cpp_CLS"
@@ -16,6 +16,16 @@ task javadocJar(type: Jar, dependsOn: javadoc) {
 task sourcesJar(type: Jar, dependsOn: classes) {
     classifier = 'sources'
     from sourceSets.main.allSource
+}
+
+task cppHeadersZip(type: Zip) {
+    destinationDir = outputsFolder
+    baseName = zipBaseName
+    classifier = "headers"
+
+    from("$rootDir/src/main/native/include") {
+        into '/'
+    }
 }
 
 task cppSourcesZip(type: Zip) {
@@ -60,6 +70,7 @@ model {
                 }
 
 
+                artifact cppHeadersZip
                 artifact cppSourcesZip
                 artifact project.packageNativeFilesInJar
 
