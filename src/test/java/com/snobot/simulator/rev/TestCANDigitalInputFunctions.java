@@ -35,9 +35,20 @@ public class TestCANDigitalInputFunctions
     {
         CANSparkMax sc = new CANSparkMax(11, MotorType.kBrushless);
 
+        for (LimitSwitchPolarity polarity : LimitSwitchPolarity.values())
+        {
+            CANDigitalInput reverseSwitch = sc.getReverseLimitSwitch(polarity);
+            CANDigitalInput fowrardSwitch = sc.getForwardLimitSwitch(polarity);
 
-        reverseSwitch.get();
-        reverseSwitch.enableLimitSwitch(false);
-        reverseSwitch.isLimitSwitchEnabled();
+            reverseSwitch.enableLimitSwitch(false);
+            reverseSwitch.enableLimitSwitch(true);
+            reverseSwitch.get();
+            reverseSwitch.isLimitSwitchEnabled();
+
+            fowrardSwitch.enableLimitSwitch(false);
+            fowrardSwitch.enableLimitSwitch(true);
+            fowrardSwitch.get();
+            fowrardSwitch.isLimitSwitchEnabled();
+        }
     }
 }

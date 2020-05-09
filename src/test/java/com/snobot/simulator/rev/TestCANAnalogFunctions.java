@@ -34,14 +34,18 @@ public class TestCANAnalogFunctions
     {
         CANSparkMax sc = new CANSparkMax(11, MotorType.kBrushless);
 
-        analog.getVoltage();
-        analog.getPosition();
-        analog.getVelocity();
-        analog.setPositionConversionFactor(0);
-        analog.setVelocityConversionFactor(0);
-        analog.getPositionConversionFactor();
-        analog.getVelocityConversionFactor();
-        analog.setInverted(false);
-        analog.getInverted();
+        for (AnalogMode analogType : AnalogMode.values())
+        {
+            CANAnalog analog = sc.getAnalog(analogType);
+            analog.getVoltage();
+            analog.getPosition();
+            analog.getVelocity();
+            analog.setPositionConversionFactor(0);
+            analog.setVelocityConversionFactor(0);
+            analog.getPositionConversionFactor();
+            analog.getVelocityConversionFactor();
+            analog.setInverted(false);
+            analog.getInverted();
+        }
     }
 }
