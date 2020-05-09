@@ -59,16 +59,16 @@ def generate_unit_tests():
 #     known_enums, known_classes = ["TalonSRXFeedbackDevice"], ["SupplyCurrentLimitConfiguration", "TalonSRXPIDSetConfiguration", "TalonSRXConfiguration"]
 #     generate("TEMP/TalonSRX.java", "unit_test_templates/talon.txt", r'F:\git\FIRST\SnobotSim\CtreSimulator\src\test\java\com\snobot\simulator\ctre\TestTalonSRXFunctions.java', "talon", known_enums, known_classes)
     
-    known_enums = ["TalonSRXFeedbackDevice", "ControlMode", "DemandType", "NeutralMode", "InvertType", "FollowerType", "ParamEnum", "StatusFrame", "StatusFrameEnhanced", "VelocityMeasPeriod",
-                   "RemoteLimitSwitchSource", "LimitSwitchNormal", "LimitSwitchSource", "RemoteFeedbackDevice", "SensorTerm", "ControlFrame", "FeedbackDevice", "RemoteSensorSource",
-                   "CalibrationMode", "PigeonIMU_StatusFrame", "PigeonIMU_ControlFrame", "LEDChannel", "GeneralPin", "PWMChannel", "VelocityPeriod",
-                   "CANifierStatusFrame", "CANifierControlFrame", "AbsoluteSensorRange", "SensorVelocityMeasPeriod", "SensorInitializationStrategy",
-                   "SensorTimeBase", "CANCoderStatusFrame", "TalonFXControlMode", "TalonFXInvertType", "TalonFXFeedbackDevice", "MotorCommutation"]
-    known_classes = ["SupplyCurrentLimitConfiguration", "TalonSRXPIDSetConfiguration", "TalonSRXConfiguration", "BufferedTrajectoryPointStream", "Faults", "StickyFaults",
-                     "MotionProfileStatus", "SlotConfiguration", "FilterConfiguration", "GeneralStatus", "PigeonIMU_Faults", "PigeonIMU_StickyFaults", "PigeonIMUConfiguration",
-                     "CANifierFaults", "CANifierStickyFaults", "PinValues", "CANifierConfiguration", "FusionStatus",
-                     "VictorSPXPIDSetConfiguration", "CANCoderFaults", "CANCoderStickyFaults", "CANCoderConfiguration", "SupplyCurrentLimitConfiguration",
-                     "TalonFXPIDSetConfiguration", "TalonFXPIDSetConfiguration", "StatorCurrentLimitConfiguration", "TalonFXConfiguration", "VictorSPXConfiguration"]
+#     known_enums = ["TalonSRXFeedbackDevice", "ControlMode", "DemandType", "NeutralMode", "InvertType", "FollowerType", "ParamEnum", "StatusFrame", "StatusFrameEnhanced", "VelocityMeasPeriod",
+#                    "RemoteLimitSwitchSource", "LimitSwitchNormal", "LimitSwitchSource", "RemoteFeedbackDevice", "SensorTerm", "ControlFrame", "FeedbackDevice", "RemoteSensorSource",
+#                    "CalibrationMode", "PigeonIMU_StatusFrame", "PigeonIMU_ControlFrame", "LEDChannel", "GeneralPin", "PWMChannel", "VelocityPeriod",
+#                    "CANifierStatusFrame", "CANifierControlFrame", "AbsoluteSensorRange", "SensorVelocityMeasPeriod", "SensorInitializationStrategy",
+#                    "SensorTimeBase", "CANCoderStatusFrame", "TalonFXControlMode", "TalonFXInvertType", "TalonFXFeedbackDevice", "MotorCommutation"]
+#     known_classes = ["SupplyCurrentLimitConfiguration", "TalonSRXPIDSetConfiguration", "TalonSRXConfiguration", "BufferedTrajectoryPointStream", "Faults", "StickyFaults",
+#                      "MotionProfileStatus", "SlotConfiguration", "FilterConfiguration", "GeneralStatus", "PigeonIMU_Faults", "PigeonIMU_StickyFaults", "PigeonIMUConfiguration",
+#                      "CANifierFaults", "CANifierStickyFaults", "PinValues", "CANifierConfiguration", "FusionStatus",
+#                      "VictorSPXPIDSetConfiguration", "CANCoderFaults", "CANCoderStickyFaults", "CANCoderConfiguration", "SupplyCurrentLimitConfiguration",
+#                      "TalonFXPIDSetConfiguration", "TalonFXPIDSetConfiguration", "StatorCurrentLimitConfiguration", "TalonFXConfiguration", "VictorSPXConfiguration"]
     
     class UnitTestGenConfig:
         def __init__(self, java_class_name, package_name, actuator_name):
@@ -78,14 +78,14 @@ def generate_unit_tests():
     
 
     definitions = []
-    definitions.append(UnitTestGenConfig("BaseMotorController", "com/ctre/phoenix/motorcontrol/can", "talon"))
-    definitions.append(UnitTestGenConfig("BaseTalon", "com/ctre/phoenix/motorcontrol/can", "talon"))
-    definitions.append(UnitTestGenConfig("TalonFX", "com/ctre/phoenix/motorcontrol/can", "talonFX"))
-    definitions.append(UnitTestGenConfig("TalonSRX", "com/ctre/phoenix/motorcontrol/can", "talon"))
-    definitions.append(UnitTestGenConfig("VictorSPX", "com/ctre/phoenix/motorcontrol/can", "victor"))
-    definitions.append(UnitTestGenConfig("CANCoder", "com/ctre/phoenix/sensors", "canCoder"))
-    definitions.append(UnitTestGenConfig("PigeonIMU", "com/ctre/phoenix/sensors", "imu"))
-    definitions.append(UnitTestGenConfig("CANifier", "com/ctre/phoenix", "canifier"))
+#     definitions.append(UnitTestGenConfig("BaseMotorController", "com/ctre/phoenix/motorcontrol/can", "talon"))
+#     definitions.append(UnitTestGenConfig("BaseTalon", "com/ctre/phoenix/motorcontrol/can", "talon"))
+#     definitions.append(UnitTestGenConfig("TalonFX", "com/ctre/phoenix/motorcontrol/can", "talonFX"))
+#     definitions.append(UnitTestGenConfig("TalonSRX", "com/ctre/phoenix/motorcontrol/can", "talon"))
+#     definitions.append(UnitTestGenConfig("VictorSPX", "com/ctre/phoenix/motorcontrol/can", "victor"))
+#     definitions.append(UnitTestGenConfig("CANCoder", "com/ctre/phoenix/sensors", "canCoder"))
+#     definitions.append(UnitTestGenConfig("PigeonIMU", "com/ctre/phoenix/sensors", "imu"))
+#     definitions.append(UnitTestGenConfig("CANifier", "com/ctre/phoenix", "canifier"))
     
     project_dir = r'F:\git\FIRST\SnobotSim\CtreSimulator'
     template_dir = os.path.join(project_dir, "gen_scripts/unit_test_templates")
@@ -112,7 +112,7 @@ def generate_unit_tests():
 
 def main():
     with open('../build.gradle') as f:
-        results = re.findall(r'ext\.ctre_library_version = "(.*)"', f.read())
+        results = re.findall(r'ext\.rev_library_version = "(.*)"', f.read())
         version = results[0]
     
     from lib.generator_config_factory import generator_config_factory

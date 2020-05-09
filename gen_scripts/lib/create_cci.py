@@ -2,7 +2,7 @@ import CppHeaderParser
 from jinja2 import Environment, Template, PackageLoader, select_autoescape
 import os
 import copy
-from cci_helpers import cci_sanitize_rettype, cci_sanitize_func_name, cci_get_output_arguments
+from .cci_helpers import cci_sanitize_rettype, cci_sanitize_func_name, cci_get_output_arguments
 
 
 class CciGenerator():
