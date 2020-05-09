@@ -5,12 +5,11 @@ import java.nio.ByteBuffer;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.revrobotics.CANAnalog;
-import com.revrobotics.CANAnalog.AnalogMode;
+import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-public class TestCANAnalogFunctions
+public class TestCANEncoderFunctions
 {
     private final RevCallback mRevCallback = new RevCallback()
     {
@@ -27,21 +26,16 @@ public class TestCANAnalogFunctions
         System.loadLibrary("SparkMaxDriver");
 
         RevSimJni.registerRevCallback(mRevCallback);
+
     }
 
     @Test
-    public void testAnnalogFunctions()
+    public void testEncoderFunctions()
     {
-        CANSparkMax sc = new CANSparkMax(11, MotorType.kBrushless);
+        CANSparkMax sc = new CANSparkMax(12, MotorType.kBrushed);
+        CANEncoder encoder = sc.getEncoder();
 
-        analog.getVoltage();
-        analog.getPosition();
-        analog.getVelocity();
-        analog.setPositionConversionFactor(0);
-        analog.setVelocityConversionFactor(0);
-        analog.getPositionConversionFactor();
-        analog.getVelocityConversionFactor();
-        analog.setInverted(false);
-        analog.getInverted();
+{{ functions }}
     }
 }
+

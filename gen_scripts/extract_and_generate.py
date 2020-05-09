@@ -77,7 +77,8 @@ def generate_unit_tests():
 #                      "VictorSPXPIDSetConfiguration", "CANCoderFaults", "CANCoderStickyFaults", "CANCoderConfiguration", "SupplyCurrentLimitConfiguration",
 #                      "TalonFXPIDSetConfiguration", "TalonFXPIDSetConfiguration", "StatorCurrentLimitConfiguration", "TalonFXConfiguration", "VictorSPXConfiguration"]
     
-    known_enums = []
+    known_enums = ["EncoderType", "AlternateEncoderType", "AnalogMode", "LimitSwitchPolarity", "IdleMode", "FaultID", "SoftLimitDirection", 
+                   "ControlType", 'AccelStrategy', 'ArbFFUnits', 'MotorType', 'PeriodicFrame']
     known_classes = []
     
     class UnitTestGenConfig:
@@ -89,13 +90,11 @@ def generate_unit_tests():
 
     definitions = []
     definitions.append(UnitTestGenConfig("CANAnalog", "com/revrobotics", "analog"))
-#     definitions.append(UnitTestGenConfig("BaseTalon", "com/revrobotics", "talon"))
-#     definitions.append(UnitTestGenConfig("TalonFX", "com/revrobotics", "talonFX"))
-#     definitions.append(UnitTestGenConfig("TalonSRX", "com/revrobotics", "talon"))
-#     definitions.append(UnitTestGenConfig("VictorSPX", "com/revrobotics", "victor"))
-#     definitions.append(UnitTestGenConfig("CANCoder", "com/ctre/phoenix/sensors", "canCoder"))
-#     definitions.append(UnitTestGenConfig("PigeonIMU", "com/ctre/phoenix/sensors", "imu"))
-#     definitions.append(UnitTestGenConfig("CANifier", "com/ctre/phoenix", "canifier"))
+    definitions.append(UnitTestGenConfig("CANDigitalInput", "com/revrobotics", "reverseSwitch"))
+    definitions.append(UnitTestGenConfig("CANEncoder", "com/revrobotics", "encoder"))
+    definitions.append(UnitTestGenConfig("CANPIDController", "com/revrobotics", "pid"))
+    definitions.append(UnitTestGenConfig("CANSparkMax", "com/revrobotics", "spark"))
+    definitions.append(UnitTestGenConfig("CANSparkMaxLowLevel", "com/revrobotics", "spark"))
     
     template_dir = os.path.join(PROJECT_DIR, "gen_scripts/unit_test_templates")
     java_files_dir = os.path.join(PROJECT_DIR, "build/tmp/test_files/")

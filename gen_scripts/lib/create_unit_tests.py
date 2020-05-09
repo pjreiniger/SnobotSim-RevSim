@@ -18,7 +18,7 @@ def __format_args(object_name, node, default_value_lookup, indent):
         output += "    " * (indent)
     else:
         output += "        "
-    output += object_name + "." + node.name + "(" + ", ".join(default_value_lookup.get(arg.type.name, "FIXME") for arg in node.parameters) + ");"
+    output += object_name + "." + node.name + "(" + ", ".join(default_value_lookup.get(arg.type.name, "FIXME'{}'".format(arg.type.name)) for arg in node.parameters) + ");"
     return output
 
 def __prepare_variable_name(in_name):
@@ -53,6 +53,7 @@ def __dump(object_name, node, known_enums, known_classes):
     default_value_lookup = {}
     default_value_lookup["int"] = "0"
     default_value_lookup["double"] = "0"
+    default_value_lookup["float"] = "0"
     default_value_lookup["boolean"] = "false"
     default_value_lookup["String"] = '""'
     
@@ -85,8 +86,31 @@ def generate(java_class, template_file, output_file, object_name, known_enums, k
         function_calls = []
         for path, node in tree.filter(javalang.tree.MethodDeclaration):
             if "public" in node.modifiers:
-                if node.name != "DestroyObject" and node.name != "valueOf" and node.name != "toString":
+                keep_function = True
+                if node.name == "DestroyObject":
+                    keep_function = False
+                elif node.name == "valueOf":
+                    keep_function = False
+                elif node.name == "toString":
+                    keep_function = False
+                elif node.name == "fromId":
+                    keep_function = False
+                elif node.name == "fromID":
+                    keep_function = False
+                elif node.name == "close":
+                    keep_function = False
+                elif node.name == "fromInt":
+                    keep_function = False
+                elif node.name == "setFeedbackDevice":
+                    keep_function = False
+                elif node.name == "getRaw":
+                    keep_function = False
+                    
+                if keep_function:
+                    print("XXXX", node.name)
                     function_calls.append(__dump(object_name, node, known_enums, known_classes))
+                else:
+                    print("KE", node.name)
             else:
                 print("Skipping protected function", node.name)
         

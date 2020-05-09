@@ -5,12 +5,12 @@ import java.nio.ByteBuffer;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.revrobotics.CANAnalog;
-import com.revrobotics.CANAnalog.AnalogMode;
+import com.revrobotics.CANDigitalInput;
+import com.revrobotics.CANDigitalInput.LimitSwitchPolarity;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-public class TestCANAnalogFunctions
+public class TestCANDigitalInputFunctions
 {
     private final RevCallback mRevCallback = new RevCallback()
     {
@@ -27,21 +27,16 @@ public class TestCANAnalogFunctions
         System.loadLibrary("SparkMaxDriver");
 
         RevSimJni.registerRevCallback(mRevCallback);
+
     }
 
     @Test
-    public void testAnnalogFunctions()
+    public void testLimitSwitchFunctions()
     {
         CANSparkMax sc = new CANSparkMax(11, MotorType.kBrushless);
 
-        analog.getVoltage();
-        analog.getPosition();
-        analog.getVelocity();
-        analog.setPositionConversionFactor(0);
-        analog.setVelocityConversionFactor(0);
-        analog.getPositionConversionFactor();
-        analog.getVelocityConversionFactor();
-        analog.setInverted(false);
-        analog.getInverted();
+
+{{ functions }}
     }
 }
+

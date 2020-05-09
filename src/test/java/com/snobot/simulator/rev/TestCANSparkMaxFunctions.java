@@ -66,14 +66,8 @@ public class TestCANSparkMaxFunctions
             spark.getAnalog(analogMode);
         }
         spark.getPIDController();
-        for (LimitSwitchPolarity limitSwitchPolarity : LimitSwitchPolarity.values())
-        {
-            spark.getForwardLimitSwitch(limitSwitchPolarity);
-        }
-        for (LimitSwitchPolarity limitSwitchPolarity : LimitSwitchPolarity.values())
-        {
-            spark.getReverseLimitSwitch(limitSwitchPolarity);
-        }
+        spark.getForwardLimitSwitch(FIXME'CANDigitalInput');
+        spark.getReverseLimitSwitch(FIXME'CANDigitalInput');
         spark.setSmartCurrentLimit(0);
         spark.setSmartCurrentLimit(0, 0);
         spark.setSmartCurrentLimit(0, 0, 0);
@@ -91,11 +85,10 @@ public class TestCANSparkMaxFunctions
         spark.setClosedLoopRampRate(0);
         spark.getOpenLoopRampRate();
         spark.getClosedLoopRampRate();
-
-        spark.follow(follower);
-        spark.follow(follower, false);
-        spark.follow(externalFollower, 0);
-        spark.follow(externalFollower, 0, false);
+        spark.follow(FIXME'CANSparkMax');
+        spark.follow(FIXME'CANSparkMax', false);
+        spark.follow(FIXME'ExternalFollower', 0);
+        spark.follow(FIXME'ExternalFollower', 0, false);
         spark.isFollower();
         spark.getFaults();
         spark.getStickyFaults();
