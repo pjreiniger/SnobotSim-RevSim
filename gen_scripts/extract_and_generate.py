@@ -3,6 +3,8 @@ import os
 from extract_source_files import extract_source_files
 import re
 
+PROJECT_DIR =  r'F:\git\FIRST\SnobotSim\CtreSimulator'
+
 
 def __delete_sources():
     def delete_if_exists(path):
@@ -17,9 +19,8 @@ def __delete_sources():
 def generate_cci(definitions):
     from lib.create_cci import CciGenerator
     
-    project_dir = r'F:\git\FIRST\SnobotSim\CtreSimulator'
-    cci_header_dir = os.path.join(project_dir, r'ctre_source\cci\native\include\ctre\phoenix\cci')
-    cci_dump_dir = os.path.join(project_dir, r'src\main\native\cpp\ctre_cci_mocks')
+    cci_header_dir = os.path.join(PROJECT_DIR, r'rev_source\cci\native\include\ctre\phoenix\cci')
+    cci_dump_dir = os.path.join(PROJECT_DIR, r'src\main\native\cpp\ctre_cci_mocks')
     
     if not os.path.exists(cci_dump_dir):
         os.makedirs(cci_dump_dir)
@@ -31,16 +32,15 @@ def generate_cci(definitions):
         generator.generate(
             os.path.join(cci_header_dir, r'%s.h' % definition.cci_class_name), 
             os.path.join(cci_dump_dir, r'%s.cpp' % definition.cci_class_name),
-            os.path.join(project_dir, "gen_scripts/cci_templates/%s.txt" % definition.cci_class_name))
+            os.path.join(PROJECT_DIR, "gen_scripts/cci_templates/%s.txt" % definition.cci_class_name))
 
 def generate_jni(definitions):    
 
     from lib.create_jni import JniGenerator
 
-    project_dir = r'F:\git\FIRST\SnobotSim\CtreSimulator'
-    jni_dir = os.path.join(project_dir, r"ctre_source\cci\native\include\ctre\phoenix\jni")
-    cci_dir = os.path.join(project_dir, r"ctre_source\cci\native\include\ctre\phoenix\cci")
-    output_dir = os.path.join(project_dir, r"src/main/native/cpp/ctre_jni_mocks")
+    jni_dir = os.path.join(PROJECT_DIR, r"ctre_source\cci\native\include\ctre\phoenix\jni")
+    cci_dir = os.path.join(PROJECT_DIR, r"ctre_source\cci\native\include\ctre\phoenix\cci")
+    output_dir = os.path.join(PROJECT_DIR, r"src/main/native/cpp/ctre_jni_mocks")
 
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
@@ -51,7 +51,7 @@ def generate_jni(definitions):
         generator.generate(
             os.path.join(jni_dir, '%s.h' % definition.jni_package), 
             os.path.join(cci_dir, '%s.h' % definition.cci_class_name),
-            os.path.join(project_dir, "gen_scripts/jni_templates/%s.txt" % definition.cci_class_name),
+            os.path.join(PROJECT_DIR, "gen_scripts/jni_templates/%s.txt" % definition.cci_class_name),
             os.path.join(output_dir, definition.jni_class_name),)
         
 
@@ -87,10 +87,9 @@ def generate_unit_tests():
 #     definitions.append(UnitTestGenConfig("PigeonIMU", "com/ctre/phoenix/sensors", "imu"))
 #     definitions.append(UnitTestGenConfig("CANifier", "com/ctre/phoenix", "canifier"))
     
-    project_dir = r'F:\git\FIRST\SnobotSim\CtreSimulator'
-    template_dir = os.path.join(project_dir, "gen_scripts/unit_test_templates")
-    java_files_dir = os.path.join(project_dir, "build/tmp/test_files/")
-    output_dir = os.path.join(project_dir, "src/test/java/com/snobot/simulator/ctre")
+    template_dir = os.path.join(PROJECT_DIR, "gen_scripts/unit_test_templates")
+    java_files_dir = os.path.join(PROJECT_DIR, "build/tmp/test_files/")
+    output_dir = os.path.join(PROJECT_DIR, "src/test/java/com/snobot/simulator/ctre")
     
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
@@ -120,10 +119,10 @@ def main():
     
     
     __delete_sources()
-    extract_source_files(version, "../ctre_source", redownload=True)
-    generate_cci(definitions)
-    generate_jni(definitions)
-    generate_unit_tests()
+    extract_source_files(version, "../rev_source", redownload=True)
+#     generate_cci(definitions)
+#     generate_jni(definitions)
+#     generate_unit_tests()
     
 
 
