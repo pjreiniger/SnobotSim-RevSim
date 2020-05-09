@@ -77,6 +77,9 @@ def generate_unit_tests():
 #                      "VictorSPXPIDSetConfiguration", "CANCoderFaults", "CANCoderStickyFaults", "CANCoderConfiguration", "SupplyCurrentLimitConfiguration",
 #                      "TalonFXPIDSetConfiguration", "TalonFXPIDSetConfiguration", "StatorCurrentLimitConfiguration", "TalonFXConfiguration", "VictorSPXConfiguration"]
     
+    known_enums = []
+    known_classes = []
+    
     class UnitTestGenConfig:
         def __init__(self, java_class_name, package_name, actuator_name):
             self.java_class_name = java_class_name
@@ -85,18 +88,18 @@ def generate_unit_tests():
     
 
     definitions = []
-#     definitions.append(UnitTestGenConfig("BaseMotorController", "com/ctre/phoenix/motorcontrol/can", "talon"))
-#     definitions.append(UnitTestGenConfig("BaseTalon", "com/ctre/phoenix/motorcontrol/can", "talon"))
-#     definitions.append(UnitTestGenConfig("TalonFX", "com/ctre/phoenix/motorcontrol/can", "talonFX"))
-#     definitions.append(UnitTestGenConfig("TalonSRX", "com/ctre/phoenix/motorcontrol/can", "talon"))
-#     definitions.append(UnitTestGenConfig("VictorSPX", "com/ctre/phoenix/motorcontrol/can", "victor"))
+    definitions.append(UnitTestGenConfig("CANAnalog", "com/revrobotics", "analog"))
+#     definitions.append(UnitTestGenConfig("BaseTalon", "com/revrobotics", "talon"))
+#     definitions.append(UnitTestGenConfig("TalonFX", "com/revrobotics", "talonFX"))
+#     definitions.append(UnitTestGenConfig("TalonSRX", "com/revrobotics", "talon"))
+#     definitions.append(UnitTestGenConfig("VictorSPX", "com/revrobotics", "victor"))
 #     definitions.append(UnitTestGenConfig("CANCoder", "com/ctre/phoenix/sensors", "canCoder"))
 #     definitions.append(UnitTestGenConfig("PigeonIMU", "com/ctre/phoenix/sensors", "imu"))
 #     definitions.append(UnitTestGenConfig("CANifier", "com/ctre/phoenix", "canifier"))
     
     template_dir = os.path.join(PROJECT_DIR, "gen_scripts/unit_test_templates")
     java_files_dir = os.path.join(PROJECT_DIR, "build/tmp/test_files/")
-    output_dir = os.path.join(PROJECT_DIR, "src/test/java/com/snobot/simulator/ctre")
+    output_dir = os.path.join(PROJECT_DIR, "src/test/java/com/snobot/simulator/rev")
     
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
@@ -125,11 +128,11 @@ def main():
     definitions = generator_config_factory()
     
     
-    __delete_sources()
-    extract_source_files(version, "../rev_source", redownload=True)
-    generate_cci(definitions)
-    generate_jni(definitions)
-#     generate_unit_tests()
+#     __delete_sources()
+#     extract_source_files(version, "../rev_source", redownload=True)
+#     generate_cci(definitions)
+#     generate_jni(definitions)
+    generate_unit_tests()
     
 
 
