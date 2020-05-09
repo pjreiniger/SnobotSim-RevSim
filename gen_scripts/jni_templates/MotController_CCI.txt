@@ -1,0 +1,20 @@
+
+#include <jni.h>
+
+#include <cassert>
+
+#include "com_ctre_phoenix_motorcontrol_can_MotControllerJNI.h"
+#include "ctre/phoenix/cci/MotController_CCI.h"
+#include "CtreSimMocks/CtreMotorControllerWrapper.h"
+#include "CtreSimMocks/MockHookUtilities.h"
+
+
+SnobotSim::CtreMotorControllerWrapper* ConvertToMotorControllerWrapper(jlong aHandle)
+{
+    return reinterpret_cast<SnobotSim::CtreMotorControllerWrapper*>(aHandle);
+}
+
+extern "C" {
+{{functions}}
+
+}  // extern "C"
