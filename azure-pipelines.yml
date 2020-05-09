@@ -24,7 +24,7 @@ jobs:
        gradleOptions: '-Xmx3072m'
        publishJUnitResults: true
        testResultsFiles: '**/TEST-*.xml'
-       tasks: 'build publish'
+       tasks: 'clean build publish'
        options: '-PciBuild'
        # checkStyleRunAnalysis: true
        # pmdRunAnalysis: true
@@ -47,7 +47,7 @@ jobs:
         jdkVersionOption: '1.11'
         publishJUnitResults: true
         testResultsFiles: '**/TEST-*.xml'
-        tasks: 'build publish'
+        tasks: 'clean build publish'
         options: '-PciBuild -Dhttp.socketTimeout=60000 -Dhttp.connectionTimeout=60000'
 
     - task: PublishBuildArtifacts@1
@@ -80,7 +80,7 @@ jobs:
         gradleOptions: '-Xmx1024m'
         publishJUnitResults: true
         testResultsFiles: '**/TEST-*.xml'
-        tasks: 'build publish'
+        tasks: 'clean build publish'
         options: '-PciBuild -Dhttp.socketTimeout=60000 -Dhttp.connectionTimeout=60000'
 
     - task: PublishBuildArtifacts@1
@@ -105,7 +105,7 @@ jobs:
         jdkVersionOption: '1.11'
         publishJUnitResults: true
         testResultsFiles: '**/TEST-*.xml'
-        tasks: 'build publish'
+        tasks: 'clean build publish'
         options: '-PciBuild -Dhttp.socketTimeout=60000 -Dhttp.connectionTimeout=60000'
 
     - task: PublishBuildArtifacts@1
