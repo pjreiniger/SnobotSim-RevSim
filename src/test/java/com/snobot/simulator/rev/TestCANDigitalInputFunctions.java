@@ -50,6 +50,5 @@ public class TestCANDigitalInputFunctions
             fowrardSwitch.get();
             fowrardSwitch.isLimitSwitchEnabled();
         }
-
     }
 }

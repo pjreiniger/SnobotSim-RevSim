@@ -52,7 +52,7 @@ public class TestCANSparkMaxLowLevelFunctions
             spark.setPeriodicFramePeriod(periodicFrame, 0);
         }
         spark.enableExternalUSBControl(false);
-        spark.getSafeFloat(0.0f);
+        spark.getSafeFloat(0);
         spark.restoreFactoryDefaults();
         spark.restoreFactoryDefaults(false);
     }
