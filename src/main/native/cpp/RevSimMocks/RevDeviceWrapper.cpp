@@ -6,29 +6,28 @@
 
 #include "RevSimMocks/MockHooks.h"
 
-
 std::vector<SnobotSim::REV_CallbackFunc> gRevCallbacks;
 
 namespace SnobotSim
 {
 void SetSparkMaxDriverCallback(REV_CallbackFunc callback)
 {
-	gRevCallbacks.clear();
-	gRevCallbacks.push_back(callback);
+    gRevCallbacks.clear();
+    gRevCallbacks.push_back(callback);
 }
 
-}
+} // namespace SnobotSim
 
 SnobotSim::RevSimulator::RevSimulator(int aDeviceId, const std::string& aName) :
-	mDeviceId(aDeviceId)
+        mDeviceId(aDeviceId)
 {
-	Send(aName);
+    Send(aName);
 }
 void SnobotSim::RevSimulator::Receive(const std::string& aName, uint8_t* aBuffer, int aSize)
 {
     if (!gRevCallbacks.empty())
     {
-    	gRevCallbacks[0](aName.c_str(), mDeviceId, aBuffer, aSize);
+        gRevCallbacks[0](aName.c_str(), mDeviceId, aBuffer, aSize);
     }
     else
     {
@@ -40,7 +39,7 @@ void SnobotSim::RevSimulator::Send(const std::string& aName, uint8_t* aBuffer, i
 {
     if (!gRevCallbacks.empty())
     {
-    	gRevCallbacks[0](aName.c_str(), mDeviceId, aBuffer, aSize);
+        gRevCallbacks[0](aName.c_str(), mDeviceId, aBuffer, aSize);
     }
     else
     {

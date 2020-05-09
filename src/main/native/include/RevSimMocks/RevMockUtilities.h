@@ -11,7 +11,7 @@
 #endif
 #endif
 
-#define LOG_UNSUPPORTED_CAN_FUNC(x)                                           \
+#define LOG_UNSUPPORTED_CAN_FUNC(x)                      \
     std::cerr << "(" << __FILE__ ":" << __LINE__ << ") " \
               << " Unsupported Function " << __FUNCTION_NAME__ << " -- " << x << std::endl;
 

@@ -9,10 +9,10 @@ def create_tests(jar_path):
     output_dir = "build/tempCreateTests"
     if os.path.exists(output_dir):
         shutil.rmtree(output_dir)
-        
+
     os.makedirs(output_dir)
     os.chdir(output_dir)
-    
+
     print(jar_path)
 
     classes = collections.defaultdict(list)
@@ -33,7 +33,7 @@ def create_tests(jar_path):
             unzip_args.append(clazz)
 
     print subprocess.call(unzip_args)
-    
+
     known_classes = ["ExternalFollower", "CANSparkMax",]
 
     for key in classes:
@@ -53,7 +53,7 @@ def prepare_variable_name(in_name):
 
 
 def run_javap(objName, class_file, known_classes, header_template):
-    
+
     print("File %s ---------------------" % class_file)
     output_file = "Test%sFunctions" % class_file.split('/')[-1][:-6]
     output_file = os.path.join("%s/src/test/java/com/snobot/simulator/rev/%s.java" % (os.path.dirname(os.path.realpath(__file__)), output_file))
@@ -111,31 +111,31 @@ def run_javap(objName, class_file, known_classes, header_template):
 
     with(open(output_file, 'w')) as f:
         f.write(header_template)
-        f.write(tests) 
+        f.write(tests)
         f.write("\n}\n")
 #     print tests
 
 def dump_enemerate(enumeration_iter, indent, args, objName, func, arg_replacement):
-    
+
     def safe_get_next(enumeration_iter):
         try:
             n = next(enumeration_iter)
             return True, n
         except StopIteration:
             return False, None
-    
+
     tests = ""
     valid, enum = safe_get_next(enumeration_iter)
     if valid:
         print(indent, "DUMPING ENUM ", enum, args)
         var_name = prepare_variable_name(enum)
-        tests += "{indent}for ({enum} {var_name} : {enum}.values())".format(**locals()) 
+        tests += "{indent}for ({enum} {var_name} : {enum}.values())".format(**locals())
         tests += "\n%s{\n" % indent
         tests += dump_enemerate(enumeration_iter, indent + "    ", args, objName, func, arg_replacement)
         tests += "{indent}}}\n".format(**locals())
     else:
         tests += "%s%s.%s(%s);\n" % (indent, objName, func, ", ".join(arg_replacement))
-        
+
     return tests
 
 def dump_single_test(indent, objName, func, arg_replacement, enumerations):
@@ -144,10 +144,10 @@ def dump_single_test(indent, objName, func, arg_replacement, enumerations):
     if len(enumerations) == 0:
         tests += "        {objName}.{func}({args});\n".format(**locals())
     else:
-        
+
         enumeration_iter = iter(enumerations)
         dump_enemerate(enumeration_iter, indent, args, objName, func, arg_replacement)
-        
+
     return tests
 
 
@@ -344,7 +344,7 @@ public class TestCANSparkMax
         ExternalFollower externalFollower = new ExternalFollower(15, 0);
 
 
-       
+
         spark
 """
 
