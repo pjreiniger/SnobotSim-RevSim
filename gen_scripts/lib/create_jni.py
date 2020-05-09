@@ -9,7 +9,7 @@ from .cci_helpers import cci_sanitize_rettype, cci_sanitize_func_name, cci_get_o
 DOCS_TEMPLATE = """
 /*
  * Class:     {{ package_name }}
- * Method:    {{"JNI_" if include_jni_in_method_name}}{{ method_name }}
+ * Method:    c_SparkMax_{{ method_name }}
  * Signature: ({{args_abbrv}}){{retrn_abbr}}
  */
 {{ return_type }} {{full_method_name}}
@@ -17,7 +17,6 @@ DOCS_TEMPLATE = """
 {
 {{ function_body }}
 }
-
 """
 
 
@@ -27,7 +26,7 @@ class JniGenerator():
         self.jni_prefix = "Java_%s_" % definition.jni_package
         self.include_jni_in_method_name = definition.include_jni_in_method_name
         self.doc_package_name = definition.jni_package
-        self.full_jni_prefix = "Java_%s" % definition.full_jni_package
+        self.full_jni_prefix = "Java_%s_c_%s_1" % (definition.full_jni_package, "SparkMax1")
         self.cci_prefix = definition.cci_prefix           
         self.getter_overrides = definition.cci_getter_overrides
         self.conversion_function = definition.cci_conversion_function
@@ -49,11 +48,12 @@ class JniGenerator():
         output = ""
         
 #         print("FFFFF", jni_func['rtnType'])
-        if 'ctre::phoenix::ErrorCode' in cci_func['rtnType'] and "void" not in jni_func['rtnType']:
-            output += "    return (jint)"
+            
+        if 'c_SparkMax_ErrorCode' in cci_func['rtnType'] and "void" not in jni_func['rtnType']:
+            output += "   c_SparkMax_ErrorCode output = "
+#             output += "   return (jint)"
         else:
             output += "    "
-            
         output += cci_func['name'] + "(%s(handle)" % self.conversion_function
         
         for arg in cci_func['parameters']:
@@ -62,12 +62,19 @@ class JniGenerator():
         
         output += ");"
         
+        if 'c_SparkMax_ErrorCode' in cci_func['rtnType'] and "void" not in jni_func['rtnType']:
+            output += "\n   return (jint) output;"
+        
         return output
     
     
     def __get_getter_function_body(self, cci_func, output_arguments):
         
         default_value = {}
+        default_value["uint8_t *"] = " = 0"
+        default_value["uint16_t *"] = " = 0"
+        default_value["uint32_t *"] = " = 0"
+        default_value["float *"] = " = 0"
         default_value["bool *"] = " = false"
         default_value["const char *"] = ""
         default_value["int *"] = " = 0"
@@ -76,19 +83,35 @@ class JniGenerator():
         default_value["ctre::phoenix::motorcontrol::MotorCommutation *"] = " "
         default_value["const double *"] = " = 0"
         default_value["char *"] = " = 0"
-        default_value["ctre::phoenix::sensors::MagnetFieldStrength *"] = " = 0"
-        default_value["ctre::phoenix::sensors::SensorVelocityMeasPeriod *"] = " = 0"
-        default_value["ctre::phoenix::sensors::AbsoluteSensorRange *"] = " = 0"
-        default_value["ctre::phoenix::sensors::SensorInitializationStrategy *"] = " = 0"
-        default_value["ctre::phoenix::sensors::SensorTimeBase *"] = " = 0"
+        default_value["c_SparkMax_FirmwareVersion *"] = " = 0"
+        default_value["c_SparkMax_MotorType *"] = " = 0"
+        default_value["c_SparkMax_IdleMode *"] = " = 0"
+        default_value["c_SparkMax_LimitPolarity *"] = " = 0"
+        default_value["c_SparkMax_AnalogMode *"] = " = 0"
+        default_value["c_SparkMax_AccelStrategy *"] = " = 0"
+        
+        cpp_to_jni = {}
+        cpp_to_jni["nt"] = "jint"
+        cpp_to_jni["int16_t"] = "jint"
+        cpp_to_jni["int32_t"] = "jint"
+        cpp_to_jni["int8_t"] = "jboolean"
+        cpp_to_jni["loat"] = "jfloat"
+        cpp_to_jni["float *"] = "float"
+        cpp_to_jni["_SparkMax_FirmwareVersion"] = "jint"
+        cpp_to_jni["_SparkMax_MotorType"] = "jint"
+        cpp_to_jni["_SparkMax_IdleMode"] = "jint"
+        cpp_to_jni["_SparkMax_LimitPolarity"] = "jint"
+        cpp_to_jni["_SparkMax_AnalogMode"] = "jint"
+        cpp_to_jni["_SparkMax_AccelStrategy"] = "jint"
+        cpp_to_jni["_SparkMax_AccelStrategy"] = "uint8_t"
         
         output = ""
         
         for arg in cci_func['parameters']:
             if str(arg['name']) in output_arguments:
-                output += "    " + arg['type'].replace(" *", "") + " " + arg['name'] + default_value[str(arg['type'])] + ";\n"
+                output += "   " + arg['type'].replace(" *", "") + " " + arg['name'] + ";\n"
             
-        output += "    "
+        output += "   "
         output += cci_func['name'] + "(%s(handle)" % self.conversion_function
         
         for arg in cci_func['parameters']:
@@ -102,7 +125,8 @@ class JniGenerator():
         
         for arg in cci_func['parameters']:
             if "*" in arg['type'] and arg['type'] != "void *":
-                output += "    return " + arg['name'] + ";"
+                arg_type = arg['type'].replace(" *", "")[1:]
+                output += "   return (" + cpp_to_jni.get(arg_type, "UNKNOWN '{}'".format(arg_type)) + ") " +  arg['name'] + ";"
                 break
         
         return output
@@ -110,28 +134,7 @@ class JniGenerator():
     
     def __sanitize_jni_func_name(self, func):
         sanitized_func_name = func["name"][len(self.full_jni_prefix):]
-#         print("Sanitizing ", func['name'], sanitized_func_name, "\t", self.full_jni_prefix)
-    #     sanitized_func_name = sanitized_func_name.replace("Create", "Create1")
-        sanitized_func_name = sanitized_func_name.replace("Config_1", "Config_")
-        sanitized_func_name = sanitized_func_name.replace("JNI_1destroy_1MotController", "Destroy")
-        sanitized_func_name = sanitized_func_name.replace("Set_14", "Set_4")
-        sanitized_func_name = sanitized_func_name.replace("SetInverted_12", "SetInverted_2")
-        sanitized_func_name = sanitized_func_name.replace("GetActiveTrajectoryPosition3", "GetActiveTrajectoryPosition_3")
-        sanitized_func_name = sanitized_func_name.replace("GetActiveTrajectoryVelocity3", "GetActiveTrajectoryVelocity_3")
-        sanitized_func_name = sanitized_func_name.replace("GetActiveTrajectoryArbFeedFwd3", "GetActiveTrajectoryArbFeedFwd_3")
-        sanitized_func_name = sanitized_func_name.replace("PushMotionProfileTrajectory2", "PushMotionProfileTrajectory_2")
-        sanitized_func_name = sanitized_func_name.replace("PushMotionProfileTrajectory3", "PushMotionProfileTrajectory_3")
-        sanitized_func_name = sanitized_func_name.replace("GetMotionProfileStatus2", "GetMotionProfileStatus_2")
-        sanitized_func_name = sanitized_func_name.replace("ConfigPulseWidthPeriod_1EdgesPerRot", "ConfigPulseWidthPeriod_EdgesPerRot")
-        sanitized_func_name = sanitized_func_name.replace("ConfigPulseWidthPeriod_1FilterWindowSz", "ConfigPulseWidthPeriod_FilterWindowSz")
-    #     sanitized_func_name = sanitized_func_name.replace("ConfigBrakeCurrentLimit", "ConfigBrakeCurrentLimit")
-    #     sanitized_func_name = sanitized_func_name.replace("ConfigBrakeCurrentLimitEnable", "ConfigBrakeCurrentLimitEnable")
-    #     sanitized_func_name = sanitized_func_name.replace("GetIntegratedSensorPosition", "GetIntegratedSensorPosition")
-    #     sanitized_func_name = sanitized_func_name.replace("GetIntegratedSensorAbsolutePosition", "GetIntegratedSensorAbsolutePosition")
-    #     sanitized_func_name = sanitized_func_name.replace("GetIntegratedSensorVelocity", "GetIntegratedSensorVelocity")
-    #     sanitized_func_name = sanitized_func_name.replace("ConfigAbsoluteSensorRange", "ConfigAbsoluteSensorRange")
-    #     sanitized_func_name = sanitized_func_name.replace("ConfigMagnetOffset", "ConfigMagnetOffset")
-    #     sanitized_func_name = sanitized_func_name.replace("ConfigSensorInitializationStrategy", "ConfigSensorInitializationStrategy")
+#         print("SAN: ", sanitized_func_name)
         
         return sanitized_func_name
     
@@ -143,6 +146,7 @@ class JniGenerator():
         jni_type_to_abbr_lookup['int'] = 'I'
         jni_type_to_abbr_lookup['jint'] = 'I'
         jni_type_to_abbr_lookup['jlong'] = 'J'
+        jni_type_to_abbr_lookup['jfloat'] = 'F'
         jni_type_to_abbr_lookup['jstring'] = 'java/lang/String;'
         jni_type_to_abbr_lookup['jdouble'] = 'D'
         jni_type_to_abbr_lookup['jboolean'] = 'Z'
@@ -169,7 +173,7 @@ class JniGenerator():
             cci_args = cci_func['parameters'] if cci_func else []
             if not cci_func:
                 print("Bouncing", sanitized_func_name)
-                function_body = '    LOG_UNSUPPORTED_CAN_FUNC("");\n    return 0;'
+                function_body = '   LOG_UNSUPPORTED_CAN_FUNC("");\n   return 0;'
                 jni_func_args = jni_args
             else:
                 output_arguments = cci_get_output_arguments(cci_func, self.getter_overrides)

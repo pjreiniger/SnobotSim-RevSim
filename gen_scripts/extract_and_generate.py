@@ -10,10 +10,10 @@ def __delete_sources():
     def delete_if_exists(path):
         if os.path.exists(path):
             shutil.rmtree(path)
-    delete_if_exists("../ctre_source")
-    delete_if_exists(r"../src\main\native\cpp\rev_driver")
-#     delete_if_exists(r"../src\main\native\cpp\ctre_jni_mocks")
-#     delete_if_exists(r"../src\test\java/com/snobot/simulator/ctre")
+    delete_if_exists("../rev_source")
+    delete_if_exists(r"../src\main\native\cpp\rev_driver_mocks")
+    delete_if_exists(r"../src\main\native\cpp\rev_jni_mocks")
+    delete_if_exists(r"../src\test\java/com/snobot/simulator/rev")
     
     
 def generate_cci(definitions):
@@ -39,15 +39,21 @@ def generate_jni(definitions):
 
     from lib.create_jni import JniGenerator
 
-    jni_dir = os.path.join(PROJECT_DIR, r"ctre_source\cci\native\include\ctre\phoenix\jni")
-    cci_dir = os.path.join(PROJECT_DIR, r"ctre_source\cci\native\include\ctre\phoenix\cci")
-    output_dir = os.path.join(PROJECT_DIR, r"src/main/native/cpp/ctre_jni_mocks")
+    cci_dir = os.path.join(PROJECT_DIR, r"rev_source\native\include\rev")
+    jni_dir = os.path.join(PROJECT_DIR, r"build\jniinclude\compileJava")
+    output_dir = os.path.join(PROJECT_DIR, r"src/main/native/cpp/rev_jni_mocks")
+    
 
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
     
     for definition in definitions:
         generator = JniGenerator(definition)
+        
+        # TODO tome
+        print(os.path.join(cci_dir, '%s.h' % definition.cci_class_name))
+        # F:\git\FIRST\SnobotSim\SparkMaxSim\rev_source\include\rev\CANSparkMaxDriver.h
+        # F:\git\FIRST\SnobotSim\SparkMaxSim\rev_source\native\include\rev\CANSparkMaxDriver.h
 
         generator.generate(
             os.path.join(jni_dir, '%s.h' % definition.jni_package), 
@@ -120,9 +126,9 @@ def main():
     
     
     __delete_sources()
-#     extract_source_files(version, "../rev_source", redownload=True)
+    extract_source_files(version, "../rev_source", redownload=True)
     generate_cci(definitions)
-#     generate_jni(definitions)
+    generate_jni(definitions)
 #     generate_unit_tests()
     
 

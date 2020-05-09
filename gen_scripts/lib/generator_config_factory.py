@@ -7,8 +7,8 @@ def generator_config_factory():
 
     definitions = []
     
-    definitions.append(__create_config("CANSparkMaxDriver", "c_CANifier_", "ConvertToCanifierWrapper", "SnobotSim::CtreCanifierWrapper",
-                                       "com_ctre_phoenix_CANifierJNI", "CANifierJNI.cpp",
+    definitions.append(__create_config("CANSparkMaxDriver", "c_SparkMax_", "ConvertToMotorControllerWrapper", "SnobotSim::CtreCanifierWrapper",
+                                       "com_revrobotics_jni_CANSparkMaxJNI", "CANSparkMaxJNI.cpp",
                                        "CANifier", "com/ctre/phoenix", "canifier"))
 
     return definitions
