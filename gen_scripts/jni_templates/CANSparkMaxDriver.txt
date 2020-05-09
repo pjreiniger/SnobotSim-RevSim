@@ -1,0 +1,22 @@
+
+#include <jni.h>
+
+#include <cassert>
+
+#include "com_revrobotics_jni_CANSparkMaxJNI.h"
+#include "RevSimMocks/RevMockUtilities.h"
+#include "rev/CANSparkMaxDriver.h"
+#include "RevSimMocks/RevDeviceWrapper.h"
+
+extern "C" {
+
+
+c_SparkMax_handle ConvertToMotorControllerWrapper(jlong aHandle)
+{
+    return (c_SparkMax_handle) reinterpret_cast<SnobotSim::RevSimulator*>(aHandle);
+}
+
+{{functions}}
+
+}  // extern "C"
+
