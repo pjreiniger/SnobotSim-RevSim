@@ -20,7 +20,7 @@ def cci_seperate_arguments(func, getter_overrides):
 
     if func['name'] in getter_overrides:
         output_arguments = getter_overrides[func['name']]
-        print("{} is in overrides ({})".format(func['name'], output_arguments))
+#         print("{} is in overrides ({})".format(func['name'], output_arguments))
     else:
         for arg in func['parameters']:
             if "*" in arg["type"] and arg["type"] != "void *":
@@ -33,7 +33,7 @@ def cci_seperate_arguments(func, getter_overrides):
 def cci_get_output_arguments(func, getter_overrides):
     _, output_arguments = cci_seperate_arguments(func, getter_overrides)
     
-    print(output_arguments)
-    for arg in output_arguments:
-        print("XXX", arg)
+#     print(output_arguments)
+#     for arg in output_arguments:
+#         print("XXX", arg)
     return [arg['name'] for arg in output_arguments]

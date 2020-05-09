@@ -6,6 +6,10 @@ def generator_config_factory():
     
 
     definitions = []
+    
+    definitions.append(__create_config("CANSparkMaxDriver", "c_CANifier_", "ConvertToCanifierWrapper", "SnobotSim::CtreCanifierWrapper",
+                                       "com_ctre_phoenix_CANifierJNI", "CANifierJNI.cpp",
+                                       "CANifier", "com/ctre/phoenix", "canifier"))
 
     return definitions
 
@@ -18,6 +22,8 @@ def __get_cci_getter_overrides():
 
 def __create_config(*kargs):
         output = GeneratorConfig(*kargs)
+        
+        output.cci_getter_overrides =[]
         
 #         print(output.full_jni_package)
 #         if output.jni_package == "com_ctre_phoenix_sensors_PigeonImuJNI":

@@ -3,7 +3,7 @@ import os
 from extract_source_files import extract_source_files
 import re
 
-PROJECT_DIR =  r'F:\git\FIRST\SnobotSim\CtreSimulator'
+PROJECT_DIR =  r'F:\git\FIRST\SnobotSim\SparkMaxSim'
 
 
 def __delete_sources():
@@ -11,28 +11,29 @@ def __delete_sources():
         if os.path.exists(path):
             shutil.rmtree(path)
     delete_if_exists("../ctre_source")
-    delete_if_exists(r"../src\main\native\cpp\ctre_cci_mocks")
-    delete_if_exists(r"../src\main\native\cpp\ctre_jni_mocks")
-    delete_if_exists(r"../src\test\java/com/snobot/simulator/ctre")
+    delete_if_exists(r"../src\main\native\cpp\rev_driver")
+#     delete_if_exists(r"../src\main\native\cpp\ctre_jni_mocks")
+#     delete_if_exists(r"../src\test\java/com/snobot/simulator/ctre")
     
     
 def generate_cci(definitions):
     from lib.create_cci import CciGenerator
     
-    cci_header_dir = os.path.join(PROJECT_DIR, r'rev_source\cci\native\include\ctre\phoenix\cci')
-    cci_dump_dir = os.path.join(PROJECT_DIR, r'src\main\native\cpp\ctre_cci_mocks')
+    cci_header_dir = os.path.join(PROJECT_DIR, r'rev_source\native\include\rev')
+    cci_dump_dir = os.path.join(PROJECT_DIR, r'src\main\native\cpp\rev_driver_mocks')
     
     if not os.path.exists(cci_dump_dir):
         os.makedirs(cci_dump_dir)
 
     for definition in definitions:
+        print(definition)
     
         generator = CciGenerator(definition)
         
         generator.generate(
             os.path.join(cci_header_dir, r'%s.h' % definition.cci_class_name), 
             os.path.join(cci_dump_dir, r'%s.cpp' % definition.cci_class_name),
-            os.path.join(PROJECT_DIR, "gen_scripts/cci_templates/%s.txt" % definition.cci_class_name))
+            os.path.join(PROJECT_DIR, "gen_scripts/cci_templates/_template.txt"))
 
 def generate_jni(definitions):    
 
@@ -119,8 +120,8 @@ def main():
     
     
     __delete_sources()
-    extract_source_files(version, "../rev_source", redownload=True)
-#     generate_cci(definitions)
+#     extract_source_files(version, "../rev_source", redownload=True)
+    generate_cci(definitions)
 #     generate_jni(definitions)
 #     generate_unit_tests()
     

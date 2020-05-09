@@ -59,6 +59,7 @@ class CciGenerator():
             output += "\n\n"
             
         with open(output_file, 'w') as f:
+            print("Writing to {}".format(output_file))
             f.write(Template(template_text).render(functions=output,
                                          stripped_cci_class_name=self.stripped_cci_class_name,
                                          wrapper_class_name=self.wrapper_class_name,
