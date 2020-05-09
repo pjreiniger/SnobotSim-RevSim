@@ -4,6 +4,16 @@ import os
 import copy
 from .cci_helpers import cci_sanitize_rettype, cci_sanitize_func_name, cci_get_output_arguments
 
+CCI_GETTER_TEMPLATE = """{
+    RECEIVE_HELPER("{{ callback_name }}", {% for arg in args if arg.name != "handle" and arg.name != "timeoutMs" %}sizeof({{ "*" if "*" in arg.type }}{{arg.name}}){{ " + " if not loop.last }}{% endfor %});{% for arg in args if arg.name != "handle" and arg.name != "timeoutMs" %}
+    PoplateReceiveResults(buffer, {{ "&" if "*" not in arg.type }}{{arg.name}}, buffer_pos);{% endfor %}
+    {% if return_type == "c_SparkMax_ErrorCode" %}return (c_SparkMax_ErrorCode) 0;{% endif %}
+}"""
+
+CCI_SETTER_TEMPLATE = """{
+    ((SnobotSim::RevSimulator*)handle)->Send("{{ callback_name }}"{% for arg in args if arg.name != "handle" and arg.name != "timeoutMs" %}, {{arg.name}}{% endfor %});{% if return_type == "c_SparkMax_ErrorCode" %}
+    return (c_SparkMax_ErrorCode) 0;{% endif %}
+}"""
 
 class CciGenerator():
     
@@ -16,13 +26,12 @@ class CciGenerator():
         self.overriden_function_bodies = definition.cci_overriden_function_bodies
         self.wrapper_type = definition.cci_wrapper_type
         self.conversion_function = definition.cci_conversion_function
+        self.getter_template = CCI_GETTER_TEMPLATE
+        self.setter_template = CCI_SETTER_TEMPLATE
     
     def __dump_func_contents(self, func):
         is_getter = cci_get_output_arguments(func, self.getter_overrides)
-        template = """{
-    {{ conversion_function }}(handle)->{{ callback_name }}({% for arg in args if arg.name != "handle" and arg.name != "timeoutMs" %}{{arg.name}}{{ ", " if not loop.last }}{% endfor %});{% if return_type == "ctre::phoenix::ErrorCode" %}
-    return (ctre::phoenix::ErrorCode)0;{% endif %}
-}"""
+        template = self.getter_template if is_getter else self.setter_template
         
         return Template(template).render(callback_name=cci_sanitize_func_name(self.cci_prefix, func['name']), 
                                          return_type=cci_sanitize_rettype(func['rtnType']),
@@ -45,7 +54,16 @@ class CciGenerator():
         jni_functions = []
         for func in parsed_header.functions:
             output += cci_sanitize_rettype(func['rtnType']) + " " + func["name"] + "("
-            output += ", ".join(arg["type"] + ("" if arg["type"].endswith("*") else " ") + arg["name"] + ("[%s]" % arg['array_size'] if "array_size" in arg else "") for arg in func["parameters"])
+            
+            def get_arg_str(arg):
+                if arg["type"].endswith("*"):
+                    arg_str = arg["type"][:-2] + "* " #+ arg["type"][-1] 
+                else:
+                    arg_str = arg["type"] + " "
+                    
+                return arg_str
+            
+            output += ", ".join(get_arg_str(arg) + arg["name"] + ("[%s]" % arg['array_size'] if "array_size" in arg else "") for arg in func["parameters"])
             
             output += ")\n"
 #             print(func['name'], self.overriden_function_bodies)
@@ -56,7 +74,7 @@ class CciGenerator():
                     conversion_function=self.conversion_function)
             else:
                 output += self.__dump_func_contents(func)
-            output += "\n\n"
+            output += "\n"
             
         with open(output_file, 'w') as f:
             print("Writing to {}".format(output_file))

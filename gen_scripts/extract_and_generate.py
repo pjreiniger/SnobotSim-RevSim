@@ -127,11 +127,11 @@ def main():
     definitions = generator_config_factory()
     
     
-    __delete_sources()
-    extract_source_files(version, "../rev_source", redownload=True)
+#     __delete_sources()
+#     extract_source_files(version, "../rev_source", redownload=True)
     generate_cci(definitions)
-    generate_jni(definitions)
-    generate_unit_tests()
+#     generate_jni(definitions)
+#     generate_unit_tests()
     
 
 

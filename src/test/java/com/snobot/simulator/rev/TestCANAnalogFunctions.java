@@ -17,7 +17,7 @@ public class TestCANAnalogFunctions
         @Override
         public void callback(String aName, int aDeviceId, ByteBuffer aBuffer, int aCount)
         {
-            // Nothing to do
+            System.out.println("Getting CANAnalog callback '" + aName + "'"); // NOPMD
         }
     };
 

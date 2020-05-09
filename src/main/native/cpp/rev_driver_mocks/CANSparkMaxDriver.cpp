@@ -64,7 +64,10 @@ void c_SparkMax_SetControlFramePeriod(c_SparkMax_handle handle, int periodMs)
 }
 int c_SparkMax_GetControlFramePeriod(c_SparkMax_handle handle)
 {
-    ((SnobotSim::RevSimulator*)handle)->Send("GetControlFramePeriod");
+    int controlFramePeriod = 0;
+    RECEIVE_HELPER("GetControlFramePeriod", sizeof(controlFramePeriod));
+    PoplateReceiveResults(buffer, &controlFramePeriod, buffer_pos);
+    return controlFramePeriod;
 }
 c_SparkMax_ErrorCode c_SparkMax_SetParameterFloat32(c_SparkMax_handle handle, c_SparkMax_ConfigParameter paramId, float value)
 {
@@ -152,11 +155,6 @@ c_SparkMax_ErrorCode c_SparkMax_SetEncoderPosition(c_SparkMax_handle handle, flo
 c_SparkMax_ErrorCode c_SparkMax_SetAltEncoderPosition(c_SparkMax_handle handle, float position)
 {
     ((SnobotSim::RevSimulator*)handle)->Send("SetAltEncoderPosition", position);
-    return (c_SparkMax_ErrorCode) 0;
-}
-c_SparkMax_ErrorCode c_SparkMax_SetIAccum(c_SparkMax_handle handle, float Iaccum)
-{
-    ((SnobotSim::RevSimulator*)handle)->Send("SetIAccum", Iaccum);
     return (c_SparkMax_ErrorCode) 0;
 }
 c_SparkMax_ErrorCode c_SparkMax_RestoreFactoryDefaults(c_SparkMax_handle handle, uint8_t persist)
@@ -377,15 +375,12 @@ c_SparkMax_ErrorCode c_SparkMax_SetSensorType(c_SparkMax_handle handle, c_SparkM
 }
 c_SparkMax_ErrorCode c_SparkMax_IDQuery(uint32_t* uniqueIdArray, size_t uniqueIdArraySize, size_t* numberOfDevices)
 {
-    RECEIVE_HELPER("IDQuery", sizeof(*uniqueIdArray) + sizeof(uniqueIdArraySize) + sizeof(*numberOfDevices));
-    PoplateReceiveResults(buffer, uniqueIdArray, buffer_pos);
-    PoplateReceiveResults(buffer, &uniqueIdArraySize, buffer_pos);
-    PoplateReceiveResults(buffer, numberOfDevices, buffer_pos);
+    LOG_UNSUPPORTED_CAN_FUNC("");
     return (c_SparkMax_ErrorCode) 0;
 }
 c_SparkMax_ErrorCode c_SparkMax_IDAssign(uint32_t uniqueId, uint8_t deviceId)
 {
-    ((SnobotSim::RevSimulator*)handle)->Send("IDAssign", uniqueId, deviceId);
+    LOG_UNSUPPORTED_CAN_FUNC("");
     return (c_SparkMax_ErrorCode) 0;
 }
 c_SparkMax_ErrorCode c_SparkMax_Identify(c_SparkMax_handle handle)
@@ -395,7 +390,7 @@ c_SparkMax_ErrorCode c_SparkMax_Identify(c_SparkMax_handle handle)
 }
 c_SparkMax_ErrorCode c_SparkMax_IdentifyUniqueId(uint32_t uniqueId)
 {
-    ((SnobotSim::RevSimulator*)handle)->Send("IdentifyUniqueId", uniqueId);
+    LOG_UNSUPPORTED_CAN_FUNC("");
     return (c_SparkMax_ErrorCode) 0;
 }
 c_SparkMax_ErrorCode c_SparkMax_SetLimitPolarity(c_SparkMax_handle handle, c_SparkMax_LimitDirection sw, c_SparkMax_LimitPolarity polarity)
@@ -872,13 +867,17 @@ c_SparkMax_ErrorCode c_SparkMax_SetFeedbackDeviceRange(c_SparkMax_handle handle,
 }
 c_SparkMax_APIVersion c_SparkMax_GetAPIVersion()
 {
-    LOG_UNSUPPORTED_CAN_FUNC("");
-    return c_SparkMax_APIVersion{};
+    c_SparkMax_APIVersion output{};
+    output.Major = c_SparkMax_kAPIMajorVersion;
+    output.Minor = c_SparkMax_kAPIMinorVersion;
+    output.Build = c_SparkMax_kAPIBuildVersion;
+    output.Version = c_SparkMax_kAPIVersion;
+
+    return output;
 }
 void c_SparkMax_SetLastError(c_SparkMax_handle handle, c_SparkMax_ErrorCode error)
 {
-    LOG_UNSUPPORTED_CAN_FUNC("");
-    return c_SparkMax_APIVersion{};
+    ((SnobotSim::RevSimulator*)handle)->Send("SetLastError", error);
 }
 c_SparkMax_ErrorCode c_SparkMax_GetLastError(c_SparkMax_handle handle)
 {

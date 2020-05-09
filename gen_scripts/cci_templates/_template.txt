@@ -1,17 +1,16 @@
 
-#include "ctre/phoenix/cci/{{ cci_class_name }}.h"
-
-#include <cstring>
+#include <iostream>
 #include <vector>
 
-#include "CtreSimMocks/{{ wrapper_class_name }}.h"
-#include "CtreSimUtils/MockHooks.h"
+#include "rev/{{ cci_class_name }}.h"
+#include "RevSimMocks/RevMockUtilities.h"
+#include "RevSimMocks/RevDeviceWrapper.h"
 
-#define RECEIVE_HELPER(paramName, size)                                  \
+#define RECEIVE_HELPER(paramName, size)                                        \
     auto* wrapper = {{conversion_function}}(handle); \
-    uint8_t buffer[size]; /* NOLINT */                                   \
-    std::memset(&buffer[0], 0, size);                                    \
-    wrapper->Receive(paramName, buffer, size);                           \
+    uint8_t buffer[size]; /* NOLINT */                                         \
+    std::memset(&buffer[0], 0, size);                                          \
+    wrapper->Receive(paramName, buffer, size);                                 \
     uint32_t buffer_pos = 0;
 
 
@@ -20,8 +19,5 @@ SnobotSim::{{ wrapper_class_name }}* {{conversion_function}}(void* param)
     return reinterpret_cast<SnobotSim::{{ wrapper_class_name }}*>(param);
 }
 
-extern "C"{
-
 {{functions}}
-}  // extern "C"
 

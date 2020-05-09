@@ -34,7 +34,7 @@ JNIEXPORT jlong JNICALL Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1Cre
  * Signature: (J)V
  */
 JNIEXPORT void JNICALL Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1Destroy
-  (JNIEnv *, jclass, jlong)
+  (JNIEnv *, jclass, jlong handle)
 {
    LOG_UNSUPPORTED_CAN_FUNC("");
 }
@@ -48,7 +48,8 @@ JNIEXPORT jint JNICALL Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1GetF
 {
    c_SparkMax_FirmwareVersion fwVersion;
    c_SparkMax_GetFirmwareVersion(ConvertToMotorControllerWrapper(handle), &fwVersion);
-   return (jint) fwVersion;
+
+   return (jint) fwVersion.versionRaw;
 }
 /*
  * Class:     com_revrobotics_jni_CANSparkMaxJNI
@@ -114,7 +115,7 @@ JNIEXPORT void JNICALL Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1SetC
 JNIEXPORT jint JNICALL Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1GetControlFramePeriod
   (JNIEnv *, jclass, jlong handle)
 {
-    c_SparkMax_GetControlFramePeriod(ConvertToMotorControllerWrapper(handle));
+    return c_SparkMax_GetControlFramePeriod(ConvertToMotorControllerWrapper(handle));
 }
 /*
  * Class:     com_revrobotics_jni_CANSparkMaxJNI
@@ -157,7 +158,7 @@ JNIEXPORT jint JNICALL Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1SetF
 JNIEXPORT jfloat JNICALL Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1SafeFloat
   (JNIEnv *, jclass, jfloat f)
 {
-    c_SparkMax_SafeFloat(ConvertToMotorControllerWrapper(handle), f);
+    return (jfloat) c_SparkMax_SafeFloat(f);
 }
 /*
  * Class:     com_revrobotics_jni_CANSparkMaxJNI
@@ -168,7 +169,6 @@ JNIEXPORT void JNICALL Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1Enab
   (JNIEnv *, jclass, jboolean)
 {
    LOG_UNSUPPORTED_CAN_FUNC("");
-   return 0;
 }
 /*
  * Class:     com_revrobotics_jni_CANSparkMaxJNI
@@ -179,7 +179,6 @@ JNIEXPORT void JNICALL Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1SetE
   (JNIEnv *, jclass, jboolean)
 {
    LOG_UNSUPPORTED_CAN_FUNC("");
-   return 0;
 }
 /*
  * Class:     com_revrobotics_jni_CANSparkMaxJNI
@@ -1549,8 +1548,7 @@ JNIEXPORT jint JNICALL Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1GetF
 JNIEXPORT jint JNICALL Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1GetAPIMajorRevision
   (JNIEnv *, jclass)
 {
-   LOG_UNSUPPORTED_CAN_FUNC("");
-   return 0;
+    return c_SparkMax_GetAPIVersion().Major;
 }
 /*
  * Class:     com_revrobotics_jni_CANSparkMaxJNI
@@ -1560,8 +1558,7 @@ JNIEXPORT jint JNICALL Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1GetA
 JNIEXPORT jint JNICALL Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1GetAPIMinorRevision
   (JNIEnv *, jclass)
 {
-   LOG_UNSUPPORTED_CAN_FUNC("");
-   return 0;
+    return c_SparkMax_GetAPIVersion().Minor;
 }
 /*
  * Class:     com_revrobotics_jni_CANSparkMaxJNI
@@ -1571,8 +1568,7 @@ JNIEXPORT jint JNICALL Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1GetA
 JNIEXPORT jint JNICALL Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1GetAPIBuildRevision
   (JNIEnv *, jclass)
 {
-   LOG_UNSUPPORTED_CAN_FUNC("");
-   return 0;
+    return c_SparkMax_GetAPIVersion().Build;
 }
 /*
  * Class:     com_revrobotics_jni_CANSparkMaxJNI
@@ -1582,7 +1578,7 @@ JNIEXPORT jint JNICALL Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1GetA
 JNIEXPORT jint JNICALL Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1GetAPIVersion
   (JNIEnv *, jclass)
 {
-    c_SparkMax_GetAPIVersion(ConvertToMotorControllerWrapper(handle));
+    return c_SparkMax_GetAPIVersion().Version;
 }
 /*
  * Class:     com_revrobotics_jni_CANSparkMaxJNI

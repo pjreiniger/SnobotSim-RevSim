@@ -30,6 +30,20 @@ class JniGenerator():
         self.cci_prefix = definition.cci_prefix           
         self.getter_overrides = definition.cci_getter_overrides
         self.conversion_function = definition.cci_conversion_function
+        
+        self.enum_casts = set()
+        self.enum_casts.add("c_SparkMax_FirmwareVersion")
+        self.enum_casts.add("c_SparkMax_MotorType")
+        self.enum_casts.add("c_SparkMax_IdleMode")
+        self.enum_casts.add("c_SparkMax_LimitPolarity")
+        self.enum_casts.add("c_SparkMax_AnalogMode")
+        self.enum_casts.add("c_SparkMax_AccelStrategy")
+        self.enum_casts.add("c_SparkMax_PeriodicFrame")
+        self.enum_casts.add("c_SparkMax_ControlType")
+        self.enum_casts.add("c_SparkMax_FaultID")
+        self.enum_casts.add("c_SparkMax_LimitDirection")
+        self.enum_casts.add("c_SparkMax_EncoderType")
+        self.enum_casts.add("c_SparkMax_DataPortConfig")
 
     def __load_cci_functions(self, header_file):
         parsed_header = CppHeaderParser.CppHeader(header_file)
@@ -47,6 +61,7 @@ class JniGenerator():
     def __get_setter_function_body(self, cci_func, jni_func):
         output = ""
         
+        
 #         print("FFFFF", jni_func['rtnType'])
             
         if 'c_SparkMax_ErrorCode' in cci_func['rtnType'] and "void" not in jni_func['rtnType']:
@@ -58,7 +73,14 @@ class JniGenerator():
         
         for arg in cci_func['parameters']:
             if arg['name'] != 'handle':
-                output += ", " + arg['name']
+                output += ", "
+                if arg['type'] in self.enum_casts:
+                    output += "(%s) " % arg['type']
+                output += arg['name']
+        
+#         print(cci_func['name'])
+#         if "SetPeriodicFramePeriod" in cci_func['name']:
+#             raise
         
         output += ");"
         
@@ -104,7 +126,7 @@ class JniGenerator():
         cpp_to_jni["_SparkMax_AnalogMode"] = "jint"
         cpp_to_jni["_SparkMax_AccelStrategy"] = "jint"
         cpp_to_jni["_SparkMax_AccelStrategy"] = "uint8_t"
-        
+
         output = ""
         
         for arg in cci_func['parameters']:
@@ -116,10 +138,12 @@ class JniGenerator():
         
         for arg in cci_func['parameters']:
             if arg['name'] != 'handle':
+                output += ", "
+                if arg['type'] in self.enum_casts:
+                    output += "(%s) " % arg['type']
                 if "*" in arg['type'] and arg['type'] != "void *":
-                    output += ", &" + arg['name']
-                else:
-                    output += ", " + arg['name']
+                    output += "&"
+                output += arg['name']
         
         output += ");\n"
         
