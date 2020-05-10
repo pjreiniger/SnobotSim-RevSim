@@ -30,7 +30,7 @@ public class TestBasicOperations
         @Override
         public void callback(String aName, int aDeviceId, ByteBuffer aBuffer, int aCount)
         {
-            System.out.println("Getting BasicOperation callback '" + aName + "'"); // NOPMD
+            System.out.println("Getting BasicOperation callback '" + aName + "' with size of " + aBuffer.capacity() + ", " + aCount); // NOPMD
         }
     };
 

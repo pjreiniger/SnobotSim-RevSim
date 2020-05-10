@@ -20,7 +20,7 @@ public class TestCANPIDControllerFunctions
         @Override
         public void callback(String aName, int aDeviceId, ByteBuffer aBuffer, int aCount)
         {
-            System.out.println("Getting CANPIDController callback '" + aName + "'"); // NOPMD
+            System.out.println("Getting CANPIDController callback '" + aName + "' with size of " + aBuffer.capacity() + ", " + aCount); // NOPMD
         }
     };
 

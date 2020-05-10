@@ -23,7 +23,7 @@ public class TestCANSparkMaxFunctions
         @Override
         public void callback(String aName, int aDeviceId, ByteBuffer aBuffer, int aCount)
         {
-            System.out.println("Getting CANSparkMax callback '" + aName + "'"); // NOPMD
+            System.out.println("Getting CANSparkMax callback '" + aName + "' with size of " + aBuffer.capacity() + ", " + aCount); // NOPMD
         }
     };
 
