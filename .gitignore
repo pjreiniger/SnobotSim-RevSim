@@ -210,3 +210,6 @@ gradle-app.setting
 
 .idea
 src/rev/java
+
+
+*.pyc

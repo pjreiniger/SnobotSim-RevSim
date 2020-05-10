@@ -1,4 +1,5 @@
 
+#pragma once
 
 #include <stdint.h>
 
@@ -12,4 +13,4 @@ typedef void (*REV_CallbackFunc)(const char* name, uint32_t messageId,
 
 void EXPORT_ SetSparkMaxDriverCallback(REV_CallbackFunc callback);
 
-}  // namespace SnobotSim
+} // namespace SnobotSim

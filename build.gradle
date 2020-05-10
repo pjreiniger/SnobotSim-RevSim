@@ -15,7 +15,7 @@ plugins {
 
 ext.allwpilibVersion = '2020.1.2'
 ext.rev_library_version = "1.5.0"
-ext.release_version = rev_library_version + "_V1"
+ext.release_version = rev_library_version + "_V2"
 
 repositories {
     mavenCentral()
@@ -51,7 +51,7 @@ model {
                         includes = ["**/*.cpp"]
                     }
                     exportedHeaders {
-                        srcDirs = ["src/main/native/include", 
+                        srcDirs = ["src/main/native/include",
                                    "rev_source/native/include"]
                     }
                 }
@@ -120,7 +120,7 @@ dependencies {
     // testCompile 'edu.wpi.first.cscore:cscore-jni:' + allwpilibVersion + ':' + getCurrentArch()
 
     testCompile 'junit:junit:4.12'
-    
+
     testCompile 'com.revrobotics.frc:SparkMax-driver:' + rev_library_version + ":headers@zip"
 
     wpilibNativeDeps packageNativeFilesInJar.outputs.files

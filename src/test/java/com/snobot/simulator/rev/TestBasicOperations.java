@@ -43,7 +43,7 @@ public class TestBasicOperations
         ExternalFollower externalFollower = new ExternalFollower(15, 0);
 
 
-       
+
         spark.set(0);
         spark.get();
         spark.setInverted(false);
@@ -131,7 +131,7 @@ public class TestBasicOperations
             spark.isSoftLimitEnabled(softLimitDirection);
         }
         spark.getLastError();
-        
+
 
         spark.close();
     }
