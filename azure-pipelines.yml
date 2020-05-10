@@ -96,13 +96,13 @@ jobs:
     - script: |
         mkdir build
         export JAVA_HOME=`/usr/libexec/java_home -v 11`
+      displayName: 'Setup JDK'
     - task: Gradle@2
       inputs:
         workingDirectory: ''
         gradleWrapperFile: 'gradlew'
         gradleOptions: '-Xmx3072m'
         javaHomeOption: 'path'
-        jdkDirectory: '/Library/Java/JavaVirtualMachines/jdk-11.jdk/Contents/Home/'
         publishJUnitResults: true
         testResultsFiles: '**/TEST-*.xml'
         tasks: 'build publish'
