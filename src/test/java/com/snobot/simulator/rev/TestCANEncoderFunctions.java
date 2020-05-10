@@ -16,7 +16,7 @@ public class TestCANEncoderFunctions
         @Override
         public void callback(String aName, int aDeviceId, ByteBuffer aBuffer, int aCount)
         {
-            // Nothing to do
+            System.out.println("Getting CANEncoder callback '" + aName + "'"); // NOPMD
         }
     };
 

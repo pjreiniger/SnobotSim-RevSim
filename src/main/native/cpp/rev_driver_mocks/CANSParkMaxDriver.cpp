@@ -58,6 +58,17 @@ c_SparkMax_ErrorCode c_SparkMax_SetPeriodicFramePeriod(c_SparkMax_handle handle,
     ((SnobotSim::RevSimulator*)handle)->Send("SetPeriodicFramePeriod", frameId, periodMs);
     return (c_SparkMax_ErrorCode) 0;
 }
+void c_SparkMax_SetControlFramePeriod(c_SparkMax_handle handle, int periodMs)
+{
+    ((SnobotSim::RevSimulator*)handle)->Send("SetControlFramePeriod", periodMs);
+}
+int c_SparkMax_GetControlFramePeriod(c_SparkMax_handle handle)
+{
+    int controlFramePeriod = 0;
+    RECEIVE_HELPER("GetControlFramePeriod", sizeof(controlFramePeriod));
+    PoplateReceiveResults(buffer, &controlFramePeriod, buffer_pos);
+    return controlFramePeriod;
+}
 c_SparkMax_ErrorCode c_SparkMax_SetParameterFloat32(c_SparkMax_handle handle, c_SparkMax_ConfigParameter paramId, float value)
 {
     ((SnobotSim::RevSimulator*)handle)->Send("SetParameterFloat32", paramId, value);
@@ -146,11 +157,6 @@ c_SparkMax_ErrorCode c_SparkMax_SetAltEncoderPosition(c_SparkMax_handle handle, 
     ((SnobotSim::RevSimulator*)handle)->Send("SetAltEncoderPosition", position);
     return (c_SparkMax_ErrorCode) 0;
 }
-c_SparkMax_ErrorCode c_SparkMax_SetIAccum(c_SparkMax_handle handle, float iAccum)
-{
-    ((SnobotSim::RevSimulator*)handle)->Send("SetIAccum", iAccum);
-    return (c_SparkMax_ErrorCode) 0;
-}
 c_SparkMax_ErrorCode c_SparkMax_RestoreFactoryDefaults(c_SparkMax_handle handle, uint8_t persist)
 {
     ((SnobotSim::RevSimulator*)handle)->Send("RestoreFactoryDefaults", persist);
@@ -165,6 +171,11 @@ c_SparkMax_ErrorCode c_SparkMax_SetFollow(c_SparkMax_handle handle, uint32_t fol
 {
     ((SnobotSim::RevSimulator*)handle)->Send("SetFollow", followerArbId, followerCfg);
     return (c_SparkMax_ErrorCode) 0;
+}
+float c_SparkMax_SafeFloat(float f)
+{
+    LOG_UNSUPPORTED_CAN_FUNC("");
+    return 0;
 }
 c_SparkMax_ErrorCode c_SparkMax_SetpointCommand(c_SparkMax_handle handle, float value, c_SparkMax_ControlType ctrl, int pidSlot, float arbFeedforward, int arbFFUnits)
 {
@@ -330,7 +341,7 @@ c_SparkMax_ErrorCode c_SparkMax_BurnFlash(c_SparkMax_handle handle)
 }
 c_SparkMax_ErrorCode c_SparkMax_SetCANTimeout(c_SparkMax_handle handle, int timeoutMs)
 {
-    ((SnobotSim::RevSimulator*)handle)->Send("SetCANTimeout", timeoutMs);
+    ((SnobotSim::RevSimulator*)handle)->Send("SetCANTimeout");
     return (c_SparkMax_ErrorCode) 0;
 }
 c_SparkMax_ErrorCode c_SparkMax_EnableSoftLimit(c_SparkMax_handle handle, c_SparkMax_LimitDirection dir, uint8_t enable)
@@ -827,6 +838,11 @@ c_SparkMax_ErrorCode c_SparkMax_GetIMaxAccum(c_SparkMax_handle handle, int slotI
     PoplateReceiveResults(buffer, iMaxAccum, buffer_pos);
     return (c_SparkMax_ErrorCode) 0;
 }
+c_SparkMax_ErrorCode c_SparkMax_SetIAccum(c_SparkMax_handle handle, float iAccum)
+{
+    ((SnobotSim::RevSimulator*)handle)->Send("SetIAccum", iAccum);
+    return (c_SparkMax_ErrorCode) 0;
+}
 c_SparkMax_ErrorCode c_SparkMax_GetIAccum(c_SparkMax_handle handle, float* iAccum)
 {
     RECEIVE_HELPER("GetIAccum", sizeof(*iAccum));
@@ -848,6 +864,20 @@ c_SparkMax_ErrorCode c_SparkMax_SetFeedbackDeviceRange(c_SparkMax_handle handle,
 {
     ((SnobotSim::RevSimulator*)handle)->Send("SetFeedbackDeviceRange", min, max);
     return (c_SparkMax_ErrorCode) 0;
+}
+c_SparkMax_APIVersion c_SparkMax_GetAPIVersion()
+{
+    c_SparkMax_APIVersion output{};
+    output.Major = c_SparkMax_kAPIMajorVersion;
+    output.Minor = c_SparkMax_kAPIMinorVersion;
+    output.Build = c_SparkMax_kAPIBuildVersion;
+    output.Version = c_SparkMax_kAPIVersion;
+
+    return output;
+}
+void c_SparkMax_SetLastError(c_SparkMax_handle handle, c_SparkMax_ErrorCode error)
+{
+    ((SnobotSim::RevSimulator*)handle)->Send("SetLastError", error);
 }
 c_SparkMax_ErrorCode c_SparkMax_GetLastError(c_SparkMax_handle handle)
 {

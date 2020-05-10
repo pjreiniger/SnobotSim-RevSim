@@ -35,9 +35,8 @@
 #include "rev/CANSparkMaxErrors.h"
 
 #if defined(__cplusplus) && __has_include(<array>)
-
 #else
-//#error This project requires C++11 or greater
+#error This project requires C++11 or greater
 #endif
 
 extern "C" {
@@ -468,13 +467,13 @@ c_SparkMax_ErrorCode c_SparkMax_IsLimitEnabled(c_SparkMax_handle handle, c_Spark
 // CANAnalog 
 c_SparkMax_ErrorCode c_SparkMax_GetAnalogPosition(c_SparkMax_handle handle, float* position);
 c_SparkMax_ErrorCode c_SparkMax_GetAnalogVelocity(c_SparkMax_handle handle, float* velocity);
-c_SparkMax_ErrorCode c_SparkMax_GetAnalogVoltage(c_SparkMax_handle, float* voltage);
-c_SparkMax_ErrorCode c_SparkMax_SetAnalogPositionConversionFactor(c_SparkMax_handle, float conversion);
-c_SparkMax_ErrorCode c_SparkMax_SetAnalogVelocityConversionFactor(c_SparkMax_handle, float conversion);
-c_SparkMax_ErrorCode c_SparkMax_GetAnalogPositionConversionFactor(c_SparkMax_handle, float* conversion);
-c_SparkMax_ErrorCode c_SparkMax_GetAnalogVelocityConversionFactor(c_SparkMax_handle, float* conversion);
-c_SparkMax_ErrorCode c_SparkMax_SetAnalogInverted(c_SparkMax_handle, uint8_t inverted);
-c_SparkMax_ErrorCode c_SparkMax_GetAnalogInverted(c_SparkMax_handle, uint8_t* inverted);
+c_SparkMax_ErrorCode c_SparkMax_GetAnalogVoltage(c_SparkMax_handle handle, float* voltage);
+c_SparkMax_ErrorCode c_SparkMax_SetAnalogPositionConversionFactor(c_SparkMax_handle handle, float conversion);
+c_SparkMax_ErrorCode c_SparkMax_SetAnalogVelocityConversionFactor(c_SparkMax_handle handle, float conversion);
+c_SparkMax_ErrorCode c_SparkMax_GetAnalogPositionConversionFactor(c_SparkMax_handle handle, float* conversion);
+c_SparkMax_ErrorCode c_SparkMax_GetAnalogVelocityConversionFactor(c_SparkMax_handle handle, float* conversion);
+c_SparkMax_ErrorCode c_SparkMax_SetAnalogInverted(c_SparkMax_handle handle, uint8_t inverted);
+c_SparkMax_ErrorCode c_SparkMax_GetAnalogInverted(c_SparkMax_handle handle, uint8_t* inverted);
 c_SparkMax_ErrorCode c_SparkMax_SetAnalogAverageDepth(c_SparkMax_handle handle, uint32_t depth);
 c_SparkMax_ErrorCode c_SparkMax_GetAnalogAverageDepth(c_SparkMax_handle handle, uint32_t* depth);
 c_SparkMax_ErrorCode c_SparkMax_SetAnalogMeasurementPeriod(c_SparkMax_handle handle, uint32_t samples);

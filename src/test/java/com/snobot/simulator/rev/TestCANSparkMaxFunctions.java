@@ -23,7 +23,7 @@ public class TestCANSparkMaxFunctions
         @Override
         public void callback(String aName, int aDeviceId, ByteBuffer aBuffer, int aCount)
         {
-            // Nothing to do
+            System.out.println("Getting CANSparkMax callback '" + aName + "'"); // NOPMD
         }
     };
 
@@ -44,8 +44,6 @@ public class TestCANSparkMaxFunctions
         CANSparkMax follower = new CANSparkMax(11, MotorType.kBrushed);
         ExternalFollower externalFollower = new ExternalFollower(15, 0);
 
-
-       
         spark.set(0);
         spark.get();
         spark.setInverted(false);
@@ -133,9 +131,7 @@ public class TestCANSparkMaxFunctions
             spark.isSoftLimitEnabled(softLimitDirection);
         }
         spark.getLastError();
-        
 
         spark.close();
     }
-
 }
