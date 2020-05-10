@@ -132,6 +132,7 @@ public class TestCANSparkMaxFunctions
         }
         spark.getLastError();
 
+
         spark.close();
     }
 }

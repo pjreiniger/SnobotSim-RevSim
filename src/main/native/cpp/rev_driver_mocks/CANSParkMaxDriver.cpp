@@ -1,11 +1,10 @@
 
-#include "rev/CANSparkMaxDriver.h"
-
 #include <iostream>
 #include <vector>
 
 #include "RevSimMocks/RevDeviceWrapper.h"
 #include "RevSimMocks/RevMockUtilities.h"
+#include "rev/CANSparkMaxDriver.h"
 
 #define RECEIVE_HELPER(paramName, size)                                  \
     SnobotSim::RevSimulator* wrapper = (SnobotSim::RevSimulator*)handle; \
@@ -341,7 +340,7 @@ c_SparkMax_ErrorCode c_SparkMax_BurnFlash(c_SparkMax_handle handle)
 }
 c_SparkMax_ErrorCode c_SparkMax_SetCANTimeout(c_SparkMax_handle handle, int timeoutMs)
 {
-    ((SnobotSim::RevSimulator*)handle)->Send("SetCANTimeout");
+    ((SnobotSim::RevSimulator*)handle)->Send("SetCANTimeout", timeoutMs);
     return (c_SparkMax_ErrorCode)0;
 }
 c_SparkMax_ErrorCode c_SparkMax_EnableSoftLimit(c_SparkMax_handle handle, c_SparkMax_LimitDirection dir, uint8_t enable)

@@ -9,7 +9,7 @@ cppSrcFileInclude {
 }
 
 generatedFileExclude {
-   rev_source
+  rev_source
 }
 
 modifiableFileExclude {
