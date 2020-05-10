@@ -34,7 +34,7 @@ Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1Create
  */
 JNIEXPORT void JNICALL
 Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1Destroy
-  (JNIEnv*, jclass, jlong)
+  (JNIEnv*, jclass, jlong handle)
 {
     LOG_UNSUPPORTED_CAN_FUNC("");
 }
@@ -47,8 +47,10 @@ JNIEXPORT jint JNICALL
 Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1GetFirmwareVersion
   (JNIEnv*, jclass, jlong handle)
 {
-    LOG_UNSUPPORTED_CAN_FUNC("");
-    return 0;
+    c_SparkMax_FirmwareVersion fwVersion;
+    c_SparkMax_GetFirmwareVersion(ConvertToMotorControllerWrapper(handle), &fwVersion);
+
+    return (jint)fwVersion.versionRaw;
 }
 /*
  * Class:     com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax
@@ -107,9 +109,9 @@ Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1SetPeriodicFramePeriod
  */
 JNIEXPORT void JNICALL
 Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1SetControlFramePeriod
-  (JNIEnv*, jclass, jlong, jint)
+  (JNIEnv*, jclass, jlong handle, jint periodMs)
 {
-    LOG_UNSUPPORTED_CAN_FUNC("");
+    c_SparkMax_SetControlFramePeriod(ConvertToMotorControllerWrapper(handle), periodMs);
 }
 /*
  * Class:     com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax
@@ -118,10 +120,9 @@ Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1SetControlFramePeriod
  */
 JNIEXPORT jint JNICALL
 Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1GetControlFramePeriod
-  (JNIEnv*, jclass, jlong)
+  (JNIEnv*, jclass, jlong handle)
 {
-    LOG_UNSUPPORTED_CAN_FUNC("");
-    return 0;
+    return c_SparkMax_GetControlFramePeriod(ConvertToMotorControllerWrapper(handle));
 }
 /*
  * Class:     com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax
@@ -166,10 +167,9 @@ Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1SetFollow
  */
 JNIEXPORT jfloat JNICALL
 Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1SafeFloat
-  (JNIEnv*, jclass, jfloat)
+  (JNIEnv*, jclass, jfloat f)
 {
-    LOG_UNSUPPORTED_CAN_FUNC("");
-    return 0;
+    return (jfloat)c_SparkMax_SafeFloat(f);
 }
 /*
  * Class:     com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax
@@ -299,10 +299,12 @@ Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1SetSecondaryCurrentLimit
  */
 JNIEXPORT jfloat JNICALL
 Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1GetSecondaryCurrentLimit
-  (JNIEnv*, jclass, jlong)
+  (JNIEnv*, jclass, jlong handle)
 {
-    LOG_UNSUPPORTED_CAN_FUNC("");
-    return 0;
+    float limit;
+    int chopCycles;
+    c_SparkMax_GetSecondaryCurrentLimit(ConvertToMotorControllerWrapper(handle), &limit, &chopCycles);
+    return (jfloat)limit;
 }
 /*
  * Class:     com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax
@@ -1680,8 +1682,7 @@ JNIEXPORT jint JNICALL
 Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1GetAPIMajorRevision
   (JNIEnv*, jclass)
 {
-    LOG_UNSUPPORTED_CAN_FUNC("");
-    return 0;
+    return c_SparkMax_GetAPIVersion().Major;
 }
 /*
  * Class:     com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax
@@ -1692,8 +1693,7 @@ JNIEXPORT jint JNICALL
 Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1GetAPIMinorRevision
   (JNIEnv*, jclass)
 {
-    LOG_UNSUPPORTED_CAN_FUNC("");
-    return 0;
+    return c_SparkMax_GetAPIVersion().Minor;
 }
 /*
  * Class:     com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax
@@ -1704,8 +1704,7 @@ JNIEXPORT jint JNICALL
 Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1GetAPIBuildRevision
   (JNIEnv*, jclass)
 {
-    LOG_UNSUPPORTED_CAN_FUNC("");
-    return 0;
+    return c_SparkMax_GetAPIVersion().Build;
 }
 /*
  * Class:     com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax
@@ -1716,8 +1715,7 @@ JNIEXPORT jint JNICALL
 Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1GetAPIVersion
   (JNIEnv*, jclass)
 {
-    LOG_UNSUPPORTED_CAN_FUNC("");
-    return 0;
+    return c_SparkMax_GetAPIVersion().Version;
 }
 /*
  * Class:     com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax

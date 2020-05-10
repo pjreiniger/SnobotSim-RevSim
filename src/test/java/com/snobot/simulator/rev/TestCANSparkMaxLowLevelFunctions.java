@@ -16,7 +16,7 @@ public class TestCANSparkMaxLowLevelFunctions
         @Override
         public void callback(String aName, int aDeviceId, ByteBuffer aBuffer, int aCount)
         {
-            // Nothing to do
+            System.out.println("Getting CANSparkMaxLowLevel callback '" + aName + "'"); // NOPMD
         }
     };
 
@@ -52,7 +52,7 @@ public class TestCANSparkMaxLowLevelFunctions
             spark.setPeriodicFramePeriod(periodicFrame, 0);
         }
         spark.enableExternalUSBControl(false);
-        spark.getSafeFloat(0.0f);
+        spark.getSafeFloat(0);
         spark.restoreFactoryDefaults();
         spark.restoreFactoryDefaults(false);
     }
