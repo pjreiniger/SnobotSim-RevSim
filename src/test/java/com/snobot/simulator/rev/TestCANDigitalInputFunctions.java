@@ -17,7 +17,7 @@ public class TestCANDigitalInputFunctions
         @Override
         public void callback(String aName, int aDeviceId, ByteBuffer aBuffer, int aCount)
         {
-            System.out.println("Getting CANDigital callback '" + aName + "'"); // NOPMD
+            System.out.println("Getting CANDigital callback '" + aName + "' with size of " + aBuffer.capacity() + ", " + aCount); // NOPMD
         }
     };
 
