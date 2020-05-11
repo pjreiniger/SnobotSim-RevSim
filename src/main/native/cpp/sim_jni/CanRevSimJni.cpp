@@ -3,7 +3,7 @@
 
 #include <iostream>
 
-#include "RevSimMocks/MockHooks.h"
+#include "RevSimUtils/MockHooks.h"
 #include "com_snobot_simulator_rev_RevSimJni.h"
 
 namespace SnobotSimRev
@@ -89,7 +89,7 @@ Java_com_snobot_simulator_rev_RevSimJni_registerRevCallback
         }
     };
 
-    SnobotSim::SetSparkMaxDriverCallback(callbackFunc);
+    SnobotSim::SetCANSparkMaxDriverCallback(callbackFunc);
 }
 
 /*

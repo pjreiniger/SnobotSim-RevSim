@@ -1,0 +1,48 @@
+package com.snobot.simulator.rev;
+
+import java.nio.ByteBuffer;
+
+import org.junit.Before;
+import org.junit.Test;
+
+import com.revrobotics.CANEncoder;
+import com.revrobotics.CANPIDController;
+import com.revrobotics.CANPIDController.AccelStrategy;
+import com.revrobotics.CANPIDController.ArbFFUnits;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.ControlType;
+
+public class TestCANPIDControllerFunctions
+{
+    private final RevCallback mRevCallback = new RevCallback()
+    {
+        @Override
+        public void callback(String aName, int aDeviceId, ByteBuffer aBuffer, int aCount)
+        {
+            System.out.println("Getting CANPIDController callback '" + aName + "' with size of " + aBuffer.capacity() + ", " + aCount); // NOPMD
+        }
+    };
+
+    @Before
+    public void initialize()
+    {
+        System.loadLibrary("SparkMaxDriver");
+
+        RevSimJni.registerRevCallback(mRevCallback);
+
+    }
+
+    @SuppressWarnings("PMD.NcssCount")
+    @Test
+    public void testPidFunctions()
+    {
+        CANSparkMax sc = new CANSparkMax(12, MotorType.kBrushless);
+        CANPIDController pid = new CANPIDController(sc);
+
+{{ functions }}
+
+        CANEncoder sensor = sc.getEncoder();
+        pid.setFeedbackDevice(sensor);
+    }
+}

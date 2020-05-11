@@ -1,0 +1,23 @@
+
+#include <jni.h>
+
+#include <cassert>
+
+#include "RevSimMocks/RevMockUtilities.h"
+#include "RevSimMocks/RevDeviceWrapper.h"
+#include "{{jni_package}}.h"
+#include "rev/{{ cci_class_name }}.h"
+{{extra_jni_header}}
+namespace
+{
+c_SparkMax_handle ConvertToWrapper(jlong aHandle)
+{
+    return (c_SparkMax_handle) reinterpret_cast<SnobotSim::RevCANSparkMaxDriverWrapper*>(aHandle);
+}
+} // namespace
+
+extern "C" {
+
+{{functions}}
+
+}  // extern "C"

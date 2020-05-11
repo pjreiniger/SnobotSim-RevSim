@@ -3,24 +3,25 @@
 
 #include <string>
 
-#include "RevSimMocks/BaseRevWrapper.h"
-#include "RevSimMocks/RevMockUtilities.h"
+#include "RevSimUtils/BaseRevWrapper.h"
+#include "RevSimUtils/RevMockUtilities.h"
 #include "rev/CANSparkMaxDriver.h"
 
 namespace SnobotSim
 {
 
-class RevSimulator : public BaseRevWrapper
+class RevCANSparkMaxDriverWrapper : public BaseRevWrapper
 {
 public:
     using BaseRevWrapper::Send;
 
-    RevSimulator(int aHandle, const std::string& aName);
+    explicit RevCANSparkMaxDriverWrapper(int aDeviceId);
     const int mDeviceId;
 
     void Receive(const std::string& aName, uint8_t* aBuffer, int aSize);
     void Send(const std::string& aName, uint8_t* aBuffer, int aSize);
 
+    //////////////////////////////////////////
     void GetFirmwareVersion(c_SparkMax_FirmwareVersion* fwVersion);
     void GetSerialNumber(uint32_t* serialNumber[3]);
     void GetDeviceId(int* deviceId);
@@ -47,7 +48,6 @@ public:
     void RestoreFactoryDefaults(uint8_t persist);
     void FactoryWipe(uint8_t persist);
     void SetFollow(uint32_t followerArbId, uint32_t followerCfg);
-    void SafeFloat(float f);
     void SetpointCommand(float value, c_SparkMax_ControlType ctrl, int pidSlot, float arbFeedforward, int arbFFUnits);
     void GetDRVStatus(c_SparkMax_DRVStatus* drvStatus);
     void SetInverted(uint8_t inverted);
@@ -82,10 +82,7 @@ public:
     void SetSoftLimit(c_SparkMax_LimitDirection dir, float limit);
     void GetSoftLimit(c_SparkMax_LimitDirection dir, float* limit);
     void SetSensorType(c_SparkMax_EncoderType sensorType);
-    void IDQuery(uint32_t* uniqueIdArray, size_t uniqueIdArraySize, size_t* numberOfDevices);
-    void IDAssign(uint32_t uniqueId, uint8_t deviceId);
     void Identify();
-    void IdentifyUniqueId(uint32_t uniqueId);
     void SetLimitPolarity(c_SparkMax_LimitDirection sw, c_SparkMax_LimitPolarity polarity);
     void GetLimitPolarity(c_SparkMax_LimitDirection sw, c_SparkMax_LimitPolarity* polarity);
     void GetLimitSwitch(c_SparkMax_LimitDirection sw, uint8_t* limit);
@@ -168,10 +165,8 @@ public:
     void SetFeedbackDevice(uint32_t sensorID);
     void GetFeedbackDeviceID(uint32_t* id);
     void SetFeedbackDeviceRange(float min, float max);
-    c_SparkMax_APIVersion GetAPIVersion();
     void SetLastError(c_SparkMax_ErrorCode error);
     void GetLastError();
-    void GenerateError(int deviceID, c_SparkMax_ErrorCode error);
     void ReadTelemetryStream(uint32_t telemetryHandle, c_SparkMax_TelemetryMessage* messages, c_SparkMax_TelemetryID* ids, uint32_t numOfStreams);
     void OpenTelemetryStream(uint32_t* telemetryHandle);
     void CloseTelemetryStream(uint32_t telemetryHandle);
