@@ -3,6 +3,7 @@ from jinja2 import Environment, Template, PackageLoader, select_autoescape
 import os
 import copy
 from .cci_helpers import cci_sanitize_rettype, cci_sanitize_func_name, cci_get_output_arguments
+from .utils import realign_pointer_position
 
 
 class CciGenerator():
@@ -46,15 +47,7 @@ class CciGenerator():
         for func in parsed_header.functions:
             output += cci_sanitize_rettype(func['rtnType']) + " " + func["name"] + "("
 
-            def get_arg_str(arg):
-                if arg["type"].endswith("*"):
-                    arg_str = arg["type"][:-2] + "* "
-                else:
-                    arg_str = arg["type"] + " "
-
-                return arg_str
-
-            output += ", ".join(get_arg_str(arg) + arg["name"] + ("[%s]" % arg['array_size'] if "array_size" in arg else "") for arg in func["parameters"])
+            output += ", ".join(realign_pointer_position(arg) + arg["name"] + ("[%s]" % arg['array_size'] if "array_size" in arg else "") for arg in func["parameters"])
 
             output += ")\n"
             #             print(func['name'], self.overriden_function_bodies)

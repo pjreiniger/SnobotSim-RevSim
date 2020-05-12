@@ -3,6 +3,7 @@ from jinja2 import Environment, Template, PackageLoader, select_autoescape
 import os
 import copy
 from .cci_helpers import cci_sanitize_rettype, cci_sanitize_func_name, cci_get_output_arguments, cci_seperate_arguments
+from .utils import realign_pointer_position
 
 WRAPPER_SETTER_TEMPLATE = """{
     RECEIVE_HELPER("{{ callback_name }}", {% for arg in args if arg.name != "handle" and arg.name != "timeoutMs" %}sizeof({{ "*" if "*" in arg.type }}{{arg.name}}){{ " + " if not loop.last }}{% endfor %});{% for arg in args if arg.name != "handle" and arg.name != "timeoutMs" %}
@@ -12,6 +13,58 @@ WRAPPER_SETTER_TEMPLATE = """{
 WRAPPER_GETTER_TEMPLATE = """{
     Send("{{ callback_name }}"{% for arg in args if arg.name != "handle" and arg.name != "timeoutMs" %}, {{arg.name}}{% endfor %});
 }"""
+
+
+def is_ignored_variable_name(variable_name):
+    return variable_name == 'handle' or variable_name == "timeoutMs" or variable_name == "timoutMs"
+
+
+class SimDeviceVariable():
+    def __init__(self, owning_function, var_dict):
+        self.owning_function = owning_function
+        self.variable_name = var_dict['name']
+        self.variable_type = var_dict['type']
+#         self.variable_type = variable_type
+#         self.variable_name = variable_name
+
+    def __str__(self):
+        return "Variable: {}".format(self.variable_name)
+    
+    def get_name_as_sim_device(self):
+        return "{}_{}".format(self.owning_function, self.variable_name)
+        
+
+class FunctionVariables():
+    
+    SLOTTED_NAMES = ['slotID']
+    
+    def __init__(self, original_function_name, stripped_function_name, variables):
+        self.original_function_name = original_function_name
+        self.sanitized_function_name = self.__get_sanitized_function_name(stripped_function_name)
+        self.is_slotted = False
+        
+        self.sanitized_variables = set()
+        for var in variables:
+            if not is_ignored_variable_name(var['name']):
+                if var['name'] in self.SLOTTED_NAMES:
+                    self.is_slotted = True
+                    continue
+                    
+                self.sanitized_variables.add(SimDeviceVariable(self.sanitized_function_name, var))
+        pass
+#         self.stripped_function = stripped_function
+
+    def __get_sanitized_function_name(self, stripped_function_name):
+        for pattern in ["Get", "Set", "Is"]:
+            if stripped_function_name.startswith(pattern):
+                output = stripped_function_name[len(pattern):]
+                return output
+        
+        return stripped_function_name
+
+
+    def __str__(self):
+        return "FunctionVariables: {}: ({}) {}".format(self.original_function_name, self.sanitized_function_name, ",".join(str(x) for x in self.sanitized_variables))
 
 
 class SimWrapperGenerator():
@@ -47,6 +100,53 @@ class SimWrapperGenerator():
                 new_args.append(arg)
 
         return new_args
+        
+
+    def __create_function_variable_lookup(self, functions, ignored_functions):
+        
+        function_to_variable_lookup = {}
+        
+        for func in functions:
+            func_name = func['name']
+            if func_name in ignored_functions:
+                continue
+            
+            setter_arguments, getter_arguments = cci_seperate_arguments(func, [])
+            
+            stripped_name = func_name[len(self.cci_prefix):]
+            function_to_variable_lookup[func_name] = FunctionVariables(func_name, stripped_name, setter_arguments + getter_arguments)
+            
+            stripped_variables = []
+            
+        normal_sim_device_variables = set()
+        slotted_sim_device_variables = set()
+        for key in function_to_variable_lookup:
+            function_def = function_to_variable_lookup[key]
+            
+            function_variables = []
+            for variable in function_def.sanitized_variables:
+                sim_device_name = variable.get_name_as_sim_device()
+                sim_device_type = "SimDouble"
+            
+                if function_def.is_slotted:
+                    slotted_sim_device_variables.add((sim_device_name, sim_device_type))
+                else:
+                    normal_sim_device_variables.add((sim_device_name, sim_device_type))
+                
+        normal_sim_device_variables = sorted(list(normal_sim_device_variables))
+        slotted_sim_device_variables = sorted(list(slotted_sim_device_variables))
+            
+        print("Function Lookup")
+        print("\n".join("{:50} -> {}".format(key, function_to_variable_lookup[key]) for key in function_to_variable_lookup))
+            
+        print("Normal Variables")
+        print("  " + "\n  ".join(str(x) for x in normal_sim_device_variables))
+              
+        print("Normal Variables")
+        print("  " + "\n  ".join(str(x) for x in slotted_sim_device_variables))
+        
+        return normal_sim_device_variables, slotted_sim_device_variables
+    #         print(setter_arguments, getter_arguments)
 
     def __dump_func_contents(self, func):
         getter_arguments = cci_get_output_arguments(func, self.getter_overrides)
@@ -66,11 +166,8 @@ class SimWrapperGenerator():
             output += "SnobotSim::%s::" % self.wrapper_class_name
         output += func['name'][len(self.cci_prefix):] + "("
         output += ", ".join(
-            arg["type"] + ("" if arg["type"].endswith("*") else " ") +
-            arg["name"] +
-            ("[%s]" % arg['array_size'] if "array_size" in arg else "")
-            for arg in func["parameters"]
-            if arg['name'] != "handle" and arg['name'] != "timeoutMs" and arg['name'] != "timoutMs")
+            realign_pointer_position(arg) + 
+            arg["name"] + ("[%s]" % arg['array_size'] if "array_size" in arg else "") for arg in func["parameters"] if arg['name'] != "handle" and arg['name'] != "timeoutMs" and arg['name'] != "timoutMs")
 
         output += ")"
         return output
@@ -85,6 +182,15 @@ class SimWrapperGenerator():
 
     def generate(self, cci_header_file, cpp_output_file, header_output_file,
                  cpp_template_file, header_template_file):
+        
+        num_slots = 6
+        
+        ignored_functions = []
+        ignored_functions.append("c_SparkMax_Create")
+        ignored_functions.append("c_SparkMax_Create_Inplace")
+        ignored_functions.append("c_SparkMax_Destroy")
+        ignored_functions.append("c_SparkMax_GetFirmwareVersion")
+        ignored_functions.append("c_SparkMax_SafeFloat")
 
         parsed_header = CppHeaderParser.CppHeader(cci_header_file)
 
@@ -92,7 +198,7 @@ class SimWrapperGenerator():
         header_output = ""
         member_variables = []
 
-        #         variable_lookup = self.__load_variable_mapping(parsed_header.functions)
+        normal_sim_device_variables, slotted_sim_device_variables = self.__create_function_variable_lookup(parsed_header.functions, ignored_functions)
 
         for func in parsed_header.functions:
             #             print(func['name'], self.cci_prefix + "Create")
@@ -130,6 +236,9 @@ class SimWrapperGenerator():
                     wrapper_class_name=self.wrapper_class_name,
                     stripped_cci_class_name=self.stripped_cci_class_name,
                     has_device_id=self.has_device_id,
+                    normal_sim_device_variables=normal_sim_device_variables,
+                    slotted_sim_device_variables=slotted_sim_device_variables,
+                    num_slots=num_slots,
                 ))
 
         with open(header_output_file, 'w') as f:
@@ -139,4 +248,7 @@ class SimWrapperGenerator():
                     wrapper_class_name=self.wrapper_class_name,
                     has_device_id=self.has_device_id,
                     cci_class_name=self.cci_class_name,
+                    normal_sim_device_variables=normal_sim_device_variables,
+                    slotted_sim_device_variables=slotted_sim_device_variables,
+                    num_slots=num_slots
                 ))
