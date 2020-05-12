@@ -1,0 +1,41 @@
+package com.snobot.simulator.rev;
+
+import java.nio.ByteBuffer;
+
+import org.junit.Before;
+import org.junit.Test;
+
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.CANSparkMaxLowLevel.PeriodicFrame;
+
+public class TestCANSparkMaxLowLevelFunctions
+{
+    private final RevCallback mRevCallback = new RevCallback()
+    {
+        @Override
+        public void callback(String aName, int aDeviceId, ByteBuffer aBuffer, int aCount)
+        {
+            System.out.println("Getting CANSparkMaxLowLevel callback '" + aName + "' with size of " + aBuffer.capacity() + ", " + aCount); // NOPMD
+        }
+    };
+
+    @Before
+    public void initialize()
+    {
+        System.loadLibrary("SparkMaxDriver");
+
+        RevSimJni.registerRevCallback(mRevCallback);
+
+    }
+
+    @SuppressWarnings({ "PMD.NcssCount", "PMD.DataflowAnomalyAnalysis", "PMD.ExcessiveMethodLength", "PMD.CyclomaticComplexity", "PMD.NPathComplexity" })
+    @Test
+    public void testUnsupportedOperations()
+    {
+        CANSparkMax spark = new CANSparkMax(10, MotorType.kBrushless);
+
+
+{{ functions }}
+    }
+}

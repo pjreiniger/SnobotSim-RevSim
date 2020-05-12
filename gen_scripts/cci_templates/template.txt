@@ -1,0 +1,21 @@
+#include "rev/{{ cci_class_name }}.h"
+
+#include <cstring>
+#include <vector>
+
+#include "RevSimMocks/{{ wrapper_class_name }}.h"
+#include "RevSimUtils/RevMockUtilities.h"
+
+namespace
+{
+SnobotSim::{{ wrapper_class_name }}* ConvertToWrapper(c_SparkMax_handle handle)
+{
+    return (SnobotSim::{{ wrapper_class_name }}*)handle;
+}
+} // namespace
+
+extern "C" {
+
+{{functions}}
+
+} // extern "C"

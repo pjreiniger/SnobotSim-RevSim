@@ -1,0 +1,29 @@
+
+#pragma once
+
+#include <string>
+
+#include "RevSimUtils/BaseRevWrapper.h"
+#include "RevSimUtils/RevMockUtilities.h"
+#include "rev/{{ cci_class_name }}.h"
+
+namespace SnobotSim
+{
+
+class {{ wrapper_class_name }} : public BaseRevWrapper
+{
+public:
+    using BaseRevWrapper::Send;
+
+    {% if has_device_id %}explicit {% endif %}{{ wrapper_class_name }}({% if has_device_id %}int aDeviceId{% endif %});
+{% if has_device_id %}    const int mDeviceId;{% endif %}
+
+    void Receive(const std::string& aName, uint8_t* aBuffer, int aSize);
+    void Send(const std::string& aName, uint8_t* aBuffer, int aSize);
+
+    //////////////////////////////////////////
+{{header_functions}}
+
+};
+
+}

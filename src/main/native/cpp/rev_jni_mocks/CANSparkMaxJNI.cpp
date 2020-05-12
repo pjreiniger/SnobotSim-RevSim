@@ -3,16 +3,16 @@
 
 #include <cassert>
 
-#include "RevSimMocks/RevDeviceWrapper.h"
-#include "RevSimMocks/RevMockUtilities.h"
+#include "RevSimMocks/RevCANSparkMaxDriverWrapper.h"
+#include "RevSimUtils/RevMockUtilities.h"
 #include "com_revrobotics_jni_CANSparkMaxJNI.h"
 #include "rev/CANSparkMaxDriver.h"
 
 extern "C" {
 
-c_SparkMax_handle ConvertToMotorControllerWrapper(jlong aHandle)
+c_SparkMax_handle ConvertToWrapper(jlong aHandle)
 {
-    return (c_SparkMax_handle) reinterpret_cast<SnobotSim::RevSimulator*>(aHandle);
+    return (c_SparkMax_handle) reinterpret_cast<SnobotSim::RevCANSparkMaxDriverWrapper*>(aHandle);
 }
 
 /*
@@ -48,7 +48,7 @@ Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1GetFirmwareVersion
   (JNIEnv*, jclass, jlong handle)
 {
     c_SparkMax_FirmwareVersion fwVersion;
-    c_SparkMax_GetFirmwareVersion(ConvertToMotorControllerWrapper(handle), &fwVersion);
+    c_SparkMax_GetFirmwareVersion(ConvertToWrapper(handle), &fwVersion);
 
     return (jint)fwVersion.versionRaw;
 }
@@ -62,7 +62,7 @@ Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1GetDeviceId
   (JNIEnv*, jclass, jlong handle)
 {
     int deviceId;
-    c_SparkMax_GetDeviceId(ConvertToMotorControllerWrapper(handle), &deviceId);
+    c_SparkMax_GetDeviceId(ConvertToWrapper(handle), &deviceId);
     return (jint)deviceId;
 }
 /*
@@ -74,7 +74,7 @@ JNIEXPORT jint JNICALL
 Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1SetMotorType
   (JNIEnv*, jclass, jlong handle, jint type)
 {
-    c_SparkMax_ErrorCode output = c_SparkMax_SetMotorType(ConvertToMotorControllerWrapper(handle), (c_SparkMax_MotorType)type);
+    c_SparkMax_ErrorCode output = c_SparkMax_SetMotorType(ConvertToWrapper(handle), (c_SparkMax_MotorType)type);
     return (jint)output;
 }
 /*
@@ -87,7 +87,7 @@ Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1GetMotorType
   (JNIEnv*, jclass, jlong handle)
 {
     c_SparkMax_MotorType type;
-    c_SparkMax_GetMotorType(ConvertToMotorControllerWrapper(handle), &type);
+    c_SparkMax_GetMotorType(ConvertToWrapper(handle), &type);
     return (jint)type;
 }
 /*
@@ -99,7 +99,7 @@ JNIEXPORT jint JNICALL
 Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1SetPeriodicFramePeriod
   (JNIEnv*, jclass, jlong handle, jint frameId, jint periodMs)
 {
-    c_SparkMax_ErrorCode output = c_SparkMax_SetPeriodicFramePeriod(ConvertToMotorControllerWrapper(handle), (c_SparkMax_PeriodicFrame)frameId, periodMs);
+    c_SparkMax_ErrorCode output = c_SparkMax_SetPeriodicFramePeriod(ConvertToWrapper(handle), (c_SparkMax_PeriodicFrame)frameId, periodMs);
     return (jint)output;
 }
 /*
@@ -111,7 +111,7 @@ JNIEXPORT void JNICALL
 Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1SetControlFramePeriod
   (JNIEnv*, jclass, jlong handle, jint periodMs)
 {
-    c_SparkMax_SetControlFramePeriod(ConvertToMotorControllerWrapper(handle), periodMs);
+    c_SparkMax_SetControlFramePeriod(ConvertToWrapper(handle), periodMs);
 }
 /*
  * Class:     com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax
@@ -122,7 +122,7 @@ JNIEXPORT jint JNICALL
 Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1GetControlFramePeriod
   (JNIEnv*, jclass, jlong handle)
 {
-    return c_SparkMax_GetControlFramePeriod(ConvertToMotorControllerWrapper(handle));
+    return c_SparkMax_GetControlFramePeriod(ConvertToWrapper(handle));
 }
 /*
  * Class:     com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax
@@ -133,7 +133,7 @@ JNIEXPORT jint JNICALL
 Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1SetEncoderPosition
   (JNIEnv*, jclass, jlong handle, jfloat position)
 {
-    c_SparkMax_ErrorCode output = c_SparkMax_SetEncoderPosition(ConvertToMotorControllerWrapper(handle), position);
+    c_SparkMax_ErrorCode output = c_SparkMax_SetEncoderPosition(ConvertToWrapper(handle), position);
     return (jint)output;
 }
 /*
@@ -145,7 +145,7 @@ JNIEXPORT jint JNICALL
 Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1RestoreFactoryDefaults
   (JNIEnv*, jclass, jlong handle, jboolean persist)
 {
-    c_SparkMax_ErrorCode output = c_SparkMax_RestoreFactoryDefaults(ConvertToMotorControllerWrapper(handle), persist);
+    c_SparkMax_ErrorCode output = c_SparkMax_RestoreFactoryDefaults(ConvertToWrapper(handle), persist);
     return (jint)output;
 }
 /*
@@ -157,7 +157,7 @@ JNIEXPORT jint JNICALL
 Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1SetFollow
   (JNIEnv*, jclass, jlong handle, jint followerArbId, jint followerCfg)
 {
-    c_SparkMax_ErrorCode output = c_SparkMax_SetFollow(ConvertToMotorControllerWrapper(handle), followerArbId, followerCfg);
+    c_SparkMax_ErrorCode output = c_SparkMax_SetFollow(ConvertToWrapper(handle), followerArbId, followerCfg);
     return (jint)output;
 }
 /*
@@ -203,7 +203,7 @@ Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1SetpointCommand
   (JNIEnv*, jclass, jlong handle, jfloat value, jint ctrl, jint pidSlot,
    jfloat arbFeedforward, jint arbFFUnits)
 {
-    c_SparkMax_ErrorCode output = c_SparkMax_SetpointCommand(ConvertToMotorControllerWrapper(handle), value, (c_SparkMax_ControlType)ctrl, pidSlot, arbFeedforward, arbFFUnits);
+    c_SparkMax_ErrorCode output = c_SparkMax_SetpointCommand(ConvertToWrapper(handle), value, (c_SparkMax_ControlType)ctrl, pidSlot, arbFeedforward, arbFFUnits);
     return (jint)output;
 }
 /*
@@ -215,7 +215,7 @@ JNIEXPORT jint JNICALL
 Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1SetInverted
   (JNIEnv*, jclass, jlong handle, jboolean inverted)
 {
-    c_SparkMax_ErrorCode output = c_SparkMax_SetInverted(ConvertToMotorControllerWrapper(handle), inverted);
+    c_SparkMax_ErrorCode output = c_SparkMax_SetInverted(ConvertToWrapper(handle), inverted);
     return (jint)output;
 }
 /*
@@ -228,7 +228,7 @@ Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1GetInverted
   (JNIEnv*, jclass, jlong handle)
 {
     uint8_t inverted;
-    c_SparkMax_GetInverted(ConvertToMotorControllerWrapper(handle), &inverted);
+    c_SparkMax_GetInverted(ConvertToWrapper(handle), &inverted);
     return (jboolean)inverted;
 }
 /*
@@ -241,7 +241,7 @@ Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1SetSmartCurrentLimit
   (JNIEnv*, jclass, jlong handle, jint stallLimit, jint freeLimit,
    jint limitRPM)
 {
-    c_SparkMax_ErrorCode output = c_SparkMax_SetSmartCurrentLimit(ConvertToMotorControllerWrapper(handle), stallLimit, freeLimit, limitRPM);
+    c_SparkMax_ErrorCode output = c_SparkMax_SetSmartCurrentLimit(ConvertToWrapper(handle), stallLimit, freeLimit, limitRPM);
     return (jint)output;
 }
 /*
@@ -289,7 +289,7 @@ JNIEXPORT jint JNICALL
 Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1SetSecondaryCurrentLimit
   (JNIEnv*, jclass, jlong handle, jfloat limit, jint chopCycles)
 {
-    c_SparkMax_ErrorCode output = c_SparkMax_SetSecondaryCurrentLimit(ConvertToMotorControllerWrapper(handle), limit, chopCycles);
+    c_SparkMax_ErrorCode output = c_SparkMax_SetSecondaryCurrentLimit(ConvertToWrapper(handle), limit, chopCycles);
     return (jint)output;
 }
 /*
@@ -303,7 +303,7 @@ Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1GetSecondaryCurrentLimit
 {
     float limit;
     int chopCycles;
-    c_SparkMax_GetSecondaryCurrentLimit(ConvertToMotorControllerWrapper(handle), &limit, &chopCycles);
+    c_SparkMax_GetSecondaryCurrentLimit(ConvertToWrapper(handle), &limit, &chopCycles);
     return (jfloat)limit;
 }
 /*
@@ -327,7 +327,7 @@ JNIEXPORT jint JNICALL
 Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1SetIdleMode
   (JNIEnv*, jclass, jlong handle, jint idlemode)
 {
-    c_SparkMax_ErrorCode output = c_SparkMax_SetIdleMode(ConvertToMotorControllerWrapper(handle), (c_SparkMax_IdleMode)idlemode);
+    c_SparkMax_ErrorCode output = c_SparkMax_SetIdleMode(ConvertToWrapper(handle), (c_SparkMax_IdleMode)idlemode);
     return (jint)output;
 }
 /*
@@ -340,7 +340,7 @@ Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1GetIdleMode
   (JNIEnv*, jclass, jlong handle)
 {
     c_SparkMax_IdleMode idlemode;
-    c_SparkMax_GetIdleMode(ConvertToMotorControllerWrapper(handle), &idlemode);
+    c_SparkMax_GetIdleMode(ConvertToWrapper(handle), &idlemode);
     return (jint)idlemode;
 }
 /*
@@ -352,7 +352,7 @@ JNIEXPORT jint JNICALL
 Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1EnableVoltageCompensation
   (JNIEnv*, jclass, jlong handle, jfloat nominalVoltage)
 {
-    c_SparkMax_ErrorCode output = c_SparkMax_EnableVoltageCompensation(ConvertToMotorControllerWrapper(handle), nominalVoltage);
+    c_SparkMax_ErrorCode output = c_SparkMax_EnableVoltageCompensation(ConvertToWrapper(handle), nominalVoltage);
     return (jint)output;
 }
 /*
@@ -365,7 +365,7 @@ Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1GetVoltageCompensationNomin
   (JNIEnv*, jclass, jlong handle)
 {
     float nominalVoltage;
-    c_SparkMax_GetVoltageCompensationNominalVoltage(ConvertToMotorControllerWrapper(handle), &nominalVoltage);
+    c_SparkMax_GetVoltageCompensationNominalVoltage(ConvertToWrapper(handle), &nominalVoltage);
     return (jfloat)nominalVoltage;
 }
 /*
@@ -377,7 +377,7 @@ JNIEXPORT jint JNICALL
 Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1DisableVoltageCompensation
   (JNIEnv*, jclass, jlong handle)
 {
-    c_SparkMax_ErrorCode output = c_SparkMax_DisableVoltageCompensation(ConvertToMotorControllerWrapper(handle));
+    c_SparkMax_ErrorCode output = c_SparkMax_DisableVoltageCompensation(ConvertToWrapper(handle));
     return (jint)output;
 }
 /*
@@ -389,7 +389,7 @@ JNIEXPORT jint JNICALL
 Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1SetOpenLoopRampRate
   (JNIEnv*, jclass, jlong handle, jfloat rate)
 {
-    c_SparkMax_ErrorCode output = c_SparkMax_SetOpenLoopRampRate(ConvertToMotorControllerWrapper(handle), rate);
+    c_SparkMax_ErrorCode output = c_SparkMax_SetOpenLoopRampRate(ConvertToWrapper(handle), rate);
     return (jint)output;
 }
 /*
@@ -402,7 +402,7 @@ Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1GetOpenLoopRampRate
   (JNIEnv*, jclass, jlong handle)
 {
     float rate;
-    c_SparkMax_GetOpenLoopRampRate(ConvertToMotorControllerWrapper(handle), &rate);
+    c_SparkMax_GetOpenLoopRampRate(ConvertToWrapper(handle), &rate);
     return (jfloat)rate;
 }
 /*
@@ -414,7 +414,7 @@ JNIEXPORT jint JNICALL
 Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1SetClosedLoopRampRate
   (JNIEnv*, jclass, jlong handle, jfloat rate)
 {
-    c_SparkMax_ErrorCode output = c_SparkMax_SetClosedLoopRampRate(ConvertToMotorControllerWrapper(handle), rate);
+    c_SparkMax_ErrorCode output = c_SparkMax_SetClosedLoopRampRate(ConvertToWrapper(handle), rate);
     return (jint)output;
 }
 /*
@@ -427,7 +427,7 @@ Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1GetClosedLoopRampRate
   (JNIEnv*, jclass, jlong handle)
 {
     float rate;
-    c_SparkMax_GetClosedLoopRampRate(ConvertToMotorControllerWrapper(handle), &rate);
+    c_SparkMax_GetClosedLoopRampRate(ConvertToWrapper(handle), &rate);
     return (jfloat)rate;
 }
 /*
@@ -440,7 +440,7 @@ Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1IsFollower
   (JNIEnv*, jclass, jlong handle)
 {
     uint8_t isFollower;
-    c_SparkMax_IsFollower(ConvertToMotorControllerWrapper(handle), &isFollower);
+    c_SparkMax_IsFollower(ConvertToWrapper(handle), &isFollower);
     return (jboolean)isFollower;
 }
 /*
@@ -453,7 +453,7 @@ Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1GetFaults
   (JNIEnv*, jclass, jlong handle)
 {
     uint16_t faults;
-    c_SparkMax_GetFaults(ConvertToMotorControllerWrapper(handle), &faults);
+    c_SparkMax_GetFaults(ConvertToWrapper(handle), &faults);
     return (jint)faults;
 }
 /*
@@ -466,7 +466,7 @@ Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1GetStickyFaults
   (JNIEnv*, jclass, jlong handle)
 {
     uint16_t stickyFaults;
-    c_SparkMax_GetStickyFaults(ConvertToMotorControllerWrapper(handle), &stickyFaults);
+    c_SparkMax_GetStickyFaults(ConvertToWrapper(handle), &stickyFaults);
     return (jint)stickyFaults;
 }
 /*
@@ -479,7 +479,7 @@ Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1GetFault
   (JNIEnv*, jclass, jlong handle, jint faultId)
 {
     uint8_t fault;
-    c_SparkMax_GetFault(ConvertToMotorControllerWrapper(handle), (c_SparkMax_FaultID)faultId, &fault);
+    c_SparkMax_GetFault(ConvertToWrapper(handle), (c_SparkMax_FaultID)faultId, &fault);
     return (jboolean)fault;
 }
 /*
@@ -492,7 +492,7 @@ Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1GetStickyFault
   (JNIEnv*, jclass, jlong handle, jint faultId)
 {
     uint8_t stickyfault;
-    c_SparkMax_GetStickyFault(ConvertToMotorControllerWrapper(handle), (c_SparkMax_FaultID)faultId, &stickyfault);
+    c_SparkMax_GetStickyFault(ConvertToWrapper(handle), (c_SparkMax_FaultID)faultId, &stickyfault);
     return (jboolean)stickyfault;
 }
 /*
@@ -505,7 +505,7 @@ Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1GetBusVoltage
   (JNIEnv*, jclass, jlong handle)
 {
     float busVoltage;
-    c_SparkMax_GetBusVoltage(ConvertToMotorControllerWrapper(handle), &busVoltage);
+    c_SparkMax_GetBusVoltage(ConvertToWrapper(handle), &busVoltage);
     return (jfloat)busVoltage;
 }
 /*
@@ -518,7 +518,7 @@ Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1GetAppliedOutput
   (JNIEnv*, jclass, jlong handle)
 {
     float appliedOutput;
-    c_SparkMax_GetAppliedOutput(ConvertToMotorControllerWrapper(handle), &appliedOutput);
+    c_SparkMax_GetAppliedOutput(ConvertToWrapper(handle), &appliedOutput);
     return (jfloat)appliedOutput;
 }
 /*
@@ -531,7 +531,7 @@ Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1GetOutputCurrent
   (JNIEnv*, jclass, jlong handle)
 {
     float outputCurrent;
-    c_SparkMax_GetOutputCurrent(ConvertToMotorControllerWrapper(handle), &outputCurrent);
+    c_SparkMax_GetOutputCurrent(ConvertToWrapper(handle), &outputCurrent);
     return (jfloat)outputCurrent;
 }
 /*
@@ -544,7 +544,7 @@ Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1GetMotorTemperature
   (JNIEnv*, jclass, jlong handle)
 {
     float motorTemperature;
-    c_SparkMax_GetMotorTemperature(ConvertToMotorControllerWrapper(handle), &motorTemperature);
+    c_SparkMax_GetMotorTemperature(ConvertToWrapper(handle), &motorTemperature);
     return (jfloat)motorTemperature;
 }
 /*
@@ -556,7 +556,7 @@ JNIEXPORT jint JNICALL
 Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1ClearFaults
   (JNIEnv*, jclass, jlong handle)
 {
-    c_SparkMax_ErrorCode output = c_SparkMax_ClearFaults(ConvertToMotorControllerWrapper(handle));
+    c_SparkMax_ErrorCode output = c_SparkMax_ClearFaults(ConvertToWrapper(handle));
     return (jint)output;
 }
 /*
@@ -568,7 +568,7 @@ JNIEXPORT jint JNICALL
 Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1BurnFlash
   (JNIEnv*, jclass, jlong handle)
 {
-    c_SparkMax_ErrorCode output = c_SparkMax_BurnFlash(ConvertToMotorControllerWrapper(handle));
+    c_SparkMax_ErrorCode output = c_SparkMax_BurnFlash(ConvertToWrapper(handle));
     return (jint)output;
 }
 /*
@@ -580,7 +580,7 @@ JNIEXPORT jint JNICALL
 Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1SetCANTimeout
   (JNIEnv*, jclass, jlong handle, jint timeoutMs)
 {
-    c_SparkMax_ErrorCode output = c_SparkMax_SetCANTimeout(ConvertToMotorControllerWrapper(handle), timeoutMs);
+    c_SparkMax_ErrorCode output = c_SparkMax_SetCANTimeout(ConvertToWrapper(handle), timeoutMs);
     return (jint)output;
 }
 /*
@@ -592,7 +592,7 @@ JNIEXPORT jint JNICALL
 Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1EnableSoftLimit
   (JNIEnv*, jclass, jlong handle, jint dir, jboolean enable)
 {
-    c_SparkMax_ErrorCode output = c_SparkMax_EnableSoftLimit(ConvertToMotorControllerWrapper(handle), (c_SparkMax_LimitDirection)dir, enable);
+    c_SparkMax_ErrorCode output = c_SparkMax_EnableSoftLimit(ConvertToWrapper(handle), (c_SparkMax_LimitDirection)dir, enable);
     return (jint)output;
 }
 /*
@@ -605,7 +605,7 @@ Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1IsSoftLimitEnabled
   (JNIEnv*, jclass, jlong handle, jint dir)
 {
     uint8_t enabled;
-    c_SparkMax_IsSoftLimitEnabled(ConvertToMotorControllerWrapper(handle), (c_SparkMax_LimitDirection)dir, &enabled);
+    c_SparkMax_IsSoftLimitEnabled(ConvertToWrapper(handle), (c_SparkMax_LimitDirection)dir, &enabled);
     return (jboolean)enabled;
 }
 /*
@@ -617,7 +617,7 @@ JNIEXPORT jint JNICALL
 Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1SetSoftLimit
   (JNIEnv*, jclass, jlong handle, jint dir, jfloat limit)
 {
-    c_SparkMax_ErrorCode output = c_SparkMax_SetSoftLimit(ConvertToMotorControllerWrapper(handle), (c_SparkMax_LimitDirection)dir, limit);
+    c_SparkMax_ErrorCode output = c_SparkMax_SetSoftLimit(ConvertToWrapper(handle), (c_SparkMax_LimitDirection)dir, limit);
     return (jint)output;
 }
 /*
@@ -630,7 +630,7 @@ Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1GetSoftLimit
   (JNIEnv*, jclass, jlong handle, jint dir)
 {
     float limit;
-    c_SparkMax_GetSoftLimit(ConvertToMotorControllerWrapper(handle), (c_SparkMax_LimitDirection)dir, &limit);
+    c_SparkMax_GetSoftLimit(ConvertToWrapper(handle), (c_SparkMax_LimitDirection)dir, &limit);
     return (jfloat)limit;
 }
 /*
@@ -642,7 +642,7 @@ JNIEXPORT jint JNICALL
 Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1SetSensorType
   (JNIEnv*, jclass, jlong handle, jint sensorType)
 {
-    c_SparkMax_ErrorCode output = c_SparkMax_SetSensorType(ConvertToMotorControllerWrapper(handle), (c_SparkMax_EncoderType)sensorType);
+    c_SparkMax_ErrorCode output = c_SparkMax_SetSensorType(ConvertToWrapper(handle), (c_SparkMax_EncoderType)sensorType);
     return (jint)output;
 }
 /*
@@ -654,7 +654,7 @@ JNIEXPORT jint JNICALL
 Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1SetLimitPolarity
   (JNIEnv*, jclass, jlong handle, jint sw, jint polarity)
 {
-    c_SparkMax_ErrorCode output = c_SparkMax_SetLimitPolarity(ConvertToMotorControllerWrapper(handle), (c_SparkMax_LimitDirection)sw, (c_SparkMax_LimitPolarity)polarity);
+    c_SparkMax_ErrorCode output = c_SparkMax_SetLimitPolarity(ConvertToWrapper(handle), (c_SparkMax_LimitDirection)sw, (c_SparkMax_LimitPolarity)polarity);
     return (jint)output;
 }
 /*
@@ -667,7 +667,7 @@ Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1GetLimitPolarity
   (JNIEnv*, jclass, jlong handle, jint sw)
 {
     c_SparkMax_LimitPolarity polarity;
-    c_SparkMax_GetLimitPolarity(ConvertToMotorControllerWrapper(handle), (c_SparkMax_LimitDirection)sw, &polarity);
+    c_SparkMax_GetLimitPolarity(ConvertToWrapper(handle), (c_SparkMax_LimitDirection)sw, &polarity);
     return (jint)polarity;
 }
 /*
@@ -680,7 +680,7 @@ Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1GetLimitSwitch
   (JNIEnv*, jclass, jlong handle, jint sw)
 {
     uint8_t limit;
-    c_SparkMax_GetLimitSwitch(ConvertToMotorControllerWrapper(handle), (c_SparkMax_LimitDirection)sw, &limit);
+    c_SparkMax_GetLimitSwitch(ConvertToWrapper(handle), (c_SparkMax_LimitDirection)sw, &limit);
     return (jboolean)limit;
 }
 /*
@@ -692,7 +692,7 @@ JNIEXPORT jint JNICALL
 Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1EnableLimitSwitch
   (JNIEnv*, jclass, jlong handle, jint sw, jboolean enable)
 {
-    c_SparkMax_ErrorCode output = c_SparkMax_EnableLimitSwitch(ConvertToMotorControllerWrapper(handle), (c_SparkMax_LimitDirection)sw, enable);
+    c_SparkMax_ErrorCode output = c_SparkMax_EnableLimitSwitch(ConvertToWrapper(handle), (c_SparkMax_LimitDirection)sw, enable);
     return (jint)output;
 }
 /*
@@ -705,7 +705,7 @@ Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1IsLimitEnabled
   (JNIEnv*, jclass, jlong handle, jint sw)
 {
     uint8_t enabled;
-    c_SparkMax_IsLimitEnabled(ConvertToMotorControllerWrapper(handle), (c_SparkMax_LimitDirection)sw, &enabled);
+    c_SparkMax_IsLimitEnabled(ConvertToWrapper(handle), (c_SparkMax_LimitDirection)sw, &enabled);
     return (jboolean)enabled;
 }
 /*
@@ -718,7 +718,7 @@ Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1GetAnalogPosition
   (JNIEnv*, jclass, jlong handle)
 {
     float position;
-    c_SparkMax_GetAnalogPosition(ConvertToMotorControllerWrapper(handle), &position);
+    c_SparkMax_GetAnalogPosition(ConvertToWrapper(handle), &position);
     return (jfloat)position;
 }
 /*
@@ -731,7 +731,7 @@ Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1GetAnalogVelocity
   (JNIEnv*, jclass, jlong handle)
 {
     float velocity;
-    c_SparkMax_GetAnalogVelocity(ConvertToMotorControllerWrapper(handle), &velocity);
+    c_SparkMax_GetAnalogVelocity(ConvertToWrapper(handle), &velocity);
     return (jfloat)velocity;
 }
 /*
@@ -744,7 +744,7 @@ Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1GetAnalogVoltage
   (JNIEnv*, jclass, jlong handle)
 {
     float voltage;
-    c_SparkMax_GetAnalogVoltage(ConvertToMotorControllerWrapper(handle), &voltage);
+    c_SparkMax_GetAnalogVoltage(ConvertToWrapper(handle), &voltage);
     return (jfloat)voltage;
 }
 /*
@@ -756,7 +756,7 @@ JNIEXPORT jint JNICALL
 Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1SetAnalogPositionConversionFactor
   (JNIEnv*, jclass, jlong handle, jfloat conversion)
 {
-    c_SparkMax_ErrorCode output = c_SparkMax_SetAnalogPositionConversionFactor(ConvertToMotorControllerWrapper(handle), conversion);
+    c_SparkMax_ErrorCode output = c_SparkMax_SetAnalogPositionConversionFactor(ConvertToWrapper(handle), conversion);
     return (jint)output;
 }
 /*
@@ -768,7 +768,7 @@ JNIEXPORT jint JNICALL
 Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1SetAnalogVelocityConversionFactor
   (JNIEnv*, jclass, jlong handle, jfloat conversion)
 {
-    c_SparkMax_ErrorCode output = c_SparkMax_SetAnalogVelocityConversionFactor(ConvertToMotorControllerWrapper(handle), conversion);
+    c_SparkMax_ErrorCode output = c_SparkMax_SetAnalogVelocityConversionFactor(ConvertToWrapper(handle), conversion);
     return (jint)output;
 }
 /*
@@ -781,7 +781,7 @@ Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1GetAnalogPositionConversion
   (JNIEnv*, jclass, jlong handle)
 {
     float conversion;
-    c_SparkMax_GetAnalogPositionConversionFactor(ConvertToMotorControllerWrapper(handle), &conversion);
+    c_SparkMax_GetAnalogPositionConversionFactor(ConvertToWrapper(handle), &conversion);
     return (jfloat)conversion;
 }
 /*
@@ -794,7 +794,7 @@ Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1GetAnalogVelocityConversion
   (JNIEnv*, jclass, jlong handle)
 {
     float conversion;
-    c_SparkMax_GetAnalogVelocityConversionFactor(ConvertToMotorControllerWrapper(handle), &conversion);
+    c_SparkMax_GetAnalogVelocityConversionFactor(ConvertToWrapper(handle), &conversion);
     return (jfloat)conversion;
 }
 /*
@@ -806,7 +806,7 @@ JNIEXPORT jint JNICALL
 Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1SetAnalogInverted
   (JNIEnv*, jclass, jlong handle, jboolean inverted)
 {
-    c_SparkMax_ErrorCode output = c_SparkMax_SetAnalogInverted(ConvertToMotorControllerWrapper(handle), inverted);
+    c_SparkMax_ErrorCode output = c_SparkMax_SetAnalogInverted(ConvertToWrapper(handle), inverted);
     return (jint)output;
 }
 /*
@@ -819,7 +819,7 @@ Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1GetAnalogInverted
   (JNIEnv*, jclass, jlong handle)
 {
     uint8_t inverted;
-    c_SparkMax_GetAnalogInverted(ConvertToMotorControllerWrapper(handle), &inverted);
+    c_SparkMax_GetAnalogInverted(ConvertToWrapper(handle), &inverted);
     return (jboolean)inverted;
 }
 /*
@@ -831,7 +831,7 @@ JNIEXPORT jint JNICALL
 Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1SetAnalogAverageDepth
   (JNIEnv*, jclass, jlong handle, jint depth)
 {
-    c_SparkMax_ErrorCode output = c_SparkMax_SetAnalogAverageDepth(ConvertToMotorControllerWrapper(handle), depth);
+    c_SparkMax_ErrorCode output = c_SparkMax_SetAnalogAverageDepth(ConvertToWrapper(handle), depth);
     return (jint)output;
 }
 /*
@@ -844,7 +844,7 @@ Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1GetAnalogAverageDepth
   (JNIEnv*, jclass, jlong handle)
 {
     uint32_t depth;
-    c_SparkMax_GetAnalogAverageDepth(ConvertToMotorControllerWrapper(handle), &depth);
+    c_SparkMax_GetAnalogAverageDepth(ConvertToWrapper(handle), &depth);
     return (jint)depth;
 }
 /*
@@ -856,7 +856,7 @@ JNIEXPORT jint JNICALL
 Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1SetAnalogMeasurementPeriod
   (JNIEnv*, jclass, jlong handle, jint samples)
 {
-    c_SparkMax_ErrorCode output = c_SparkMax_SetAnalogMeasurementPeriod(ConvertToMotorControllerWrapper(handle), samples);
+    c_SparkMax_ErrorCode output = c_SparkMax_SetAnalogMeasurementPeriod(ConvertToWrapper(handle), samples);
     return (jint)output;
 }
 /*
@@ -869,7 +869,7 @@ Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1GetAnalogMeasurementPeriod
   (JNIEnv*, jclass, jlong handle)
 {
     uint32_t samples;
-    c_SparkMax_GetAnalogMeasurementPeriod(ConvertToMotorControllerWrapper(handle), &samples);
+    c_SparkMax_GetAnalogMeasurementPeriod(ConvertToWrapper(handle), &samples);
     return (jint)samples;
 }
 /*
@@ -881,7 +881,7 @@ JNIEXPORT jint JNICALL
 Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1SetAnalogMode
   (JNIEnv*, jclass, jlong handle, jint mode)
 {
-    c_SparkMax_ErrorCode output = c_SparkMax_SetAnalogMode(ConvertToMotorControllerWrapper(handle), (c_SparkMax_AnalogMode)mode);
+    c_SparkMax_ErrorCode output = c_SparkMax_SetAnalogMode(ConvertToWrapper(handle), (c_SparkMax_AnalogMode)mode);
     return (jint)output;
 }
 /*
@@ -894,7 +894,7 @@ Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1GetAnalogMode
   (JNIEnv*, jclass, jlong handle)
 {
     c_SparkMax_AnalogMode mode;
-    c_SparkMax_GetAnalogMode(ConvertToMotorControllerWrapper(handle), &mode);
+    c_SparkMax_GetAnalogMode(ConvertToWrapper(handle), &mode);
     return (jint)mode;
 }
 /*
@@ -907,7 +907,7 @@ Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1GetEncoderPosition
   (JNIEnv*, jclass, jlong handle)
 {
     float position;
-    c_SparkMax_GetEncoderPosition(ConvertToMotorControllerWrapper(handle), &position);
+    c_SparkMax_GetEncoderPosition(ConvertToWrapper(handle), &position);
     return (jfloat)position;
 }
 /*
@@ -920,7 +920,7 @@ Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1GetEncoderVelocity
   (JNIEnv*, jclass, jlong handle)
 {
     float velocity;
-    c_SparkMax_GetEncoderVelocity(ConvertToMotorControllerWrapper(handle), &velocity);
+    c_SparkMax_GetEncoderVelocity(ConvertToWrapper(handle), &velocity);
     return (jfloat)velocity;
 }
 /*
@@ -932,7 +932,7 @@ JNIEXPORT jint JNICALL
 Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1SetPositionConversionFactor
   (JNIEnv*, jclass, jlong handle, jfloat conversion)
 {
-    c_SparkMax_ErrorCode output = c_SparkMax_SetPositionConversionFactor(ConvertToMotorControllerWrapper(handle), conversion);
+    c_SparkMax_ErrorCode output = c_SparkMax_SetPositionConversionFactor(ConvertToWrapper(handle), conversion);
     return (jint)output;
 }
 /*
@@ -944,7 +944,7 @@ JNIEXPORT jint JNICALL
 Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1SetVelocityConversionFactor
   (JNIEnv*, jclass, jlong handle, jfloat conversion)
 {
-    c_SparkMax_ErrorCode output = c_SparkMax_SetVelocityConversionFactor(ConvertToMotorControllerWrapper(handle), conversion);
+    c_SparkMax_ErrorCode output = c_SparkMax_SetVelocityConversionFactor(ConvertToWrapper(handle), conversion);
     return (jint)output;
 }
 /*
@@ -957,7 +957,7 @@ Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1GetPositionConversionFactor
   (JNIEnv*, jclass, jlong handle)
 {
     float conversion;
-    c_SparkMax_GetPositionConversionFactor(ConvertToMotorControllerWrapper(handle), &conversion);
+    c_SparkMax_GetPositionConversionFactor(ConvertToWrapper(handle), &conversion);
     return (jfloat)conversion;
 }
 /*
@@ -970,7 +970,7 @@ Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1GetVelocityConversionFactor
   (JNIEnv*, jclass, jlong handle)
 {
     float conversion;
-    c_SparkMax_GetVelocityConversionFactor(ConvertToMotorControllerWrapper(handle), &conversion);
+    c_SparkMax_GetVelocityConversionFactor(ConvertToWrapper(handle), &conversion);
     return (jfloat)conversion;
 }
 /*
@@ -982,7 +982,7 @@ JNIEXPORT jint JNICALL
 Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1SetAverageDepth
   (JNIEnv*, jclass, jlong handle, jint depth)
 {
-    c_SparkMax_ErrorCode output = c_SparkMax_SetAverageDepth(ConvertToMotorControllerWrapper(handle), depth);
+    c_SparkMax_ErrorCode output = c_SparkMax_SetAverageDepth(ConvertToWrapper(handle), depth);
     return (jint)output;
 }
 /*
@@ -995,7 +995,7 @@ Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1GetAverageDepth
   (JNIEnv*, jclass, jlong handle)
 {
     uint32_t depth;
-    c_SparkMax_GetAverageDepth(ConvertToMotorControllerWrapper(handle), &depth);
+    c_SparkMax_GetAverageDepth(ConvertToWrapper(handle), &depth);
     return (jint)depth;
 }
 /*
@@ -1007,7 +1007,7 @@ JNIEXPORT jint JNICALL
 Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1SetMeasurementPeriod
   (JNIEnv*, jclass, jlong handle, jint samples)
 {
-    c_SparkMax_ErrorCode output = c_SparkMax_SetMeasurementPeriod(ConvertToMotorControllerWrapper(handle), samples);
+    c_SparkMax_ErrorCode output = c_SparkMax_SetMeasurementPeriod(ConvertToWrapper(handle), samples);
     return (jint)output;
 }
 /*
@@ -1020,7 +1020,7 @@ Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1GetMeasurementPeriod
   (JNIEnv*, jclass, jlong handle)
 {
     uint32_t samples;
-    c_SparkMax_GetMeasurementPeriod(ConvertToMotorControllerWrapper(handle), &samples);
+    c_SparkMax_GetMeasurementPeriod(ConvertToWrapper(handle), &samples);
     return (jint)samples;
 }
 /*
@@ -1032,7 +1032,7 @@ JNIEXPORT jint JNICALL
 Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1SetCountsPerRevolution
   (JNIEnv*, jclass, jlong handle, jint cpr)
 {
-    c_SparkMax_ErrorCode output = c_SparkMax_SetCountsPerRevolution(ConvertToMotorControllerWrapper(handle), cpr);
+    c_SparkMax_ErrorCode output = c_SparkMax_SetCountsPerRevolution(ConvertToWrapper(handle), cpr);
     return (jint)output;
 }
 /*
@@ -1045,7 +1045,7 @@ Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1GetCountsPerRevolution
   (JNIEnv*, jclass, jlong handle)
 {
     uint32_t cpr;
-    c_SparkMax_GetCountsPerRevolution(ConvertToMotorControllerWrapper(handle), &cpr);
+    c_SparkMax_GetCountsPerRevolution(ConvertToWrapper(handle), &cpr);
     return (jint)cpr;
 }
 /*
@@ -1057,7 +1057,7 @@ JNIEXPORT jint JNICALL
 Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1SetEncoderInverted
   (JNIEnv*, jclass, jlong handle, jboolean inverted)
 {
-    c_SparkMax_ErrorCode output = c_SparkMax_SetEncoderInverted(ConvertToMotorControllerWrapper(handle), inverted);
+    c_SparkMax_ErrorCode output = c_SparkMax_SetEncoderInverted(ConvertToWrapper(handle), inverted);
     return (jint)output;
 }
 /*
@@ -1070,7 +1070,7 @@ Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1GetEncoderInverted
   (JNIEnv*, jclass, jlong handle)
 {
     uint8_t inverted;
-    c_SparkMax_GetEncoderInverted(ConvertToMotorControllerWrapper(handle), &inverted);
+    c_SparkMax_GetEncoderInverted(ConvertToWrapper(handle), &inverted);
     return (jboolean)inverted;
 }
 /*
@@ -1082,7 +1082,7 @@ JNIEXPORT jint JNICALL
 Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1SetAltEncoderPosition
   (JNIEnv*, jclass, jlong handle, jfloat position)
 {
-    c_SparkMax_ErrorCode output = c_SparkMax_SetAltEncoderPosition(ConvertToMotorControllerWrapper(handle), position);
+    c_SparkMax_ErrorCode output = c_SparkMax_SetAltEncoderPosition(ConvertToWrapper(handle), position);
     return (jint)output;
 }
 /*
@@ -1095,7 +1095,7 @@ Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1GetAltEncoderPosition
   (JNIEnv*, jclass, jlong handle)
 {
     float position;
-    c_SparkMax_GetAltEncoderPosition(ConvertToMotorControllerWrapper(handle), &position);
+    c_SparkMax_GetAltEncoderPosition(ConvertToWrapper(handle), &position);
     return (jfloat)position;
 }
 /*
@@ -1108,7 +1108,7 @@ Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1GetAltEncoderVelocity
   (JNIEnv*, jclass, jlong handle)
 {
     float velocity;
-    c_SparkMax_GetAltEncoderVelocity(ConvertToMotorControllerWrapper(handle), &velocity);
+    c_SparkMax_GetAltEncoderVelocity(ConvertToWrapper(handle), &velocity);
     return (jfloat)velocity;
 }
 /*
@@ -1120,7 +1120,7 @@ JNIEXPORT jint JNICALL
 Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1SetAltEncoderPositionFactor
   (JNIEnv*, jclass, jlong handle, jfloat conversion)
 {
-    c_SparkMax_ErrorCode output = c_SparkMax_SetAltEncoderPositionFactor(ConvertToMotorControllerWrapper(handle), conversion);
+    c_SparkMax_ErrorCode output = c_SparkMax_SetAltEncoderPositionFactor(ConvertToWrapper(handle), conversion);
     return (jint)output;
 }
 /*
@@ -1132,7 +1132,7 @@ JNIEXPORT jint JNICALL
 Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1SetAltEncoderVelocityFactor
   (JNIEnv*, jclass, jlong handle, jfloat conversion)
 {
-    c_SparkMax_ErrorCode output = c_SparkMax_SetAltEncoderVelocityFactor(ConvertToMotorControllerWrapper(handle), conversion);
+    c_SparkMax_ErrorCode output = c_SparkMax_SetAltEncoderVelocityFactor(ConvertToWrapper(handle), conversion);
     return (jint)output;
 }
 /*
@@ -1145,7 +1145,7 @@ Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1GetAltEncoderPositionFactor
   (JNIEnv*, jclass, jlong handle)
 {
     float conversion;
-    c_SparkMax_GetAltEncoderPositionFactor(ConvertToMotorControllerWrapper(handle), &conversion);
+    c_SparkMax_GetAltEncoderPositionFactor(ConvertToWrapper(handle), &conversion);
     return (jfloat)conversion;
 }
 /*
@@ -1158,7 +1158,7 @@ Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1GetAltEncoderVelocityFactor
   (JNIEnv*, jclass, jlong handle)
 {
     float conversion;
-    c_SparkMax_GetAltEncoderVelocityFactor(ConvertToMotorControllerWrapper(handle), &conversion);
+    c_SparkMax_GetAltEncoderVelocityFactor(ConvertToWrapper(handle), &conversion);
     return (jfloat)conversion;
 }
 /*
@@ -1170,7 +1170,7 @@ JNIEXPORT jint JNICALL
 Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1SetAltEncoderAverageDepth
   (JNIEnv*, jclass, jlong handle, jint depth)
 {
-    c_SparkMax_ErrorCode output = c_SparkMax_SetAltEncoderAverageDepth(ConvertToMotorControllerWrapper(handle), depth);
+    c_SparkMax_ErrorCode output = c_SparkMax_SetAltEncoderAverageDepth(ConvertToWrapper(handle), depth);
     return (jint)output;
 }
 /*
@@ -1183,7 +1183,7 @@ Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1GetAltEncoderAverageDepth
   (JNIEnv*, jclass, jlong handle)
 {
     uint32_t depth;
-    c_SparkMax_GetAltEncoderAverageDepth(ConvertToMotorControllerWrapper(handle), &depth);
+    c_SparkMax_GetAltEncoderAverageDepth(ConvertToWrapper(handle), &depth);
     return (jint)depth;
 }
 /*
@@ -1195,7 +1195,7 @@ JNIEXPORT jint JNICALL
 Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1SetAltEncoderMeasurementPeriod
   (JNIEnv*, jclass, jlong handle, jint samples)
 {
-    c_SparkMax_ErrorCode output = c_SparkMax_SetAltEncoderMeasurementPeriod(ConvertToMotorControllerWrapper(handle), samples);
+    c_SparkMax_ErrorCode output = c_SparkMax_SetAltEncoderMeasurementPeriod(ConvertToWrapper(handle), samples);
     return (jint)output;
 }
 /*
@@ -1208,7 +1208,7 @@ Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1GetAltEncoderMeasurementPer
   (JNIEnv*, jclass, jlong handle)
 {
     uint32_t samples;
-    c_SparkMax_GetAltEncoderMeasurementPeriod(ConvertToMotorControllerWrapper(handle), &samples);
+    c_SparkMax_GetAltEncoderMeasurementPeriod(ConvertToWrapper(handle), &samples);
     return (jint)samples;
 }
 /*
@@ -1220,7 +1220,7 @@ JNIEXPORT jint JNICALL
 Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1SetAltEncoderCountsPerRevolution
   (JNIEnv*, jclass, jlong handle, jint cpr)
 {
-    c_SparkMax_ErrorCode output = c_SparkMax_SetAltEncoderCountsPerRevolution(ConvertToMotorControllerWrapper(handle), cpr);
+    c_SparkMax_ErrorCode output = c_SparkMax_SetAltEncoderCountsPerRevolution(ConvertToWrapper(handle), cpr);
     return (jint)output;
 }
 /*
@@ -1233,7 +1233,7 @@ Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1GetAltEncoderCountsPerRevol
   (JNIEnv*, jclass, jlong handle)
 {
     uint32_t cpr;
-    c_SparkMax_GetAltEncoderCountsPerRevolution(ConvertToMotorControllerWrapper(handle), &cpr);
+    c_SparkMax_GetAltEncoderCountsPerRevolution(ConvertToWrapper(handle), &cpr);
     return (jint)cpr;
 }
 /*
@@ -1245,7 +1245,7 @@ JNIEXPORT jint JNICALL
 Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1SetAltEncoderInverted
   (JNIEnv*, jclass, jlong handle, jboolean inverted)
 {
-    c_SparkMax_ErrorCode output = c_SparkMax_SetAltEncoderInverted(ConvertToMotorControllerWrapper(handle), inverted);
+    c_SparkMax_ErrorCode output = c_SparkMax_SetAltEncoderInverted(ConvertToWrapper(handle), inverted);
     return (jint)output;
 }
 /*
@@ -1258,7 +1258,7 @@ Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1GetAltEncoderInverted
   (JNIEnv*, jclass, jlong handle)
 {
     uint8_t inverted;
-    c_SparkMax_GetAltEncoderInverted(ConvertToMotorControllerWrapper(handle), &inverted);
+    c_SparkMax_GetAltEncoderInverted(ConvertToWrapper(handle), &inverted);
     return (jboolean)inverted;
 }
 /*
@@ -1270,7 +1270,7 @@ JNIEXPORT jint JNICALL
 Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1SetDataPortConfig
   (JNIEnv*, jclass, jlong handle, jint config)
 {
-    c_SparkMax_ErrorCode output = c_SparkMax_SetDataPortConfig(ConvertToMotorControllerWrapper(handle), (c_SparkMax_DataPortConfig)config);
+    c_SparkMax_ErrorCode output = c_SparkMax_SetDataPortConfig(ConvertToWrapper(handle), (c_SparkMax_DataPortConfig)config);
     return (jint)output;
 }
 /*
@@ -1282,7 +1282,7 @@ JNIEXPORT jint JNICALL
 Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1SetP
   (JNIEnv*, jclass, jlong handle, jint slotID, jfloat gain)
 {
-    c_SparkMax_ErrorCode output = c_SparkMax_SetP(ConvertToMotorControllerWrapper(handle), slotID, gain);
+    c_SparkMax_ErrorCode output = c_SparkMax_SetP(ConvertToWrapper(handle), slotID, gain);
     return (jint)output;
 }
 /*
@@ -1294,7 +1294,7 @@ JNIEXPORT jint JNICALL
 Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1SetI
   (JNIEnv*, jclass, jlong handle, jint slotID, jfloat gain)
 {
-    c_SparkMax_ErrorCode output = c_SparkMax_SetI(ConvertToMotorControllerWrapper(handle), slotID, gain);
+    c_SparkMax_ErrorCode output = c_SparkMax_SetI(ConvertToWrapper(handle), slotID, gain);
     return (jint)output;
 }
 /*
@@ -1306,7 +1306,7 @@ JNIEXPORT jint JNICALL
 Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1SetD
   (JNIEnv*, jclass, jlong handle, jint slotID, jfloat gain)
 {
-    c_SparkMax_ErrorCode output = c_SparkMax_SetD(ConvertToMotorControllerWrapper(handle), slotID, gain);
+    c_SparkMax_ErrorCode output = c_SparkMax_SetD(ConvertToWrapper(handle), slotID, gain);
     return (jint)output;
 }
 /*
@@ -1318,7 +1318,7 @@ JNIEXPORT jint JNICALL
 Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1SetDFilter
   (JNIEnv*, jclass, jlong handle, jint slotID, jfloat gain)
 {
-    c_SparkMax_ErrorCode output = c_SparkMax_SetDFilter(ConvertToMotorControllerWrapper(handle), slotID, gain);
+    c_SparkMax_ErrorCode output = c_SparkMax_SetDFilter(ConvertToWrapper(handle), slotID, gain);
     return (jint)output;
 }
 /*
@@ -1330,7 +1330,7 @@ JNIEXPORT jint JNICALL
 Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1SetFF
   (JNIEnv*, jclass, jlong handle, jint slotID, jfloat gain)
 {
-    c_SparkMax_ErrorCode output = c_SparkMax_SetFF(ConvertToMotorControllerWrapper(handle), slotID, gain);
+    c_SparkMax_ErrorCode output = c_SparkMax_SetFF(ConvertToWrapper(handle), slotID, gain);
     return (jint)output;
 }
 /*
@@ -1342,7 +1342,7 @@ JNIEXPORT jint JNICALL
 Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1SetIZone
   (JNIEnv*, jclass, jlong handle, jint slotID, jfloat IZone)
 {
-    c_SparkMax_ErrorCode output = c_SparkMax_SetIZone(ConvertToMotorControllerWrapper(handle), slotID, IZone);
+    c_SparkMax_ErrorCode output = c_SparkMax_SetIZone(ConvertToWrapper(handle), slotID, IZone);
     return (jint)output;
 }
 /*
@@ -1354,7 +1354,7 @@ JNIEXPORT jint JNICALL
 Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1SetOutputRange
   (JNIEnv*, jclass, jlong handle, jint slotID, jfloat min, jfloat max)
 {
-    c_SparkMax_ErrorCode output = c_SparkMax_SetOutputRange(ConvertToMotorControllerWrapper(handle), slotID, min, max);
+    c_SparkMax_ErrorCode output = c_SparkMax_SetOutputRange(ConvertToWrapper(handle), slotID, min, max);
     return (jint)output;
 }
 /*
@@ -1367,7 +1367,7 @@ Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1GetP
   (JNIEnv*, jclass, jlong handle, jint slotID)
 {
     float gain;
-    c_SparkMax_GetP(ConvertToMotorControllerWrapper(handle), slotID, &gain);
+    c_SparkMax_GetP(ConvertToWrapper(handle), slotID, &gain);
     return (jfloat)gain;
 }
 /*
@@ -1380,7 +1380,7 @@ Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1GetI
   (JNIEnv*, jclass, jlong handle, jint slotID)
 {
     float gain;
-    c_SparkMax_GetI(ConvertToMotorControllerWrapper(handle), slotID, &gain);
+    c_SparkMax_GetI(ConvertToWrapper(handle), slotID, &gain);
     return (jfloat)gain;
 }
 /*
@@ -1393,7 +1393,7 @@ Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1GetD
   (JNIEnv*, jclass, jlong handle, jint slotID)
 {
     float gain;
-    c_SparkMax_GetD(ConvertToMotorControllerWrapper(handle), slotID, &gain);
+    c_SparkMax_GetD(ConvertToWrapper(handle), slotID, &gain);
     return (jfloat)gain;
 }
 /*
@@ -1406,7 +1406,7 @@ Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1GetDFilter
   (JNIEnv*, jclass, jlong handle, jint slotID)
 {
     float gain;
-    c_SparkMax_GetDFilter(ConvertToMotorControllerWrapper(handle), slotID, &gain);
+    c_SparkMax_GetDFilter(ConvertToWrapper(handle), slotID, &gain);
     return (jfloat)gain;
 }
 /*
@@ -1419,7 +1419,7 @@ Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1GetFF
   (JNIEnv*, jclass, jlong handle, jint slotID)
 {
     float gain;
-    c_SparkMax_GetFF(ConvertToMotorControllerWrapper(handle), slotID, &gain);
+    c_SparkMax_GetFF(ConvertToWrapper(handle), slotID, &gain);
     return (jfloat)gain;
 }
 /*
@@ -1432,7 +1432,7 @@ Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1GetIZone
   (JNIEnv*, jclass, jlong handle, jint slotID)
 {
     float IZone;
-    c_SparkMax_GetIZone(ConvertToMotorControllerWrapper(handle), slotID, &IZone);
+    c_SparkMax_GetIZone(ConvertToWrapper(handle), slotID, &IZone);
     return (jfloat)IZone;
 }
 /*
@@ -1445,7 +1445,7 @@ Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1GetOutputMin
   (JNIEnv*, jclass, jlong handle, jint slotID)
 {
     float min;
-    c_SparkMax_GetOutputMin(ConvertToMotorControllerWrapper(handle), slotID, &min);
+    c_SparkMax_GetOutputMin(ConvertToWrapper(handle), slotID, &min);
     return (jfloat)min;
 }
 /*
@@ -1458,7 +1458,7 @@ Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1GetOutputMax
   (JNIEnv*, jclass, jlong handle, jint slotID)
 {
     float max;
-    c_SparkMax_GetOutputMax(ConvertToMotorControllerWrapper(handle), slotID, &max);
+    c_SparkMax_GetOutputMax(ConvertToWrapper(handle), slotID, &max);
     return (jfloat)max;
 }
 /*
@@ -1470,7 +1470,7 @@ JNIEXPORT jint JNICALL
 Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1SetSmartMotionMaxVelocity
   (JNIEnv*, jclass, jlong handle, jint slotID, jfloat maxVel)
 {
-    c_SparkMax_ErrorCode output = c_SparkMax_SetSmartMotionMaxVelocity(ConvertToMotorControllerWrapper(handle), slotID, maxVel);
+    c_SparkMax_ErrorCode output = c_SparkMax_SetSmartMotionMaxVelocity(ConvertToWrapper(handle), slotID, maxVel);
     return (jint)output;
 }
 /*
@@ -1482,7 +1482,7 @@ JNIEXPORT jint JNICALL
 Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1SetSmartMotionMaxAccel
   (JNIEnv*, jclass, jlong handle, jint slotID, jfloat maxAccel)
 {
-    c_SparkMax_ErrorCode output = c_SparkMax_SetSmartMotionMaxAccel(ConvertToMotorControllerWrapper(handle), slotID, maxAccel);
+    c_SparkMax_ErrorCode output = c_SparkMax_SetSmartMotionMaxAccel(ConvertToWrapper(handle), slotID, maxAccel);
     return (jint)output;
 }
 /*
@@ -1494,7 +1494,7 @@ JNIEXPORT jint JNICALL
 Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1SetSmartMotionMinOutputVelocity
   (JNIEnv*, jclass, jlong handle, jint slotID, jfloat minVel)
 {
-    c_SparkMax_ErrorCode output = c_SparkMax_SetSmartMotionMinOutputVelocity(ConvertToMotorControllerWrapper(handle), slotID, minVel);
+    c_SparkMax_ErrorCode output = c_SparkMax_SetSmartMotionMinOutputVelocity(ConvertToWrapper(handle), slotID, minVel);
     return (jint)output;
 }
 /*
@@ -1506,7 +1506,7 @@ JNIEXPORT jint JNICALL
 Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1SetSmartMotionAccelStrategy
   (JNIEnv*, jclass, jlong handle, jint slotID, jint accelStrategy)
 {
-    c_SparkMax_ErrorCode output = c_SparkMax_SetSmartMotionAccelStrategy(ConvertToMotorControllerWrapper(handle), slotID, (c_SparkMax_AccelStrategy)accelStrategy);
+    c_SparkMax_ErrorCode output = c_SparkMax_SetSmartMotionAccelStrategy(ConvertToWrapper(handle), slotID, (c_SparkMax_AccelStrategy)accelStrategy);
     return (jint)output;
 }
 /*
@@ -1518,7 +1518,7 @@ JNIEXPORT jint JNICALL
 Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1SetSmartMotionAllowedClosedLoopError
   (JNIEnv*, jclass, jlong handle, jint slotID, jfloat allowedError)
 {
-    c_SparkMax_ErrorCode output = c_SparkMax_SetSmartMotionAllowedClosedLoopError(ConvertToMotorControllerWrapper(handle), slotID, allowedError);
+    c_SparkMax_ErrorCode output = c_SparkMax_SetSmartMotionAllowedClosedLoopError(ConvertToWrapper(handle), slotID, allowedError);
     return (jint)output;
 }
 /*
@@ -1531,7 +1531,7 @@ Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1GetSmartMotionMaxVelocity
   (JNIEnv*, jclass, jlong handle, jint slotID)
 {
     float maxVel;
-    c_SparkMax_GetSmartMotionMaxVelocity(ConvertToMotorControllerWrapper(handle), slotID, &maxVel);
+    c_SparkMax_GetSmartMotionMaxVelocity(ConvertToWrapper(handle), slotID, &maxVel);
     return (jfloat)maxVel;
 }
 /*
@@ -1544,7 +1544,7 @@ Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1GetSmartMotionMaxAccel
   (JNIEnv*, jclass, jlong handle, jint slotID)
 {
     float maxAccel;
-    c_SparkMax_GetSmartMotionMaxAccel(ConvertToMotorControllerWrapper(handle), slotID, &maxAccel);
+    c_SparkMax_GetSmartMotionMaxAccel(ConvertToWrapper(handle), slotID, &maxAccel);
     return (jfloat)maxAccel;
 }
 /*
@@ -1557,7 +1557,7 @@ Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1GetSmartMotionMinOutputVelo
   (JNIEnv*, jclass, jlong handle, jint slotID)
 {
     float minVel;
-    c_SparkMax_GetSmartMotionMinOutputVelocity(ConvertToMotorControllerWrapper(handle), slotID, &minVel);
+    c_SparkMax_GetSmartMotionMinOutputVelocity(ConvertToWrapper(handle), slotID, &minVel);
     return (jfloat)minVel;
 }
 /*
@@ -1570,7 +1570,7 @@ Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1GetSmartMotionAccelStrategy
   (JNIEnv*, jclass, jlong handle, jint slotID)
 {
     c_SparkMax_AccelStrategy accelStrategy;
-    c_SparkMax_GetSmartMotionAccelStrategy(ConvertToMotorControllerWrapper(handle), slotID, &accelStrategy);
+    c_SparkMax_GetSmartMotionAccelStrategy(ConvertToWrapper(handle), slotID, &accelStrategy);
     return (jint)accelStrategy;
 }
 /*
@@ -1583,7 +1583,7 @@ Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1GetSmartMotionAllowedClosed
   (JNIEnv*, jclass, jlong handle, jint slotID)
 {
     float allowedError;
-    c_SparkMax_GetSmartMotionAllowedClosedLoopError(ConvertToMotorControllerWrapper(handle), slotID, &allowedError);
+    c_SparkMax_GetSmartMotionAllowedClosedLoopError(ConvertToWrapper(handle), slotID, &allowedError);
     return (jfloat)allowedError;
 }
 /*
@@ -1595,7 +1595,7 @@ JNIEXPORT jint JNICALL
 Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1SetIMaxAccum
   (JNIEnv*, jclass, jlong handle, jint slotID, jfloat iMaxAccum)
 {
-    c_SparkMax_ErrorCode output = c_SparkMax_SetIMaxAccum(ConvertToMotorControllerWrapper(handle), slotID, iMaxAccum);
+    c_SparkMax_ErrorCode output = c_SparkMax_SetIMaxAccum(ConvertToWrapper(handle), slotID, iMaxAccum);
     return (jint)output;
 }
 /*
@@ -1608,7 +1608,7 @@ Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1GetIMaxAccum
   (JNIEnv*, jclass, jlong handle, jint slotID)
 {
     float iMaxAccum;
-    c_SparkMax_GetIMaxAccum(ConvertToMotorControllerWrapper(handle), slotID, &iMaxAccum);
+    c_SparkMax_GetIMaxAccum(ConvertToWrapper(handle), slotID, &iMaxAccum);
     return (jfloat)iMaxAccum;
 }
 /*
@@ -1620,7 +1620,7 @@ JNIEXPORT jint JNICALL
 Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1SetIAccum
   (JNIEnv*, jclass, jlong handle, jfloat iAccum)
 {
-    c_SparkMax_ErrorCode output = c_SparkMax_SetIAccum(ConvertToMotorControllerWrapper(handle), iAccum);
+    c_SparkMax_ErrorCode output = c_SparkMax_SetIAccum(ConvertToWrapper(handle), iAccum);
     return (jint)output;
 }
 /*
@@ -1633,7 +1633,7 @@ Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1GetIAccum
   (JNIEnv*, jclass, jlong handle)
 {
     float iAccum;
-    c_SparkMax_GetIAccum(ConvertToMotorControllerWrapper(handle), &iAccum);
+    c_SparkMax_GetIAccum(ConvertToWrapper(handle), &iAccum);
     return (jfloat)iAccum;
 }
 /*
@@ -1645,7 +1645,7 @@ JNIEXPORT jint JNICALL
 Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1SetFeedbackDevice
   (JNIEnv*, jclass, jlong handle, jint sensorID)
 {
-    c_SparkMax_ErrorCode output = c_SparkMax_SetFeedbackDevice(ConvertToMotorControllerWrapper(handle), sensorID);
+    c_SparkMax_ErrorCode output = c_SparkMax_SetFeedbackDevice(ConvertToWrapper(handle), sensorID);
     return (jint)output;
 }
 /*
@@ -1657,7 +1657,7 @@ JNIEXPORT jint JNICALL
 Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1SetFeedbackDeviceRange
   (JNIEnv*, jclass, jlong handle, jfloat min, jfloat max)
 {
-    c_SparkMax_ErrorCode output = c_SparkMax_SetFeedbackDeviceRange(ConvertToMotorControllerWrapper(handle), min, max);
+    c_SparkMax_ErrorCode output = c_SparkMax_SetFeedbackDeviceRange(ConvertToWrapper(handle), min, max);
     return (jint)output;
 }
 /*
@@ -1670,7 +1670,7 @@ Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1GetFeedbackDeviceID
   (JNIEnv*, jclass, jlong handle)
 {
     uint32_t id;
-    c_SparkMax_GetFeedbackDeviceID(ConvertToMotorControllerWrapper(handle), &id);
+    c_SparkMax_GetFeedbackDeviceID(ConvertToWrapper(handle), &id);
     return (jint)id;
 }
 /*
@@ -1726,7 +1726,7 @@ JNIEXPORT jint JNICALL
 Java_com_revrobotics_jni_CANSparkMaxJNI_c_1SparkMax_1GetLastError
   (JNIEnv*, jclass, jlong handle)
 {
-    c_SparkMax_ErrorCode output = c_SparkMax_GetLastError(ConvertToMotorControllerWrapper(handle));
+    c_SparkMax_ErrorCode output = c_SparkMax_GetLastError(ConvertToWrapper(handle));
     return (jint)output;
 }
 
