@@ -2,12 +2,13 @@ package com.snobot.simulator.rev;
 
 import java.nio.ByteBuffer;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.CANSparkMaxLowLevel.PeriodicFrame;
+import com.snobot.test.utilities.SimDeviceDumpHelper;
 
 public class TestCANSparkMaxLowLevelFunctions
 {
@@ -20,7 +21,7 @@ public class TestCANSparkMaxLowLevelFunctions
         }
     };
 
-    @Before
+    @BeforeEach
     public void initialize()
     {
         System.loadLibrary("SparkMaxDriver");
@@ -34,6 +35,7 @@ public class TestCANSparkMaxLowLevelFunctions
     public void testUnsupportedOperations()
     {
         CANSparkMax spark = new CANSparkMax(10, MotorType.kBrushless);
+        SimDeviceDumpHelper.dumpSimDevices();
 
 
         spark.getFirmwareVersion();

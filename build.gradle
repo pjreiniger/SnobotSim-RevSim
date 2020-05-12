@@ -13,7 +13,7 @@ plugins {
     id "jacoco"
 }
 
-ext.allwpilibVersion = '2020.1.2'
+ext.allwpilibVersion = '2020.2.2'
 ext.rev_library_version = "1.5.0"
 ext.release_version = rev_library_version + "_V2"
 
@@ -21,7 +21,7 @@ repositories {
     mavenCentral()
     mavenLocal()
     maven {
-        url "https://frcmaven.wpi.edu/artifactory/development/"
+        url "https://frcmaven.wpi.edu/artifactory/release/"
     }
     maven {
         url "http://www.revrobotics.com/content/sw/max/sdk/maven/"
@@ -36,8 +36,28 @@ sourceSets {
     }
 }
 
+
 apply from: "config.gradle"
 model {
+    dependencyConfigs {
+        wpiutil(DependencyConfig) {
+            groupId = 'edu.wpi.first.wpiutil'
+            artifactId = 'wpiutil-cpp'
+            headerClassifier = 'headers'
+            ext = 'zip'
+            version = allwpilibVersion
+            sharedConfigs = [ SparkMaxDriver: [], SparkMaxDriverDev:[] ]
+        }
+        halsim(DependencyConfig) {
+            groupId = 'edu.wpi.first.hal'
+            artifactId = 'hal-cpp'
+            headerClassifier = 'headers'
+            ext = 'zip'
+            version = allwpilibVersion
+            sharedConfigs = [ SparkMaxDriver: [], SparkMaxDriverDev:[] ]
+        }
+    }
+
     components {
         SparkMaxDriver(JniNativeLibrarySpec) {
 
@@ -57,33 +77,60 @@ model {
                 }
             }
         }
-    }
-}
+        // By default, a development executable will be generated. This is to help the case of
+        // testing specific functionality of the library.
+        SparkMaxDriverDev(NativeExecutableSpec) {
+            targetBuildTypes 'release'
+            sources {
+                cpp {
 
-
-task packageNativeFilesInJar(type: Jar) {
-    destinationDir = project.buildDir
-    classifier = org.gradle.internal.os.OperatingSystem.current().getFamilyName() + getCurrentArch();
-    if (org.gradle.internal.os.OperatingSystem.current().isMacOsX())
-    {
-        classifier = "osx" + getCurrentArch();
-    }
-
-    project.model {
-        binaries {
-            withType(SharedLibraryBinarySpec) { binary ->
-                if (binary.component.name == "SparkMaxDriver")
-                {
-                    dependsOn binary.buildTask
-                    from(binary.sharedLibraryFile) {
-
-                        into NativeUtils.getPlatformPath(binary)
+                    source {
+                        srcDirs "${projectDir}"
+                        include 'dummy.cpp'
+                    }
+                    exportedHeaders {
+                        srcDir 'src/main/native/include'
+                        if (project.hasProperty('generatedHeaders')) {
+                            srcDir generatedHeaders
+                        }
                     }
                 }
             }
+            binaries.all {
+                lib library: "SparkMaxDriver", linkage: 'shared'
+            }
+        }
+    }
+    tasks {
+        def c = $.components
+        project.tasks.create('runCpp', Exec) {
+            def found = false
+            def systemArch = getCurrentArch()
+            c.each {
+                if (it in NativeExecutableSpec && it.name == "SparkMaxDriverDev") {
+                    it.binaries.each {
+                        if (!found) {
+                            def arch = it.targetPlatform.name
+                            if (arch == systemArch) {
+                                dependsOn it.tasks.install
+                                commandLine it.tasks.install.runScriptFile.get().asFile.toString()
+                                def filePath = it.tasks.install.installDirectory.get().toString() + File.separatorChar + 'lib'
+                                test.dependsOn it.tasks.install
+                                test.systemProperty 'java.library.path', filePath
+                                test.environment 'LD_LIBRARY_PATH', filePath
+                                test.workingDir filePath
+
+                                found = true
+                            }
+                        }
+                    }
+                }
+            }
+            println("Found " + found)
         }
     }
 }
+
 
 ext.use_real_library = true
 
@@ -99,37 +146,38 @@ if(!use_real_library)
 }
 
 
-configurations.maybeCreate("wpilibNativeDeps")
 dependencies {
 
     compile 'edu.wpi.first.wpiutil:wpiutil-java:' + allwpilibVersion
     compile 'edu.wpi.first.wpilibj:wpilibj-java:' + allwpilibVersion
     compile 'edu.wpi.first.hal:hal-java:' + allwpilibVersion
+    testRuntime 'edu.wpi.first.hal:hal-jni:' + allwpilibVersion + ':' + org.gradle.internal.os.OperatingSystem.current().getFamilyName() + getCurrentArch()
 
     if(use_real_library)
     {
         compile 'com.revrobotics.frc:SparkMax-java:' + rev_library_version
     }
 
+    testCompile 'org.junit.jupiter:junit-jupiter-api:5.2.0'
+    testCompile 'org.junit.jupiter:junit-jupiter-params:5.2.0'
+    testRuntime 'org.junit.jupiter:junit-jupiter-engine:5.2.0'
+    testRuntime 'org.junit.platform:junit-platform-launcher:1.2.0'
+
     compile 'org.apache.logging.log4j:log4j-api:2.11.0'
     compile 'org.apache.logging.log4j:log4j-core:2.11.0'
 
-    // testCompile 'edu.wpi.first.ntcore:ntcore-java:' + allwpilibVersion
-    // testCompile 'edu.wpi.first.cscore:cscore-java:' + allwpilibVersion
-    // testCompile 'edu.wpi.first.ntcore:ntcore-jni:' + allwpilibVersion + ':' + getCurrentArch()
-    // testCompile 'edu.wpi.first.cscore:cscore-jni:' + allwpilibVersion + ':' + getCurrentArch()
-
-    testCompile 'junit:junit:4.12'
-
     testCompile 'com.revrobotics.frc:SparkMax-driver:' + rev_library_version + ":headers@zip"
-
-    wpilibNativeDeps packageNativeFilesInJar.outputs.files
 
 }
 
-compileJava {
-    sourceCompatibility = 1.8
-    targetCompatibility = 1.8
+test {
+    useJUnitPlatform()
+    testLogging {
+        events TestLogEvent.FAILED,
+               TestLogEvent.SKIPPED,
+               TestLogEvent.STANDARD_OUT
+        exceptionFormat "full"
+    }
 }
 
 /////////////////////////////////////////////////////////////////////////////////
@@ -159,11 +207,17 @@ check.dependsOn jacocoTestReport
 
 /////////////////////////////////////////////////////////////////////////////////
 
+
+javadoc {
+    failOnError = false
+}
+
+
 wrapper {
     gradleVersion = '5.0'
 }
 
-apply from: "publish.gradle"
+//apply from: "publish.gradle"
 
-apply from: "${rootDir}/extract_native_libraries.gradle"
-test.dependsOn extract_wpilib
+//apply from: "${rootDir}/extract_native_libraries.gradle"
+//test.dependsOn extract_wpilib

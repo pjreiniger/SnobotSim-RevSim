@@ -2,13 +2,14 @@ package com.snobot.simulator.rev;
 
 import java.nio.ByteBuffer;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import com.revrobotics.CANAnalog;
 import com.revrobotics.CANAnalog.AnalogMode;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.snobot.test.utilities.SimDeviceDumpHelper;
 
 public class TestCANAnalogFunctions
 {
@@ -21,7 +22,7 @@ public class TestCANAnalogFunctions
         }
     };
 
-    @Before
+    @BeforeEach
     public void initialize()
     {
         System.loadLibrary("SparkMaxDriver");
@@ -33,6 +34,7 @@ public class TestCANAnalogFunctions
     public void testAnnalogFunctions()
     {
         CANSparkMax sc = new CANSparkMax(11, MotorType.kBrushless);
+        SimDeviceDumpHelper.dumpSimDevices();
 
         for (AnalogMode analogType : AnalogMode.values())
         {

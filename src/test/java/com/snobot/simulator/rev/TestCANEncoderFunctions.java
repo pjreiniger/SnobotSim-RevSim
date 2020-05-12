@@ -2,12 +2,13 @@ package com.snobot.simulator.rev;
 
 import java.nio.ByteBuffer;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.snobot.test.utilities.SimDeviceDumpHelper;
 
 public class TestCANEncoderFunctions
 {
@@ -20,7 +21,7 @@ public class TestCANEncoderFunctions
         }
     };
 
-    @Before
+    @BeforeEach
     public void initialize()
     {
         System.loadLibrary("SparkMaxDriver");
@@ -34,6 +35,7 @@ public class TestCANEncoderFunctions
     {
         CANSparkMax sc = new CANSparkMax(12, MotorType.kBrushed);
         CANEncoder encoder = sc.getEncoder();
+        SimDeviceDumpHelper.dumpSimDevices();
 
         encoder.getPosition();
         encoder.getVelocity();

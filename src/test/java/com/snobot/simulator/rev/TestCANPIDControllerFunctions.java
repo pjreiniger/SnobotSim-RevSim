@@ -2,8 +2,8 @@ package com.snobot.simulator.rev;
 
 import java.nio.ByteBuffer;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANPIDController;
@@ -12,6 +12,7 @@ import com.revrobotics.CANPIDController.ArbFFUnits;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.ControlType;
+import com.snobot.test.utilities.SimDeviceDumpHelper;
 
 public class TestCANPIDControllerFunctions
 {
@@ -24,7 +25,7 @@ public class TestCANPIDControllerFunctions
         }
     };
 
-    @Before
+    @BeforeEach
     public void initialize()
     {
         System.loadLibrary("SparkMaxDriver");
@@ -39,6 +40,7 @@ public class TestCANPIDControllerFunctions
     {
         CANSparkMax sc = new CANSparkMax(12, MotorType.kBrushless);
         CANPIDController pid = new CANPIDController(sc);
+        SimDeviceDumpHelper.dumpSimDevices();
 
         for (ControlType controlType : ControlType.values())
         {

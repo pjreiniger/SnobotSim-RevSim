@@ -2,13 +2,14 @@ package com.snobot.simulator.rev;
 
 import java.nio.ByteBuffer;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import com.revrobotics.CANDigitalInput;
 import com.revrobotics.CANDigitalInput.LimitSwitchPolarity;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.snobot.test.utilities.SimDeviceDumpHelper;
 
 public class TestCANDigitalInputFunctions
 {
@@ -21,7 +22,7 @@ public class TestCANDigitalInputFunctions
         }
     };
 
-    @Before
+    @BeforeEach
     public void initialize()
     {
         System.loadLibrary("SparkMaxDriver");
@@ -34,6 +35,7 @@ public class TestCANDigitalInputFunctions
     public void testLimitSwitchFunctions()
     {
         CANSparkMax sc = new CANSparkMax(11, MotorType.kBrushless);
+        SimDeviceDumpHelper.dumpSimDevices();
 
         for (LimitSwitchPolarity polarity : LimitSwitchPolarity.values())
         {

@@ -2,8 +2,8 @@ package com.snobot.simulator.rev;
 
 import java.nio.ByteBuffer;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import com.revrobotics.AlternateEncoderType;
 import com.revrobotics.CANAnalog;
@@ -277,7 +277,7 @@ public class TestBasicOperations
         pid.setFeedbackDevice(sensor);
     }
 
-    @Before
+    @BeforeEach
     public void initialize()
     {
         // System.loadLibrary("wpiutil");
