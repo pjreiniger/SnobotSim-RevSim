@@ -10,6 +10,9 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.snobot.test.utilities.SimDeviceDumpHelper;
 
+import edu.wpi.first.hal.sim.SimDeviceSim;
+import edu.wpi.first.hal.sim.mockdata.SimulatorJNI;
+
 public class TestCANEncoderFunctions
 {
     private final RevCallback mRevCallback = new RevCallback()
@@ -26,6 +29,8 @@ public class TestCANEncoderFunctions
     {
         System.loadLibrary("SparkMaxDriver");
 
+        SimulatorJNI.resetHandles();
+        SimDeviceSim.resetData();
         RevSimJni.registerRevCallback(mRevCallback);
 
     }

@@ -26,8 +26,8 @@ public final class SimDeviceDumpHelper
         }
         catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException ex)
         {
-            ex.printStackTrace();
-            throw new RuntimeException(ex);
+            ex.printStackTrace(); // NOPMD
+            throw new RuntimeException(ex); // NOPMD
         }
     }
 
@@ -43,7 +43,7 @@ public final class SimDeviceDumpHelper
             String deviceName = getName(SimDeviceInfo.class, deviceSimName);
             builder.append("  ").append(deviceName).append('\n');
 
-            SimDeviceSim simDeviceSime = new SimDeviceSim(deviceName);
+            SimDeviceSim simDeviceSime = new SimDeviceSim(deviceName); // NOPMD
             for (SimValueInfo valueName : simDeviceSime.enumerateValues())
             {
                 String sim = getName(SimValueInfo.class, valueName);
@@ -51,7 +51,7 @@ public final class SimDeviceDumpHelper
             }
         }
         builder.append("***************************************************\n");
-        System.out.println(builder);
+        System.out.println(builder); // NOPMD
 
     }
 }

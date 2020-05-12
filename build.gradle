@@ -217,7 +217,7 @@ wrapper {
     gradleVersion = '5.0'
 }
 
-//apply from: "publish.gradle"
+apply from: "publish.gradle"
 
 //apply from: "${rootDir}/extract_native_libraries.gradle"
 //test.dependsOn extract_wpilib
