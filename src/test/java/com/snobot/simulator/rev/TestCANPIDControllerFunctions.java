@@ -2,8 +2,8 @@ package com.snobot.simulator.rev;
 
 import java.nio.ByteBuffer;
 
+import org.junit.Test;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANPIDController;
@@ -14,6 +14,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.ControlType;
 import com.snobot.test.utilities.SimDeviceDumpHelper;
 
+import edu.wpi.first.hal.HAL;
 import edu.wpi.first.hal.sim.SimDeviceSim;
 import edu.wpi.first.hal.sim.mockdata.SimulatorJNI;
 
@@ -31,6 +32,7 @@ public class TestCANPIDControllerFunctions
     @BeforeEach
     public void initialize()
     {
+        HAL.initialize(0, 0);
         System.loadLibrary("SparkMaxDriver");
 
         SimulatorJNI.resetHandles();

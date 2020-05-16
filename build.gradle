@@ -145,13 +145,22 @@ if(!use_real_library)
     }
 }
 
+ext.get_os_arc_name = {
+    
+    if (org.gradle.internal.os.OperatingSystem.current().isMacOsX())
+    {
+        return "osx" + getCurrentArch();
+    }
+    
+    return org.gradle.internal.os.OperatingSystem.current().getFamilyName() + getCurrentArch()
+}
 
 dependencies {
 
     compile 'edu.wpi.first.wpiutil:wpiutil-java:' + allwpilibVersion
     compile 'edu.wpi.first.wpilibj:wpilibj-java:' + allwpilibVersion
     compile 'edu.wpi.first.hal:hal-java:' + allwpilibVersion
-    testRuntime 'edu.wpi.first.hal:hal-jni:' + allwpilibVersion + ':' + org.gradle.internal.os.OperatingSystem.current().getFamilyName() + getCurrentArch()
+    testRuntime 'edu.wpi.first.hal:hal-jni:' + allwpilibVersion + ':' + get_os_arc_name()
 
     if(use_real_library)
     {
