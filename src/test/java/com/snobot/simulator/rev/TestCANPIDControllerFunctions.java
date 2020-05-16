@@ -2,8 +2,8 @@ package com.snobot.simulator.rev;
 
 import java.nio.ByteBuffer;
 
-import org.junit.Test;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANPIDController;
