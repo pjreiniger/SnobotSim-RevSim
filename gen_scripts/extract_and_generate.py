@@ -141,12 +141,12 @@ def main():
 
 #     extract_source_files(version, "../rev_source", redownload=True)
 #     generate_cci(definitions)
-    generate_jni(definitions)
-#     generate_wrapper(definitions)
+#     generate_jni(definitions)
+    generate_wrapper(definitions)
 #     generate_unit_tests()
 
-    os.chdir(PROJECT_DIR)
-    subprocess.call("wpiformat")
+#     os.chdir(PROJECT_DIR)
+#     subprocess.call("wpiformat")
 
 
 if __name__ == "__main__":

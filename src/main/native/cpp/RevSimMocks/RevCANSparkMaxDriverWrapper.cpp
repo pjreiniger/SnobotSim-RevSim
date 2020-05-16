@@ -21,11 +21,154 @@ void SnobotSim::SetCANSparkMaxDriverCallback(SnobotSim::REV_CallbackFunc callbac
 }
 
 SnobotSim::RevCANSparkMaxDriverWrapper::RevCANSparkMaxDriverWrapper(int aDeviceId) :
-        mDeviceId(aDeviceId)
+        mDeviceId(aDeviceId),
+        m_simDevice(std::string("RevCANSparkMaxDriverWrapper " + std::to_string(aDeviceId)).c_str(), aDeviceId)
 {
+
+
+    m_AltEncoderAverageDepth_depth = m_simDevice.CreateDouble("AltEncoderAverageDepth_depth", false, 0);
+    m_AltEncoderCountsPerRevolution_cpr = m_simDevice.CreateDouble("AltEncoderCountsPerRevolution_cpr", false, 0);
+    m_AltEncoderInverted_inverted = m_simDevice.CreateDouble("AltEncoderInverted_inverted", false, 0);
+    m_AltEncoderMeasurementPeriod_samples = m_simDevice.CreateDouble("AltEncoderMeasurementPeriod_samples", false, 0);
+    m_AltEncoderPositionFactor_conversion = m_simDevice.CreateDouble("AltEncoderPositionFactor_conversion", false, 0);
+    m_AltEncoderPosition_position = m_simDevice.CreateDouble("AltEncoderPosition_position", false, 0);
+    m_AltEncoderVelocityFactor_conversion = m_simDevice.CreateDouble("AltEncoderVelocityFactor_conversion", false, 0);
+    m_AltEncoderVelocity_velocity = m_simDevice.CreateDouble("AltEncoderVelocity_velocity", false, 0);
+    m_AnalogAverageDepth_depth = m_simDevice.CreateDouble("AnalogAverageDepth_depth", false, 0);
+    m_AnalogInverted_inverted = m_simDevice.CreateDouble("AnalogInverted_inverted", false, 0);
+    m_AnalogMeasurementPeriod_samples = m_simDevice.CreateDouble("AnalogMeasurementPeriod_samples", false, 0);
+    m_AnalogMode_mode = m_simDevice.CreateDouble("AnalogMode_mode", false, 0);
+    m_AnalogPositionConversionFactor_conversion = m_simDevice.CreateDouble("AnalogPositionConversionFactor_conversion", false, 0);
+    m_AnalogPosition_position = m_simDevice.CreateDouble("AnalogPosition_position", false, 0);
+    m_AnalogVelocityConversionFactor_conversion = m_simDevice.CreateDouble("AnalogVelocityConversionFactor_conversion", false, 0);
+    m_AnalogVelocity_velocity = m_simDevice.CreateDouble("AnalogVelocity_velocity", false, 0);
+    m_AnalogVoltage_voltage = m_simDevice.CreateDouble("AnalogVoltage_voltage", false, 0);
+    m_AppliedOutput_appliedOutput = m_simDevice.CreateDouble("AppliedOutput_appliedOutput", false, 0);
+    m_AverageDepth_depth = m_simDevice.CreateDouble("AverageDepth_depth", false, 0);
+    m_BusVoltage_busVoltage = m_simDevice.CreateDouble("BusVoltage_busVoltage", false, 0);
+    m_CloseTelemetryStream_telemetryHandle = m_simDevice.CreateDouble("CloseTelemetryStream_telemetryHandle", false, 0);
+    m_ClosedLoopRampRate_rate = m_simDevice.CreateDouble("ClosedLoopRampRate_rate", false, 0);
+    m_ControlFramePeriod_periodMs = m_simDevice.CreateDouble("ControlFramePeriod_periodMs", false, 0);
+    m_CountsPerRevolution_cpr = m_simDevice.CreateDouble("CountsPerRevolution_cpr", false, 0);
+    m_DRVStatus_drvStatus = m_simDevice.CreateDouble("DRVStatus_drvStatus", false, 0);
+    m_DataPortConfig_config = m_simDevice.CreateDouble("DataPortConfig_config", false, 0);
+    m_DeviceId_deviceId = m_simDevice.CreateDouble("DeviceId_deviceId", false, 0);
+    m_EnableLimitSwitch_enable = m_simDevice.CreateDouble("EnableLimitSwitch_enable", false, 0);
+    m_EnableLimitSwitch_sw = m_simDevice.CreateDouble("EnableLimitSwitch_sw", false, 0);
+    m_EnableSoftLimit_dir = m_simDevice.CreateDouble("EnableSoftLimit_dir", false, 0);
+    m_EnableSoftLimit_enable = m_simDevice.CreateDouble("EnableSoftLimit_enable", false, 0);
+    m_EnableVoltageCompensation_nominalVoltage = m_simDevice.CreateDouble("EnableVoltageCompensation_nominalVoltage", false, 0);
+    m_EncoderInverted_inverted = m_simDevice.CreateDouble("EncoderInverted_inverted", false, 0);
+    m_EncoderPosition_position = m_simDevice.CreateDouble("EncoderPosition_position", false, 0);
+    m_EncoderVelocity_velocity = m_simDevice.CreateDouble("EncoderVelocity_velocity", false, 0);
+    m_FactoryWipe_persist = m_simDevice.CreateDouble("FactoryWipe_persist", false, 0);
+    m_Fault_fault = m_simDevice.CreateDouble("Fault_fault", false, 0);
+    m_Fault_faultId = m_simDevice.CreateDouble("Fault_faultId", false, 0);
+    m_Faults_faults = m_simDevice.CreateDouble("Faults_faults", false, 0);
+    m_FeedbackDeviceID_id = m_simDevice.CreateDouble("FeedbackDeviceID_id", false, 0);
+    m_FeedbackDeviceRange_max = m_simDevice.CreateDouble("FeedbackDeviceRange_max", false, 0);
+    m_FeedbackDeviceRange_min = m_simDevice.CreateDouble("FeedbackDeviceRange_min", false, 0);
+    m_FeedbackDevice_sensorID = m_simDevice.CreateDouble("FeedbackDevice_sensorID", false, 0);
+    m_Follow_followerArbId = m_simDevice.CreateDouble("Follow_followerArbId", false, 0);
+    m_Follow_followerCfg = m_simDevice.CreateDouble("Follow_followerCfg", false, 0);
+    m_Follower_isFollower = m_simDevice.CreateDouble("Follower_isFollower", false, 0);
+    m_GenerateError_deviceID = m_simDevice.CreateDouble("GenerateError_deviceID", false, 0);
+    m_GenerateError_error = m_simDevice.CreateDouble("GenerateError_error", false, 0);
+    m_IAccum_iAccum = m_simDevice.CreateDouble("IAccum_iAccum", false, 0);
+    m_IDAssign_deviceId = m_simDevice.CreateDouble("IDAssign_deviceId", false, 0);
+    m_IDAssign_uniqueId = m_simDevice.CreateDouble("IDAssign_uniqueId", false, 0);
+    m_IDQuery_numberOfDevices = m_simDevice.CreateDouble("IDQuery_numberOfDevices", false, 0);
+    m_IDQuery_uniqueIdArray = m_simDevice.CreateDouble("IDQuery_uniqueIdArray", false, 0);
+    m_IDQuery_uniqueIdArraySize = m_simDevice.CreateDouble("IDQuery_uniqueIdArraySize", false, 0);
+    m_IdentifyUniqueId_uniqueId = m_simDevice.CreateDouble("IdentifyUniqueId_uniqueId", false, 0);
+    m_IdleMode_idlemode = m_simDevice.CreateDouble("IdleMode_idlemode", false, 0);
+    m_Inverted_inverted = m_simDevice.CreateDouble("Inverted_inverted", false, 0);
+    m_LastError_error = m_simDevice.CreateDouble("LastError_error", false, 0);
+    m_LimitEnabled_enabled = m_simDevice.CreateDouble("LimitEnabled_enabled", false, 0);
+    m_LimitEnabled_sw = m_simDevice.CreateDouble("LimitEnabled_sw", false, 0);
+    m_LimitPolarity_polarity = m_simDevice.CreateDouble("LimitPolarity_polarity", false, 0);
+    m_LimitPolarity_sw = m_simDevice.CreateDouble("LimitPolarity_sw", false, 0);
+    m_LimitSwitch_limit = m_simDevice.CreateDouble("LimitSwitch_limit", false, 0);
+    m_LimitSwitch_sw = m_simDevice.CreateDouble("LimitSwitch_sw", false, 0);
+    m_ListTelemetryStream_messages = m_simDevice.CreateDouble("ListTelemetryStream_messages", false, 0);
+    m_MeasurementPeriod_samples = m_simDevice.CreateDouble("MeasurementPeriod_samples", false, 0);
+    m_MotorTemperature_motorTemperature = m_simDevice.CreateDouble("MotorTemperature_motorTemperature", false, 0);
+    m_MotorType_type = m_simDevice.CreateDouble("MotorType_type", false, 0);
+    m_OpenLoopRampRate_rate = m_simDevice.CreateDouble("OpenLoopRampRate_rate", false, 0);
+    m_OpenTelemetryStream_telemetryHandle = m_simDevice.CreateDouble("OpenTelemetryStream_telemetryHandle", false, 0);
+    m_OutputCurrent_outputCurrent = m_simDevice.CreateDouble("OutputCurrent_outputCurrent", false, 0);
+    m_ParameterBool_paramId = m_simDevice.CreateDouble("ParameterBool_paramId", false, 0);
+    m_ParameterBool_value = m_simDevice.CreateDouble("ParameterBool_value", false, 0);
+    m_ParameterFloat32_paramId = m_simDevice.CreateDouble("ParameterFloat32_paramId", false, 0);
+    m_ParameterFloat32_value = m_simDevice.CreateDouble("ParameterFloat32_value", false, 0);
+    m_ParameterInt32_paramId = m_simDevice.CreateDouble("ParameterInt32_paramId", false, 0);
+    m_ParameterInt32_value = m_simDevice.CreateDouble("ParameterInt32_value", false, 0);
+    m_ParameterUint32_paramId = m_simDevice.CreateDouble("ParameterUint32_paramId", false, 0);
+    m_ParameterUint32_value = m_simDevice.CreateDouble("ParameterUint32_value", false, 0);
+    m_PeriodicFramePeriod_frameId = m_simDevice.CreateDouble("PeriodicFramePeriod_frameId", false, 0);
+    m_PeriodicFramePeriod_periodMs = m_simDevice.CreateDouble("PeriodicFramePeriod_periodMs", false, 0);
+    m_PeriodicStatus0_rawframe = m_simDevice.CreateDouble("PeriodicStatus0_rawframe", false, 0);
+    m_PeriodicStatus1_rawframe = m_simDevice.CreateDouble("PeriodicStatus1_rawframe", false, 0);
+    m_PeriodicStatus2_rawframe = m_simDevice.CreateDouble("PeriodicStatus2_rawframe", false, 0);
+    m_PeriodicStatus3_rawframe = m_simDevice.CreateDouble("PeriodicStatus3_rawframe", false, 0);
+    m_PeriodicStatus4_rawframe = m_simDevice.CreateDouble("PeriodicStatus4_rawframe", false, 0);
+    m_PositionConversionFactor_conversion = m_simDevice.CreateDouble("PositionConversionFactor_conversion", false, 0);
+    m_ReadTelemetryStream_ids = m_simDevice.CreateDouble("ReadTelemetryStream_ids", false, 0);
+    m_ReadTelemetryStream_messages = m_simDevice.CreateDouble("ReadTelemetryStream_messages", false, 0);
+    m_ReadTelemetryStream_numOfStreams = m_simDevice.CreateDouble("ReadTelemetryStream_numOfStreams", false, 0);
+    m_ReadTelemetryStream_telemetryHandle = m_simDevice.CreateDouble("ReadTelemetryStream_telemetryHandle", false, 0);
+    m_RestoreFactoryDefaults_persist = m_simDevice.CreateDouble("RestoreFactoryDefaults_persist", false, 0);
+    m_SecondaryCurrentLimit_chopCycles = m_simDevice.CreateDouble("SecondaryCurrentLimit_chopCycles", false, 0);
+    m_SecondaryCurrentLimit_limit = m_simDevice.CreateDouble("SecondaryCurrentLimit_limit", false, 0);
+    m_SensorType_sensorType = m_simDevice.CreateDouble("SensorType_sensorType", false, 0);
+    m_SerialNumber_serialNumber = m_simDevice.CreateDouble("SerialNumber_serialNumber", false, 0);
+    m_SmartCurrentLimit_freeLimit = m_simDevice.CreateDouble("SmartCurrentLimit_freeLimit", false, 0);
+    m_SmartCurrentLimit_limitRPM = m_simDevice.CreateDouble("SmartCurrentLimit_limitRPM", false, 0);
+    m_SmartCurrentLimit_stallLimit = m_simDevice.CreateDouble("SmartCurrentLimit_stallLimit", false, 0);
+    m_SoftLimitEnabled_dir = m_simDevice.CreateDouble("SoftLimitEnabled_dir", false, 0);
+    m_SoftLimitEnabled_enabled = m_simDevice.CreateDouble("SoftLimitEnabled_enabled", false, 0);
+    m_SoftLimit_dir = m_simDevice.CreateDouble("SoftLimit_dir", false, 0);
+    m_SoftLimit_limit = m_simDevice.CreateDouble("SoftLimit_limit", false, 0);
+    m_StickyFault_faultId = m_simDevice.CreateDouble("StickyFault_faultId", false, 0);
+    m_StickyFault_stickyfault = m_simDevice.CreateDouble("StickyFault_stickyfault", false, 0);
+    m_StickyFaults_stickyFaults = m_simDevice.CreateDouble("StickyFaults_stickyFaults", false, 0);
+    m_VelocityConversionFactor_conversion = m_simDevice.CreateDouble("VelocityConversionFactor_conversion", false, 0);
+    m_VoltageCompensationNominalVoltage_nominalVoltage = m_simDevice.CreateDouble("VoltageCompensationNominalVoltage_nominalVoltage", false, 0);
+    m_pointCommand_arbFFUnits = m_simDevice.CreateDouble("pointCommand_arbFFUnits", false, 0);
+    m_pointCommand_arbFeedforward = m_simDevice.CreateDouble("pointCommand_arbFeedforward", false, 0);
+    m_pointCommand_ctrl = m_simDevice.CreateDouble("pointCommand_ctrl", false, 0);
+    m_pointCommand_pidSlot = m_simDevice.CreateDouble("pointCommand_pidSlot", false, 0);
+    m_pointCommand_value = m_simDevice.CreateDouble("pointCommand_value", false, 0);
+
+
+
+    for (int slotId = 0; slotId < 6; ++slotId)
+    {
+
+        m_slotted_variables[slotId].m_DFilter_gain = m_simDevice.CreateDouble(std::string("DFilter_gain[" + std::to_string(slotId) + "]").c_str(), false, 0);
+        m_slotted_variables[slotId].m_D_gain = m_simDevice.CreateDouble(std::string("D_gain[" + std::to_string(slotId) + "]").c_str(), false, 0);
+        m_slotted_variables[slotId].m_FF_gain = m_simDevice.CreateDouble(std::string("FF_gain[" + std::to_string(slotId) + "]").c_str(), false, 0);
+        m_slotted_variables[slotId].m_IMaxAccum_iMaxAccum = m_simDevice.CreateDouble(std::string("IMaxAccum_iMaxAccum[" + std::to_string(slotId) + "]").c_str(), false, 0);
+        m_slotted_variables[slotId].m_IZone_IZone = m_simDevice.CreateDouble(std::string("IZone_IZone[" + std::to_string(slotId) + "]").c_str(), false, 0);
+        m_slotted_variables[slotId].m_I_gain = m_simDevice.CreateDouble(std::string("I_gain[" + std::to_string(slotId) + "]").c_str(), false, 0);
+        m_slotted_variables[slotId].m_OutputMax_max = m_simDevice.CreateDouble(std::string("OutputMax_max[" + std::to_string(slotId) + "]").c_str(), false, 0);
+        m_slotted_variables[slotId].m_OutputMin_min = m_simDevice.CreateDouble(std::string("OutputMin_min[" + std::to_string(slotId) + "]").c_str(), false, 0);
+        m_slotted_variables[slotId].m_OutputRange_max = m_simDevice.CreateDouble(std::string("OutputRange_max[" + std::to_string(slotId) + "]").c_str(), false, 0);
+        m_slotted_variables[slotId].m_OutputRange_min = m_simDevice.CreateDouble(std::string("OutputRange_min[" + std::to_string(slotId) + "]").c_str(), false, 0);
+        m_slotted_variables[slotId].m_P_gain = m_simDevice.CreateDouble(std::string("P_gain[" + std::to_string(slotId) + "]").c_str(), false, 0);
+        m_slotted_variables[slotId].m_SmartMotionAccelStrategy_accelStrategy = m_simDevice.CreateDouble(std::string("SmartMotionAccelStrategy_accelStrategy[" + std::to_string(slotId) + "]").c_str(), false, 0);
+        m_slotted_variables[slotId].m_SmartMotionAllowedClosedLoopError_allowedError = m_simDevice.CreateDouble(std::string("SmartMotionAllowedClosedLoopError_allowedError[" + std::to_string(slotId) + "]").c_str(), false, 0);
+        m_slotted_variables[slotId].m_SmartMotionMaxAccel_maxAccel = m_simDevice.CreateDouble(std::string("SmartMotionMaxAccel_maxAccel[" + std::to_string(slotId) + "]").c_str(), false, 0);
+        m_slotted_variables[slotId].m_SmartMotionMaxVelocity_maxVel = m_simDevice.CreateDouble(std::string("SmartMotionMaxVelocity_maxVel[" + std::to_string(slotId) + "]").c_str(), false, 0);
+        m_slotted_variables[slotId].m_SmartMotionMinOutputVelocity_minVel = m_simDevice.CreateDouble(std::string("SmartMotionMinOutputVelocity_minVel[" + std::to_string(slotId) + "]").c_str(), false, 0);
+    }
+
+
     Send("Create");
 }
-void SnobotSim::RevCANSparkMaxDriverWrapper::Receive(const std::string& aName, uint8_t* aBuffer, int aSize)
+
+void SnobotSim::RevCANSparkMaxDriverWrapper::Send(const std::string& aName,
+        uint8_t* aBuffer, int aSize)
 {
     if (!gCANSparkMaxDriverCallbacks.empty())
     {
@@ -37,7 +180,9 @@ void SnobotSim::RevCANSparkMaxDriverWrapper::Receive(const std::string& aName, u
     }
 }
 
-void SnobotSim::RevCANSparkMaxDriverWrapper::Send(const std::string& aName, uint8_t* aBuffer, int aSize)
+void SnobotSim::RevCANSparkMaxDriverWrapper::Receive(const std::string& aName,
+        uint8_t* aBuffer,
+        int aSize)
 {
     if (!gCANSparkMaxDriverCallbacks.empty())
     {
@@ -58,8 +203,10 @@ void SnobotSim::RevCANSparkMaxDriverWrapper::GetFirmwareVersion(c_SparkMax_Firmw
 
 void SnobotSim::RevCANSparkMaxDriverWrapper::GetSerialNumber(uint32_t* serialNumber[3])
 {
-    RECEIVE_HELPER("GetSerialNumber", sizeof(*serialNumber[3]));
-    PoplateReceiveResults(buffer, serialNumber[3], buffer_pos);
+    RECEIVE_HELPER("GetSerialNumber", sizeof(*serialNumber[0]) + sizeof(*serialNumber[1]) + sizeof(*serialNumber[2]));
+    PoplateReceiveResults(buffer, serialNumber[0], buffer_pos);
+    PoplateReceiveResults(buffer, serialNumber[1], buffer_pos);
+    PoplateReceiveResults(buffer, serialNumber[2], buffer_pos);
 }
 
 void SnobotSim::RevCANSparkMaxDriverWrapper::GetDeviceId(int* deviceId)
@@ -904,3 +1051,4 @@ void SnobotSim::RevCANSparkMaxDriverWrapper::ListTelemetryStream(c_SparkMax_Tele
     RECEIVE_HELPER("ListTelemetryStream", sizeof(*messages));
     PoplateReceiveResults(buffer, messages, buffer_pos);
 }
+
