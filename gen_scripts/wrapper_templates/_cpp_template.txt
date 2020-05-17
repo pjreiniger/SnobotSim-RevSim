@@ -33,7 +33,7 @@ SnobotSim::{{ wrapper_class_name }}::{{ wrapper_class_name }}({% if has_device_i
     for (int slotId = 0; slotId < {{num_slots}}; ++slotId)
     {
 {% for variable_tuple in slotted_sim_device_variables %}
-        m_slotted_variables[slotId].m_{{ variable_tuple[0] }} = m_simDevice.CreateDouble(std::string("{{ variable_tuple[0] }}[" + std::to_string(slotId) + "]").c_str(), false, 0){% endfor %}
+        m_slotted_variables[slotId].m_{{ variable_tuple[0] }} = m_simDevice.CreateDouble(std::string("{{ variable_tuple[0] }}[" + std::to_string(slotId) + "]").c_str(), false, 0);{% endfor %}
     }
 {% endif %}
 
