@@ -15,7 +15,7 @@ plugins {
 
 ext.allwpilibVersion = '2020.2.2'
 ext.rev_library_version = "1.5.0"
-ext.release_version = rev_library_version + "_V2"
+ext.release_version = rev_library_version + "_V3"
 
 repositories {
     mavenCentral()
