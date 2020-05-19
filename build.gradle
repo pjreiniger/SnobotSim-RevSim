@@ -146,12 +146,12 @@ if(!use_real_library)
 }
 
 ext.get_os_arc_name = {
-    
+
     if (org.gradle.internal.os.OperatingSystem.current().isMacOsX())
     {
         return "osx" + getCurrentArch();
     }
-    
+
     return org.gradle.internal.os.OperatingSystem.current().getFamilyName() + getCurrentArch()
 }
 

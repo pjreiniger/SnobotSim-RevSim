@@ -24,8 +24,6 @@ SnobotSim::RevCANSparkMaxDriverWrapper::RevCANSparkMaxDriverWrapper(int aDeviceI
         mDeviceId(aDeviceId),
         m_simDevice(std::string("RevCANSparkMaxDriverWrapper " + std::to_string(aDeviceId)).c_str(), aDeviceId)
 {
-
-
     m_AltEncoderAverageDepth_depth = m_simDevice.CreateDouble("AltEncoderAverageDepth_depth", false, 0);
     m_AltEncoderCountsPerRevolution_cpr = m_simDevice.CreateDouble("AltEncoderCountsPerRevolution_cpr", false, 0);
     m_AltEncoderInverted_inverted = m_simDevice.CreateDouble("AltEncoderInverted_inverted", false, 0);
@@ -140,11 +138,8 @@ SnobotSim::RevCANSparkMaxDriverWrapper::RevCANSparkMaxDriverWrapper(int aDeviceI
     m_pointCommand_pidSlot = m_simDevice.CreateDouble("pointCommand_pidSlot", false, 0);
     m_pointCommand_value = m_simDevice.CreateDouble("pointCommand_value", false, 0);
 
-
-
     for (int slotID = 0; slotID < 6; ++slotID)
     {
-
         m_slotted_variables[slotID].m_DFilter_gain = m_simDevice.CreateDouble(std::string("DFilter_gain[" + std::to_string(slotID) + "]").c_str(), false, 0);
         m_slotted_variables[slotID].m_D_gain = m_simDevice.CreateDouble(std::string("D_gain[" + std::to_string(slotID) + "]").c_str(), false, 0);
         m_slotted_variables[slotID].m_FF_gain = m_simDevice.CreateDouble(std::string("FF_gain[" + std::to_string(slotID) + "]").c_str(), false, 0);
@@ -162,7 +157,6 @@ SnobotSim::RevCANSparkMaxDriverWrapper::RevCANSparkMaxDriverWrapper(int aDeviceI
         m_slotted_variables[slotID].m_SmartMotionMaxVelocity_maxVel = m_simDevice.CreateDouble(std::string("SmartMotionMaxVelocity_maxVel[" + std::to_string(slotID) + "]").c_str(), false, 0);
         m_slotted_variables[slotID].m_SmartMotionMinOutputVelocity_minVel = m_simDevice.CreateDouble(std::string("SmartMotionMinOutputVelocity_minVel[" + std::to_string(slotID) + "]").c_str(), false, 0);
     }
-
 
     Send("Create");
 }
@@ -198,8 +192,6 @@ void SnobotSim::RevCANSparkMaxDriverWrapper::GetFirmwareVersion(c_SparkMax_Firmw
 {
     RECEIVE_HELPER("GetFirmwareVersion", sizeof(*fwVersion));
     PoplateReceiveResults(buffer, fwVersion, buffer_pos);
-
-
 }
 
 void SnobotSim::RevCANSparkMaxDriverWrapper::GetSerialNumber(uint32_t* serialNumber[3])
@@ -209,15 +201,13 @@ void SnobotSim::RevCANSparkMaxDriverWrapper::GetSerialNumber(uint32_t* serialNum
     PoplateReceiveResults(buffer, serialNumber[1], buffer_pos);
     PoplateReceiveResults(buffer, serialNumber[2], buffer_pos);
 
-
-//    *serialNumber = m_SerialNumber_serialNumber.Get();
+    //    *serialNumber = m_SerialNumber_serialNumber.Get();
 }
 
 void SnobotSim::RevCANSparkMaxDriverWrapper::GetDeviceId(int* deviceId)
 {
     RECEIVE_HELPER("GetDeviceId", sizeof(*deviceId));
     PoplateReceiveResults(buffer, deviceId, buffer_pos);
-
 
     *deviceId = m_DeviceId_deviceId.Get();
 }
@@ -234,8 +224,7 @@ void SnobotSim::RevCANSparkMaxDriverWrapper::GetMotorType(c_SparkMax_MotorType* 
     RECEIVE_HELPER("GetMotorType", sizeof(*type));
     PoplateReceiveResults(buffer, type, buffer_pos);
 
-
-//    *type = m_MotorType_type.Get();
+    //    *type = m_MotorType_type.Get();
 }
 
 void SnobotSim::RevCANSparkMaxDriverWrapper::SetPeriodicFramePeriod(c_SparkMax_PeriodicFrame frameId, int periodMs)
@@ -297,9 +286,8 @@ void SnobotSim::RevCANSparkMaxDriverWrapper::GetParameterFloat32(c_SparkMax_Conf
     PoplateReceiveResults(buffer, &paramId, buffer_pos);
     PoplateReceiveResults(buffer, value, buffer_pos);
 
-
     *value = m_ParameterFloat32_value.Get();
-//    *paramId = m_ParameterFloat32_paramId.Get();
+    //    *paramId = m_ParameterFloat32_paramId.Get();
 }
 
 void SnobotSim::RevCANSparkMaxDriverWrapper::GetParameterInt32(c_SparkMax_ConfigParameter paramId, int32_t* value)
@@ -308,9 +296,8 @@ void SnobotSim::RevCANSparkMaxDriverWrapper::GetParameterInt32(c_SparkMax_Config
     PoplateReceiveResults(buffer, &paramId, buffer_pos);
     PoplateReceiveResults(buffer, value, buffer_pos);
 
-
     *value = m_ParameterInt32_value.Get();
-//    *paramId = m_ParameterInt32_paramId.Get();
+    //    *paramId = m_ParameterInt32_paramId.Get();
 }
 
 void SnobotSim::RevCANSparkMaxDriverWrapper::GetParameterUint32(c_SparkMax_ConfigParameter paramId, uint32_t* value)
@@ -319,9 +306,8 @@ void SnobotSim::RevCANSparkMaxDriverWrapper::GetParameterUint32(c_SparkMax_Confi
     PoplateReceiveResults(buffer, &paramId, buffer_pos);
     PoplateReceiveResults(buffer, value, buffer_pos);
 
-
     *value = m_ParameterUint32_value.Get();
-//    *paramId = m_ParameterUint32_paramId.Get();
+    //    *paramId = m_ParameterUint32_paramId.Get();
 }
 
 void SnobotSim::RevCANSparkMaxDriverWrapper::GetParameterBool(c_SparkMax_ConfigParameter paramId, uint8_t* value)
@@ -330,9 +316,8 @@ void SnobotSim::RevCANSparkMaxDriverWrapper::GetParameterBool(c_SparkMax_ConfigP
     PoplateReceiveResults(buffer, &paramId, buffer_pos);
     PoplateReceiveResults(buffer, value, buffer_pos);
 
-
     *value = static_cast<bool>(static_cast<int>(m_ParameterBool_value.Get()));
-//    *paramId = m_ParameterBool_paramId.Get();
+    //    *paramId = m_ParameterBool_paramId.Get();
 }
 
 void SnobotSim::RevCANSparkMaxDriverWrapper::GetPeriodicStatus0(c_SparkMax_PeriodicStatus0* rawframe)
@@ -340,8 +325,7 @@ void SnobotSim::RevCANSparkMaxDriverWrapper::GetPeriodicStatus0(c_SparkMax_Perio
     RECEIVE_HELPER("GetPeriodicStatus0", sizeof(*rawframe));
     PoplateReceiveResults(buffer, rawframe, buffer_pos);
 
-
-//    *rawframe = m_PeriodicStatus0_rawframe.Get();
+    //    *rawframe = m_PeriodicStatus0_rawframe.Get();
 }
 
 void SnobotSim::RevCANSparkMaxDriverWrapper::GetPeriodicStatus1(c_SparkMax_PeriodicStatus1* rawframe)
@@ -349,8 +333,7 @@ void SnobotSim::RevCANSparkMaxDriverWrapper::GetPeriodicStatus1(c_SparkMax_Perio
     RECEIVE_HELPER("GetPeriodicStatus1", sizeof(*rawframe));
     PoplateReceiveResults(buffer, rawframe, buffer_pos);
 
-
-//    *rawframe = m_PeriodicStatus1_rawframe.Get();
+    //    *rawframe = m_PeriodicStatus1_rawframe.Get();
 }
 
 void SnobotSim::RevCANSparkMaxDriverWrapper::GetPeriodicStatus2(c_SparkMax_PeriodicStatus2* rawframe)
@@ -358,8 +341,7 @@ void SnobotSim::RevCANSparkMaxDriverWrapper::GetPeriodicStatus2(c_SparkMax_Perio
     RECEIVE_HELPER("GetPeriodicStatus2", sizeof(*rawframe));
     PoplateReceiveResults(buffer, rawframe, buffer_pos);
 
-
-//    *rawframe = m_PeriodicStatus2_rawframe.Get();
+    //    *rawframe = m_PeriodicStatus2_rawframe.Get();
 }
 
 void SnobotSim::RevCANSparkMaxDriverWrapper::GetPeriodicStatus3(c_SparkMax_PeriodicStatus3* rawframe)
@@ -367,8 +349,7 @@ void SnobotSim::RevCANSparkMaxDriverWrapper::GetPeriodicStatus3(c_SparkMax_Perio
     RECEIVE_HELPER("GetPeriodicStatus3", sizeof(*rawframe));
     PoplateReceiveResults(buffer, rawframe, buffer_pos);
 
-
-//    *rawframe = m_PeriodicStatus3_rawframe.Get();
+    //    *rawframe = m_PeriodicStatus3_rawframe.Get();
 }
 
 void SnobotSim::RevCANSparkMaxDriverWrapper::GetPeriodicStatus4(c_SparkMax_PeriodicStatus4* rawframe)
@@ -376,8 +357,7 @@ void SnobotSim::RevCANSparkMaxDriverWrapper::GetPeriodicStatus4(c_SparkMax_Perio
     RECEIVE_HELPER("GetPeriodicStatus4", sizeof(*rawframe));
     PoplateReceiveResults(buffer, rawframe, buffer_pos);
 
-
-//    *rawframe = m_PeriodicStatus4_rawframe.Get();
+    //    *rawframe = m_PeriodicStatus4_rawframe.Get();
 }
 
 void SnobotSim::RevCANSparkMaxDriverWrapper::SetEncoderPosition(float position)
@@ -432,8 +412,7 @@ void SnobotSim::RevCANSparkMaxDriverWrapper::GetDRVStatus(c_SparkMax_DRVStatus* 
     RECEIVE_HELPER("GetDRVStatus", sizeof(*drvStatus));
     PoplateReceiveResults(buffer, drvStatus, buffer_pos);
 
-
-//    *drvStatus = m_DRVStatus_drvStatus.Get();
+    //    *drvStatus = m_DRVStatus_drvStatus.Get();
 }
 
 void SnobotSim::RevCANSparkMaxDriverWrapper::SetInverted(uint8_t inverted)
@@ -447,7 +426,6 @@ void SnobotSim::RevCANSparkMaxDriverWrapper::GetInverted(uint8_t* inverted)
 {
     RECEIVE_HELPER("GetInverted", sizeof(*inverted));
     PoplateReceiveResults(buffer, inverted, buffer_pos);
-
 
     *inverted = m_Inverted_inverted.Get();
 }
@@ -468,7 +446,6 @@ void SnobotSim::RevCANSparkMaxDriverWrapper::GetSmartCurrentLimit(uint8_t* stall
     PoplateReceiveResults(buffer, freeLimit, buffer_pos);
     PoplateReceiveResults(buffer, limitRPM, buffer_pos);
 
-
     *stallLimit = m_SmartCurrentLimit_stallLimit.Get();
     *limitRPM = m_SmartCurrentLimit_limitRPM.Get();
     *freeLimit = m_SmartCurrentLimit_freeLimit.Get();
@@ -488,7 +465,6 @@ void SnobotSim::RevCANSparkMaxDriverWrapper::GetSecondaryCurrentLimit(float* lim
     PoplateReceiveResults(buffer, limit, buffer_pos);
     PoplateReceiveResults(buffer, chopCycles, buffer_pos);
 
-
     *limit = m_SecondaryCurrentLimit_limit.Get();
     *chopCycles = m_SecondaryCurrentLimit_chopCycles.Get();
 }
@@ -505,8 +481,7 @@ void SnobotSim::RevCANSparkMaxDriverWrapper::GetIdleMode(c_SparkMax_IdleMode* id
     RECEIVE_HELPER("GetIdleMode", sizeof(*idlemode));
     PoplateReceiveResults(buffer, idlemode, buffer_pos);
 
-
-//    *idlemode = m_IdleMode_idlemode.Get();
+    //    *idlemode = m_IdleMode_idlemode.Get();
 }
 
 void SnobotSim::RevCANSparkMaxDriverWrapper::EnableVoltageCompensation(float nominalVoltage)
@@ -521,13 +496,11 @@ void SnobotSim::RevCANSparkMaxDriverWrapper::GetVoltageCompensationNominalVoltag
     RECEIVE_HELPER("GetVoltageCompensationNominalVoltage", sizeof(*nominalVoltage));
     PoplateReceiveResults(buffer, nominalVoltage, buffer_pos);
 
-
     *nominalVoltage = m_VoltageCompensationNominalVoltage_nominalVoltage.Get();
 }
 
 void SnobotSim::RevCANSparkMaxDriverWrapper::DisableVoltageCompensation()
 {
-
     Send("DisableVoltageCompensation");
 }
 
@@ -542,7 +515,6 @@ void SnobotSim::RevCANSparkMaxDriverWrapper::GetOpenLoopRampRate(float* rate)
 {
     RECEIVE_HELPER("GetOpenLoopRampRate", sizeof(*rate));
     PoplateReceiveResults(buffer, rate, buffer_pos);
-
 
     *rate = m_OpenLoopRampRate_rate.Get();
 }
@@ -559,7 +531,6 @@ void SnobotSim::RevCANSparkMaxDriverWrapper::GetClosedLoopRampRate(float* rate)
     RECEIVE_HELPER("GetClosedLoopRampRate", sizeof(*rate));
     PoplateReceiveResults(buffer, rate, buffer_pos);
 
-
     *rate = m_ClosedLoopRampRate_rate.Get();
 }
 
@@ -567,7 +538,6 @@ void SnobotSim::RevCANSparkMaxDriverWrapper::IsFollower(uint8_t* isFollower)
 {
     RECEIVE_HELPER("IsFollower", sizeof(*isFollower));
     PoplateReceiveResults(buffer, isFollower, buffer_pos);
-
 
     *isFollower = m_Follower_isFollower.Get();
 }
@@ -577,7 +547,6 @@ void SnobotSim::RevCANSparkMaxDriverWrapper::GetFaults(uint16_t* faults)
     RECEIVE_HELPER("GetFaults", sizeof(*faults));
     PoplateReceiveResults(buffer, faults, buffer_pos);
 
-
     *faults = m_Faults_faults.Get();
 }
 
@@ -585,7 +554,6 @@ void SnobotSim::RevCANSparkMaxDriverWrapper::GetStickyFaults(uint16_t* stickyFau
 {
     RECEIVE_HELPER("GetStickyFaults", sizeof(*stickyFaults));
     PoplateReceiveResults(buffer, stickyFaults, buffer_pos);
-
 
     *stickyFaults = m_StickyFaults_stickyFaults.Get();
 }
@@ -596,8 +564,7 @@ void SnobotSim::RevCANSparkMaxDriverWrapper::GetFault(c_SparkMax_FaultID faultId
     PoplateReceiveResults(buffer, &faultId, buffer_pos);
     PoplateReceiveResults(buffer, fault, buffer_pos);
 
-
-//    *faultId = m_Fault_faultId.Get();
+    //    *faultId = m_Fault_faultId.Get();
     *fault = m_Fault_fault.Get();
 }
 
@@ -607,16 +574,14 @@ void SnobotSim::RevCANSparkMaxDriverWrapper::GetStickyFault(c_SparkMax_FaultID f
     PoplateReceiveResults(buffer, &faultId, buffer_pos);
     PoplateReceiveResults(buffer, stickyfault, buffer_pos);
 
-
     *stickyfault = m_StickyFault_stickyfault.Get();
-//    *faultId = m_StickyFault_faultId.Get();
+    //    *faultId = m_StickyFault_faultId.Get();
 }
 
 void SnobotSim::RevCANSparkMaxDriverWrapper::GetBusVoltage(float* busVoltage)
 {
     RECEIVE_HELPER("GetBusVoltage", sizeof(*busVoltage));
     PoplateReceiveResults(buffer, busVoltage, buffer_pos);
-
 
     *busVoltage = m_BusVoltage_busVoltage.Get();
 }
@@ -626,7 +591,6 @@ void SnobotSim::RevCANSparkMaxDriverWrapper::GetAppliedOutput(float* appliedOutp
     RECEIVE_HELPER("GetAppliedOutput", sizeof(*appliedOutput));
     PoplateReceiveResults(buffer, appliedOutput, buffer_pos);
 
-
     *appliedOutput = m_AppliedOutput_appliedOutput.Get();
 }
 
@@ -634,7 +598,6 @@ void SnobotSim::RevCANSparkMaxDriverWrapper::GetOutputCurrent(float* outputCurre
 {
     RECEIVE_HELPER("GetOutputCurrent", sizeof(*outputCurrent));
     PoplateReceiveResults(buffer, outputCurrent, buffer_pos);
-
 
     *outputCurrent = m_OutputCurrent_outputCurrent.Get();
 }
@@ -644,19 +607,16 @@ void SnobotSim::RevCANSparkMaxDriverWrapper::GetMotorTemperature(float* motorTem
     RECEIVE_HELPER("GetMotorTemperature", sizeof(*motorTemperature));
     PoplateReceiveResults(buffer, motorTemperature, buffer_pos);
 
-
     *motorTemperature = m_MotorTemperature_motorTemperature.Get();
 }
 
 void SnobotSim::RevCANSparkMaxDriverWrapper::ClearFaults()
 {
-
     Send("ClearFaults");
 }
 
 void SnobotSim::RevCANSparkMaxDriverWrapper::BurnFlash()
 {
-
     Send("BurnFlash");
 }
 void SnobotSim::RevCANSparkMaxDriverWrapper::SetCANTimeout(int timeoutMs)
@@ -678,15 +638,14 @@ void SnobotSim::RevCANSparkMaxDriverWrapper::IsSoftLimitEnabled(c_SparkMax_Limit
     PoplateReceiveResults(buffer, &dir, buffer_pos);
     PoplateReceiveResults(buffer, enabled, buffer_pos);
 
-
     *enabled = m_SoftLimitEnabled_enabled.Get();
-//    *dir = m_SoftLimitEnabled_dir.Get();
+    //    *dir = m_SoftLimitEnabled_dir.Get();
 }
 
 void SnobotSim::RevCANSparkMaxDriverWrapper::SetSoftLimit(c_SparkMax_LimitDirection dir, float limit)
 {
     m_SoftLimit_limit.Set(limit);
-//    m_SoftLimit_dir.Set(dir);
+    //    m_SoftLimit_dir.Set(dir);
 
     Send("SetSoftLimit", dir, limit);
 }
@@ -697,9 +656,8 @@ void SnobotSim::RevCANSparkMaxDriverWrapper::GetSoftLimit(c_SparkMax_LimitDirect
     PoplateReceiveResults(buffer, &dir, buffer_pos);
     PoplateReceiveResults(buffer, limit, buffer_pos);
 
-
     *limit = m_SoftLimit_limit.Get();
-//    *dir = m_SoftLimit_dir.Get();
+    //    *dir = m_SoftLimit_dir.Get();
 }
 
 void SnobotSim::RevCANSparkMaxDriverWrapper::SetSensorType(c_SparkMax_EncoderType sensorType)
@@ -711,7 +669,6 @@ void SnobotSim::RevCANSparkMaxDriverWrapper::SetSensorType(c_SparkMax_EncoderTyp
 
 void SnobotSim::RevCANSparkMaxDriverWrapper::Identify()
 {
-
     Send("Identify");
 }
 
@@ -729,9 +686,8 @@ void SnobotSim::RevCANSparkMaxDriverWrapper::GetLimitPolarity(c_SparkMax_LimitDi
     PoplateReceiveResults(buffer, &sw, buffer_pos);
     PoplateReceiveResults(buffer, polarity, buffer_pos);
 
-
-//    *sw = m_LimitPolarity_sw.Get();
-//    *polarity = m_LimitPolarity_polarity.Get();
+    //    *sw = m_LimitPolarity_sw.Get();
+    //    *polarity = m_LimitPolarity_polarity.Get();
 }
 
 void SnobotSim::RevCANSparkMaxDriverWrapper::GetLimitSwitch(c_SparkMax_LimitDirection sw, uint8_t* limit)
@@ -740,8 +696,7 @@ void SnobotSim::RevCANSparkMaxDriverWrapper::GetLimitSwitch(c_SparkMax_LimitDire
     PoplateReceiveResults(buffer, &sw, buffer_pos);
     PoplateReceiveResults(buffer, limit, buffer_pos);
 
-
-//    *sw = m_LimitSwitch_sw.Get();
+    //    *sw = m_LimitSwitch_sw.Get();
     *limit = m_LimitSwitch_limit.Get();
 }
 
@@ -759,8 +714,7 @@ void SnobotSim::RevCANSparkMaxDriverWrapper::IsLimitEnabled(c_SparkMax_LimitDire
     PoplateReceiveResults(buffer, &sw, buffer_pos);
     PoplateReceiveResults(buffer, enabled, buffer_pos);
 
-
-//    *sw = m_LimitEnabled_sw.Get();
+    //    *sw = m_LimitEnabled_sw.Get();
     *enabled = m_LimitEnabled_enabled.Get();
 }
 
@@ -768,7 +722,6 @@ void SnobotSim::RevCANSparkMaxDriverWrapper::GetAnalogPosition(float* position)
 {
     RECEIVE_HELPER("GetAnalogPosition", sizeof(*position));
     PoplateReceiveResults(buffer, position, buffer_pos);
-
 
     *position = m_AnalogPosition_position.Get();
 }
@@ -778,7 +731,6 @@ void SnobotSim::RevCANSparkMaxDriverWrapper::GetAnalogVelocity(float* velocity)
     RECEIVE_HELPER("GetAnalogVelocity", sizeof(*velocity));
     PoplateReceiveResults(buffer, velocity, buffer_pos);
 
-
     *velocity = m_AnalogVelocity_velocity.Get();
 }
 
@@ -786,7 +738,6 @@ void SnobotSim::RevCANSparkMaxDriverWrapper::GetAnalogVoltage(float* voltage)
 {
     RECEIVE_HELPER("GetAnalogVoltage", sizeof(*voltage));
     PoplateReceiveResults(buffer, voltage, buffer_pos);
-
 
     *voltage = m_AnalogVoltage_voltage.Get();
 }
@@ -810,7 +761,6 @@ void SnobotSim::RevCANSparkMaxDriverWrapper::GetAnalogPositionConversionFactor(f
     RECEIVE_HELPER("GetAnalogPositionConversionFactor", sizeof(*conversion));
     PoplateReceiveResults(buffer, conversion, buffer_pos);
 
-
     *conversion = m_AnalogPositionConversionFactor_conversion.Get();
 }
 
@@ -818,7 +768,6 @@ void SnobotSim::RevCANSparkMaxDriverWrapper::GetAnalogVelocityConversionFactor(f
 {
     RECEIVE_HELPER("GetAnalogVelocityConversionFactor", sizeof(*conversion));
     PoplateReceiveResults(buffer, conversion, buffer_pos);
-
 
     *conversion = m_AnalogVelocityConversionFactor_conversion.Get();
 }
@@ -835,7 +784,6 @@ void SnobotSim::RevCANSparkMaxDriverWrapper::GetAnalogInverted(uint8_t* inverted
     RECEIVE_HELPER("GetAnalogInverted", sizeof(*inverted));
     PoplateReceiveResults(buffer, inverted, buffer_pos);
 
-
     *inverted = m_AnalogInverted_inverted.Get();
 }
 
@@ -850,7 +798,6 @@ void SnobotSim::RevCANSparkMaxDriverWrapper::GetAnalogAverageDepth(uint32_t* dep
 {
     RECEIVE_HELPER("GetAnalogAverageDepth", sizeof(*depth));
     PoplateReceiveResults(buffer, depth, buffer_pos);
-
 
     *depth = m_AnalogAverageDepth_depth.Get();
 }
@@ -867,7 +814,6 @@ void SnobotSim::RevCANSparkMaxDriverWrapper::GetAnalogMeasurementPeriod(uint32_t
     RECEIVE_HELPER("GetAnalogMeasurementPeriod", sizeof(*samples));
     PoplateReceiveResults(buffer, samples, buffer_pos);
 
-
     *samples = m_AnalogMeasurementPeriod_samples.Get();
 }
 
@@ -883,15 +829,13 @@ void SnobotSim::RevCANSparkMaxDriverWrapper::GetAnalogMode(c_SparkMax_AnalogMode
     RECEIVE_HELPER("GetAnalogMode", sizeof(*mode));
     PoplateReceiveResults(buffer, mode, buffer_pos);
 
-
-//    *mode = m_AnalogMode_mode.Get();
+    //    *mode = m_AnalogMode_mode.Get();
 }
 
 void SnobotSim::RevCANSparkMaxDriverWrapper::GetEncoderPosition(float* position)
 {
     RECEIVE_HELPER("GetEncoderPosition", sizeof(*position));
     PoplateReceiveResults(buffer, position, buffer_pos);
-
 
     *position = m_EncoderPosition_position.Get();
 }
@@ -900,7 +844,6 @@ void SnobotSim::RevCANSparkMaxDriverWrapper::GetEncoderVelocity(float* velocity)
 {
     RECEIVE_HELPER("GetEncoderVelocity", sizeof(*velocity));
     PoplateReceiveResults(buffer, velocity, buffer_pos);
-
 
     *velocity = m_EncoderVelocity_velocity.Get();
 }
@@ -924,7 +867,6 @@ void SnobotSim::RevCANSparkMaxDriverWrapper::GetPositionConversionFactor(float* 
     RECEIVE_HELPER("GetPositionConversionFactor", sizeof(*conversion));
     PoplateReceiveResults(buffer, conversion, buffer_pos);
 
-
     *conversion = m_PositionConversionFactor_conversion.Get();
 }
 
@@ -932,7 +874,6 @@ void SnobotSim::RevCANSparkMaxDriverWrapper::GetVelocityConversionFactor(float* 
 {
     RECEIVE_HELPER("GetVelocityConversionFactor", sizeof(*conversion));
     PoplateReceiveResults(buffer, conversion, buffer_pos);
-
 
     *conversion = m_VelocityConversionFactor_conversion.Get();
 }
@@ -949,7 +890,6 @@ void SnobotSim::RevCANSparkMaxDriverWrapper::GetAverageDepth(uint32_t* depth)
     RECEIVE_HELPER("GetAverageDepth", sizeof(*depth));
     PoplateReceiveResults(buffer, depth, buffer_pos);
 
-
     *depth = m_AverageDepth_depth.Get();
 }
 
@@ -964,7 +904,6 @@ void SnobotSim::RevCANSparkMaxDriverWrapper::GetMeasurementPeriod(uint32_t* samp
 {
     RECEIVE_HELPER("GetMeasurementPeriod", sizeof(*samples));
     PoplateReceiveResults(buffer, samples, buffer_pos);
-
 
     *samples = m_MeasurementPeriod_samples.Get();
 }
@@ -981,7 +920,6 @@ void SnobotSim::RevCANSparkMaxDriverWrapper::GetCountsPerRevolution(uint32_t* cp
     RECEIVE_HELPER("GetCountsPerRevolution", sizeof(*cpr));
     PoplateReceiveResults(buffer, cpr, buffer_pos);
 
-
     *cpr = m_CountsPerRevolution_cpr.Get();
 }
 
@@ -997,7 +935,6 @@ void SnobotSim::RevCANSparkMaxDriverWrapper::GetEncoderInverted(uint8_t* inverte
     RECEIVE_HELPER("GetEncoderInverted", sizeof(*inverted));
     PoplateReceiveResults(buffer, inverted, buffer_pos);
 
-
     *inverted = m_EncoderInverted_inverted.Get();
 }
 
@@ -1006,7 +943,6 @@ void SnobotSim::RevCANSparkMaxDriverWrapper::GetAltEncoderPosition(float* positi
     RECEIVE_HELPER("GetAltEncoderPosition", sizeof(*position));
     PoplateReceiveResults(buffer, position, buffer_pos);
 
-
     *position = m_AltEncoderPosition_position.Get();
 }
 
@@ -1014,7 +950,6 @@ void SnobotSim::RevCANSparkMaxDriverWrapper::GetAltEncoderVelocity(float* veloci
 {
     RECEIVE_HELPER("GetAltEncoderVelocity", sizeof(*velocity));
     PoplateReceiveResults(buffer, velocity, buffer_pos);
-
 
     *velocity = m_AltEncoderVelocity_velocity.Get();
 }
@@ -1038,7 +973,6 @@ void SnobotSim::RevCANSparkMaxDriverWrapper::GetAltEncoderPositionFactor(float* 
     RECEIVE_HELPER("GetAltEncoderPositionFactor", sizeof(*conversion));
     PoplateReceiveResults(buffer, conversion, buffer_pos);
 
-
     *conversion = m_AltEncoderPositionFactor_conversion.Get();
 }
 
@@ -1046,7 +980,6 @@ void SnobotSim::RevCANSparkMaxDriverWrapper::GetAltEncoderVelocityFactor(float* 
 {
     RECEIVE_HELPER("GetAltEncoderVelocityFactor", sizeof(*conversion));
     PoplateReceiveResults(buffer, conversion, buffer_pos);
-
 
     *conversion = m_AltEncoderVelocityFactor_conversion.Get();
 }
@@ -1063,7 +996,6 @@ void SnobotSim::RevCANSparkMaxDriverWrapper::GetAltEncoderAverageDepth(uint32_t*
     RECEIVE_HELPER("GetAltEncoderAverageDepth", sizeof(*depth));
     PoplateReceiveResults(buffer, depth, buffer_pos);
 
-
     *depth = m_AltEncoderAverageDepth_depth.Get();
 }
 
@@ -1078,7 +1010,6 @@ void SnobotSim::RevCANSparkMaxDriverWrapper::GetAltEncoderMeasurementPeriod(uint
 {
     RECEIVE_HELPER("GetAltEncoderMeasurementPeriod", sizeof(*samples));
     PoplateReceiveResults(buffer, samples, buffer_pos);
-
 
     *samples = m_AltEncoderMeasurementPeriod_samples.Get();
 }
@@ -1095,7 +1026,6 @@ void SnobotSim::RevCANSparkMaxDriverWrapper::GetAltEncoderCountsPerRevolution(ui
     RECEIVE_HELPER("GetAltEncoderCountsPerRevolution", sizeof(*cpr));
     PoplateReceiveResults(buffer, cpr, buffer_pos);
 
-
     *cpr = m_AltEncoderCountsPerRevolution_cpr.Get();
 }
 
@@ -1110,7 +1040,6 @@ void SnobotSim::RevCANSparkMaxDriverWrapper::GetAltEncoderInverted(uint8_t* inve
 {
     RECEIVE_HELPER("GetAltEncoderInverted", sizeof(*inverted));
     PoplateReceiveResults(buffer, inverted, buffer_pos);
-
 
     *inverted = m_AltEncoderInverted_inverted.Get();
 }
@@ -1127,8 +1056,7 @@ void SnobotSim::RevCANSparkMaxDriverWrapper::GetDataPortConfig(c_SparkMax_DataPo
     RECEIVE_HELPER("GetDataPortConfig", sizeof(*config));
     PoplateReceiveResults(buffer, config, buffer_pos);
 
-
-//    *config = m_DataPortConfig_config.Get();
+    //    *config = m_DataPortConfig_config.Get();
 }
 
 void SnobotSim::RevCANSparkMaxDriverWrapper::SetP(int slotID, float gain)
@@ -1188,7 +1116,6 @@ void SnobotSim::RevCANSparkMaxDriverWrapper::GetP(int slotID, float* gain)
     PoplateReceiveResults(buffer, gain, buffer_pos);
 
     *gain = m_slotted_variables[slotID].m_P_gain.Get();
-
 }
 
 void SnobotSim::RevCANSparkMaxDriverWrapper::GetI(int slotID, float* gain)
@@ -1198,7 +1125,6 @@ void SnobotSim::RevCANSparkMaxDriverWrapper::GetI(int slotID, float* gain)
     PoplateReceiveResults(buffer, gain, buffer_pos);
 
     *gain = m_slotted_variables[slotID].m_I_gain.Get();
-
 }
 
 void SnobotSim::RevCANSparkMaxDriverWrapper::GetD(int slotID, float* gain)
@@ -1208,7 +1134,6 @@ void SnobotSim::RevCANSparkMaxDriverWrapper::GetD(int slotID, float* gain)
     PoplateReceiveResults(buffer, gain, buffer_pos);
 
     *gain = m_slotted_variables[slotID].m_D_gain.Get();
-
 }
 
 void SnobotSim::RevCANSparkMaxDriverWrapper::GetDFilter(int slotID, float* gain)
@@ -1218,7 +1143,6 @@ void SnobotSim::RevCANSparkMaxDriverWrapper::GetDFilter(int slotID, float* gain)
     PoplateReceiveResults(buffer, gain, buffer_pos);
 
     *gain = m_slotted_variables[slotID].m_DFilter_gain.Get();
-
 }
 
 void SnobotSim::RevCANSparkMaxDriverWrapper::GetFF(int slotID, float* gain)
@@ -1228,7 +1152,6 @@ void SnobotSim::RevCANSparkMaxDriverWrapper::GetFF(int slotID, float* gain)
     PoplateReceiveResults(buffer, gain, buffer_pos);
 
     *gain = m_slotted_variables[slotID].m_FF_gain.Get();
-
 }
 
 void SnobotSim::RevCANSparkMaxDriverWrapper::GetIZone(int slotID, float* IZone)
@@ -1238,7 +1161,6 @@ void SnobotSim::RevCANSparkMaxDriverWrapper::GetIZone(int slotID, float* IZone)
     PoplateReceiveResults(buffer, IZone, buffer_pos);
 
     *IZone = m_slotted_variables[slotID].m_IZone_IZone.Get();
-
 }
 
 void SnobotSim::RevCANSparkMaxDriverWrapper::GetOutputMin(int slotID, float* min)
@@ -1248,7 +1170,6 @@ void SnobotSim::RevCANSparkMaxDriverWrapper::GetOutputMin(int slotID, float* min
     PoplateReceiveResults(buffer, min, buffer_pos);
 
     *min = m_slotted_variables[slotID].m_OutputMin_min.Get();
-
 }
 
 void SnobotSim::RevCANSparkMaxDriverWrapper::GetOutputMax(int slotID, float* max)
@@ -1258,7 +1179,6 @@ void SnobotSim::RevCANSparkMaxDriverWrapper::GetOutputMax(int slotID, float* max
     PoplateReceiveResults(buffer, max, buffer_pos);
 
     *max = m_slotted_variables[slotID].m_OutputMax_max.Get();
-
 }
 
 void SnobotSim::RevCANSparkMaxDriverWrapper::SetSmartMotionMaxVelocity(int slotID, float maxVel)
@@ -1303,7 +1223,6 @@ void SnobotSim::RevCANSparkMaxDriverWrapper::GetSmartMotionMaxVelocity(int slotI
     PoplateReceiveResults(buffer, maxVel, buffer_pos);
 
     *maxVel = m_slotted_variables[slotID].m_SmartMotionMaxVelocity_maxVel.Get();
-
 }
 
 void SnobotSim::RevCANSparkMaxDriverWrapper::GetSmartMotionMaxAccel(int slotID, float* maxAccel)
@@ -1313,7 +1232,6 @@ void SnobotSim::RevCANSparkMaxDriverWrapper::GetSmartMotionMaxAccel(int slotID, 
     PoplateReceiveResults(buffer, maxAccel, buffer_pos);
 
     *maxAccel = m_slotted_variables[slotID].m_SmartMotionMaxAccel_maxAccel.Get();
-
 }
 
 void SnobotSim::RevCANSparkMaxDriverWrapper::GetSmartMotionMinOutputVelocity(int slotID, float* minVel)
@@ -1323,7 +1241,6 @@ void SnobotSim::RevCANSparkMaxDriverWrapper::GetSmartMotionMinOutputVelocity(int
     PoplateReceiveResults(buffer, minVel, buffer_pos);
 
     *minVel = m_slotted_variables[slotID].m_SmartMotionMinOutputVelocity_minVel.Get();
-
 }
 
 void SnobotSim::RevCANSparkMaxDriverWrapper::GetSmartMotionAccelStrategy(int slotID, c_SparkMax_AccelStrategy* accelStrategy)
@@ -1332,8 +1249,7 @@ void SnobotSim::RevCANSparkMaxDriverWrapper::GetSmartMotionAccelStrategy(int slo
     PoplateReceiveResults(buffer, &slotID, buffer_pos);
     PoplateReceiveResults(buffer, accelStrategy, buffer_pos);
 
-//    *accelStrategy = m_slotted_variables[slotID].m_SmartMotionAccelStrategy_accelStrategy.Get();
-
+    //    *accelStrategy = m_slotted_variables[slotID].m_SmartMotionAccelStrategy_accelStrategy.Get();
 }
 
 void SnobotSim::RevCANSparkMaxDriverWrapper::GetSmartMotionAllowedClosedLoopError(int slotID, float* allowedError)
@@ -1343,7 +1259,6 @@ void SnobotSim::RevCANSparkMaxDriverWrapper::GetSmartMotionAllowedClosedLoopErro
     PoplateReceiveResults(buffer, allowedError, buffer_pos);
 
     *allowedError = m_slotted_variables[slotID].m_SmartMotionAllowedClosedLoopError_allowedError.Get();
-
 }
 
 void SnobotSim::RevCANSparkMaxDriverWrapper::SetIMaxAccum(int slotID, float iMaxAccum)
@@ -1360,7 +1275,6 @@ void SnobotSim::RevCANSparkMaxDriverWrapper::GetIMaxAccum(int slotID, float* iMa
     PoplateReceiveResults(buffer, iMaxAccum, buffer_pos);
 
     *iMaxAccum = m_slotted_variables[slotID].m_IMaxAccum_iMaxAccum.Get();
-
 }
 
 void SnobotSim::RevCANSparkMaxDriverWrapper::SetIAccum(float iAccum)
@@ -1374,7 +1288,6 @@ void SnobotSim::RevCANSparkMaxDriverWrapper::GetIAccum(float* iAccum)
 {
     RECEIVE_HELPER("GetIAccum", sizeof(*iAccum));
     PoplateReceiveResults(buffer, iAccum, buffer_pos);
-
 
     *iAccum = m_IAccum_iAccum.Get();
 }
@@ -1390,7 +1303,6 @@ void SnobotSim::RevCANSparkMaxDriverWrapper::GetFeedbackDeviceID(uint32_t* id)
 {
     RECEIVE_HELPER("GetFeedbackDeviceID", sizeof(*id));
     PoplateReceiveResults(buffer, id, buffer_pos);
-
 
     *id = m_FeedbackDeviceID_id.Get();
 }
@@ -1412,7 +1324,6 @@ void SnobotSim::RevCANSparkMaxDriverWrapper::SetLastError(c_SparkMax_ErrorCode e
 
 void SnobotSim::RevCANSparkMaxDriverWrapper::GetLastError()
 {
-
     Send("GetLastError");
 }
 
@@ -1424,18 +1335,16 @@ void SnobotSim::RevCANSparkMaxDriverWrapper::ReadTelemetryStream(uint32_t teleme
     PoplateReceiveResults(buffer, ids, buffer_pos);
     PoplateReceiveResults(buffer, &numOfStreams, buffer_pos);
 
-
-//    *telemetryHandle = m_ReadTelemetryStream_telemetryHandle.Get();
-//    *numOfStreams = m_ReadTelemetryStream_numOfStreams.Get();
-//    *messages = m_ReadTelemetryStream_messages.Get();
-//    *ids = m_ReadTelemetryStream_ids.Get();
+    //    *telemetryHandle = m_ReadTelemetryStream_telemetryHandle.Get();
+    //    *numOfStreams = m_ReadTelemetryStream_numOfStreams.Get();
+    //    *messages = m_ReadTelemetryStream_messages.Get();
+    //    *ids = m_ReadTelemetryStream_ids.Get();
 }
 
 void SnobotSim::RevCANSparkMaxDriverWrapper::OpenTelemetryStream(uint32_t* telemetryHandle)
 {
     RECEIVE_HELPER("OpenTelemetryStream", sizeof(*telemetryHandle));
     PoplateReceiveResults(buffer, telemetryHandle, buffer_pos);
-
 
     *telemetryHandle = m_OpenTelemetryStream_telemetryHandle.Get();
 }
@@ -1452,7 +1361,5 @@ void SnobotSim::RevCANSparkMaxDriverWrapper::ListTelemetryStream(c_SparkMax_Tele
     RECEIVE_HELPER("ListTelemetryStream", sizeof(*messages));
     PoplateReceiveResults(buffer, messages, buffer_pos);
 
-
-//    *messages = m_ListTelemetryStream_messages.Get();
+    //    *messages = m_ListTelemetryStream_messages.Get();
 }
-

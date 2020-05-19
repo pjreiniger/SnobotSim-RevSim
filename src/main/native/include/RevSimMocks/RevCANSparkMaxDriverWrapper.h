@@ -173,10 +173,8 @@ public:
     void CloseTelemetryStream(uint32_t telemetryHandle);
     void ListTelemetryStream(c_SparkMax_TelemetryMessage* messages);
 
-
 protected:
     hal::SimDevice m_simDevice;
-
 
     hal::SimDouble m_AltEncoderAverageDepth_depth;
     hal::SimDouble m_AltEncoderCountsPerRevolution_cpr;
@@ -292,33 +290,27 @@ protected:
     hal::SimDouble m_pointCommand_pidSlot;
     hal::SimDouble m_pointCommand_value;
 
+    struct SlottedVariables
+    {
+        hal::SimDouble m_DFilter_gain;
+        hal::SimDouble m_D_gain;
+        hal::SimDouble m_FF_gain;
+        hal::SimDouble m_IMaxAccum_iMaxAccum;
+        hal::SimDouble m_IZone_IZone;
+        hal::SimDouble m_I_gain;
+        hal::SimDouble m_OutputMax_max;
+        hal::SimDouble m_OutputMin_min;
+        hal::SimDouble m_OutputRange_max;
+        hal::SimDouble m_OutputRange_min;
+        hal::SimDouble m_P_gain;
+        hal::SimDouble m_SmartMotionAccelStrategy_accelStrategy;
+        hal::SimDouble m_SmartMotionAllowedClosedLoopError_allowedError;
+        hal::SimDouble m_SmartMotionMaxAccel_maxAccel;
+        hal::SimDouble m_SmartMotionMaxVelocity_maxVel;
+        hal::SimDouble m_SmartMotionMinOutputVelocity_minVel;
+    };
 
-
-struct SlottedVariables
-{
-
-    hal::SimDouble m_DFilter_gain;
-    hal::SimDouble m_D_gain;
-    hal::SimDouble m_FF_gain;
-    hal::SimDouble m_IMaxAccum_iMaxAccum;
-    hal::SimDouble m_IZone_IZone;
-    hal::SimDouble m_I_gain;
-    hal::SimDouble m_OutputMax_max;
-    hal::SimDouble m_OutputMin_min;
-    hal::SimDouble m_OutputRange_max;
-    hal::SimDouble m_OutputRange_min;
-    hal::SimDouble m_P_gain;
-    hal::SimDouble m_SmartMotionAccelStrategy_accelStrategy;
-    hal::SimDouble m_SmartMotionAllowedClosedLoopError_allowedError;
-    hal::SimDouble m_SmartMotionMaxAccel_maxAccel;
-    hal::SimDouble m_SmartMotionMaxVelocity_maxVel;
-    hal::SimDouble m_SmartMotionMinOutputVelocity_minVel;
-};
-
-SlottedVariables m_slotted_variables[6];
-
-
-
+    SlottedVariables m_slotted_variables[6];
 };
 
 } // namespace SnobotSim
