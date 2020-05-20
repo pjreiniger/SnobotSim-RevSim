@@ -30,7 +30,6 @@ public:
     void GetMotorType(c_SparkMax_MotorType* type);
     void SetPeriodicFramePeriod(c_SparkMax_PeriodicFrame frameId, int periodMs);
     void SetControlFramePeriod(int periodMs);
-    int GetControlFramePeriod();
     void SetParameterFloat32(c_SparkMax_ConfigParameter paramId, float value);
     void SetParameterInt32(c_SparkMax_ConfigParameter paramId, int32_t value);
     void SetParameterUint32(c_SparkMax_ConfigParameter paramId, uint32_t value);
@@ -77,7 +76,6 @@ public:
     void GetMotorTemperature(float* motorTemperature);
     void ClearFaults();
     void BurnFlash();
-    void SetCANTimeout(int timeoutMs);
     void EnableSoftLimit(c_SparkMax_LimitDirection dir, uint8_t enable);
     void IsSoftLimitEnabled(c_SparkMax_LimitDirection dir, uint8_t* enabled);
     void SetSoftLimit(c_SparkMax_LimitDirection dir, float limit);
@@ -172,6 +170,9 @@ public:
     void OpenTelemetryStream(uint32_t* telemetryHandle);
     void CloseTelemetryStream(uint32_t telemetryHandle);
     void ListTelemetryStream(c_SparkMax_TelemetryMessage* messages);
+
+    int GetControlFramePeriod();
+    void SetCANTimeout(int timeoutMs);
 
 protected:
     hal::SimDevice m_simDevice;
@@ -271,7 +272,9 @@ protected:
     hal::SimDouble m_SecondaryCurrentLimit_chopCycles;
     hal::SimDouble m_SecondaryCurrentLimit_limit;
     hal::SimDouble m_SensorType_sensorType;
-    hal::SimDouble m_SerialNumber_serialNumber;
+    hal::SimDouble m_SerialNumber_serialNumber_0;
+    hal::SimDouble m_SerialNumber_serialNumber_1;
+    hal::SimDouble m_SerialNumber_serialNumber_2;
     hal::SimDouble m_SmartCurrentLimit_freeLimit;
     hal::SimDouble m_SmartCurrentLimit_limitRPM;
     hal::SimDouble m_SmartCurrentLimit_stallLimit;

@@ -23,20 +23,14 @@ void SnobotSim::Set{{ stripped_cci_class_name }}Callback(SnobotSim::REV_Callback
 SnobotSim::{{ wrapper_class_name }}::{{ wrapper_class_name }}({% if has_device_id %}int aDeviceId) :
         mDeviceId(aDeviceId),{% else %}){% endif %}
         m_simDevice(std::string("{{ wrapper_class_name }} " + std::to_string(aDeviceId)).c_str(), aDeviceId)
-{
-
-{% for variable_tuple in normal_sim_device_variables %}
-    m_{{ variable_tuple[0] }} = m_simDevice.CreateDouble("{{ variable_tuple[0] }}", false, 0);{% endfor %}
-
-
+{% raw %}{{% endraw %}{% for variable_tuple in normal_sim_device_variables %}
+    m_{{ variable_tuple[0] }} = m_simDevice.Create{{variable_tuple[1]}}("{{ variable_tuple[0] }}", false, 0);{% endfor %}
 {% if slotted_sim_device_variables %}
-    for (int slotId = 0; slotId < {{num_slots}}; ++slotId)
-    {
-{% for variable_tuple in slotted_sim_device_variables %}
-        m_slotted_variables[slotId].m_{{ variable_tuple[0] }} = m_simDevice.CreateDouble(std::string("{{ variable_tuple[0] }}[" + std::to_string(slotId) + "]").c_str(), false, 0);{% endfor %}
+    for (int slotID = 0; slotID < {{num_slots}}; ++slotID)
+    {% raw %}{{% endraw %}{% for variable_tuple in slotted_sim_device_variables %}
+        m_slotted_variables[slotID].m_{{ variable_tuple[0] }} = m_simDevice.Create{{variable_tuple[1]}}(std::string("{{ variable_tuple[0] }}[" + std::to_string(slotID) + "]").c_str(), false, 0);{% endfor %}
     }
 {% endif %}
-
     Send("Create");
 }
 

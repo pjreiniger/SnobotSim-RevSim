@@ -64,7 +64,7 @@ public final class SimDeviceDumpHelper
                 case HALValue.kUnassigned:
                     break;
                 default:
-                    throw new RuntimeException();
+                    throw new RuntimeException(); // NOPMD
                 }
                 builder.append("    ").append(sim).append('=').append(simDeviceSime.getValue(sim).getValue().getType()).append('{').append(value)
                         .append('}')

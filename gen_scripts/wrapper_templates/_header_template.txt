@@ -29,20 +29,15 @@ protected:
     hal::SimDevice m_simDevice;
 
 {% for variable_tuple in normal_sim_device_variables %}
-    hal::{{ variable_tuple[1] }} m_{{variable_tuple[0] }};{% endfor %}
+    hal::Sim{{ variable_tuple[1] }} m_{{variable_tuple[0] }};{% endfor %}
 
+{% if slotted_sim_device_variables %}    struct SlottedVariables
+    {
+    {% for variable_tuple in slotted_sim_device_variables %}
+        hal::Sim{{ variable_tuple[1] }} m_{{variable_tuple[0] }};{% endfor %}
+    };
 
-{% if slotted_sim_device_variables %}
-struct SlottedVariables
-{
-{% for variable_tuple in slotted_sim_device_variables %}
-    hal::{{ variable_tuple[1] }} m_{{variable_tuple[0] }};{% endfor %}
-};
-
-SlottedVariables m_slotted_variables[{{ num_slots }}];
-
-{% endif %}
-
+    SlottedVariables m_slotted_variables[{{ num_slots }}];{% endif %}
 };
 
 } // namespace SnobotSim
