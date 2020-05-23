@@ -171,11 +171,10 @@ public:
     void CloseTelemetryStream(uint32_t telemetryHandle);
     void ListTelemetryStream(c_SparkMax_TelemetryMessage* messages);
 
-    int GetControlFramePeriod();
-    void SetCANTimeout(int timeoutMs);
 
 protected:
     hal::SimDevice m_simDevice;
+
 
     hal::SimDouble m_AltEncoderAverageDepth_depth;
     hal::SimDouble m_AltEncoderCountsPerRevolution_cpr;
@@ -295,6 +294,7 @@ protected:
 
     struct SlottedVariables
     {
+    
         hal::SimDouble m_DFilter_gain;
         hal::SimDouble m_D_gain;
         hal::SimDouble m_FF_gain;
